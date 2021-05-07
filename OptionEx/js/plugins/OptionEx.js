@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Extends the option scene.
  * @author nz_prism
- * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/main/OptionEx.js
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
  * ver. 1.1.0
@@ -251,7 +251,7 @@
  * @target MZ
  * @plugindesc オプション画面を拡張します。
  * @author nz_prism
- * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/main/OptionEx.js
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
  * ver. 1.1.0
