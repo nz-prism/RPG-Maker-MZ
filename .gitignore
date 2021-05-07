@@ -1,5 +1,3 @@
-.DS_Store
-.gitignore
 /OLD/
 /CartRide/*
 !/CartRide/data/
