@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Extends the option scene.
  * @author nz_prism
- * @url https://twitter.com/nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/main/OptionEx.js
  *
  * @help OptionEx.js
  * ver. 1.1.0
@@ -251,7 +251,7 @@
  * @target MZ
  * @plugindesc オプション画面を拡張します。
  * @author nz_prism
- * @url https://twitter.com/nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/main/OptionEx.js
  *
  * @help OptionEx.js
  * ver. 1.1.0
@@ -794,7 +794,6 @@
         return this.textWidth("100%");
     };
 
-    const _Window_Options_prototype_addGeneralOptions = Window_Options.prototype.addGeneralOptions;
     Window_Options.prototype.addGeneralOptions = function() {
         if (USE_ALWAYS_DASH) this.addCommand(TextManager.alwaysDash, "alwaysDash");
         if (USE_COMMAND_REMEMBER) this.addCommand(TextManager.commandRemember, "commandRemember");
