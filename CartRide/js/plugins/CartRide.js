@@ -6,6 +6,7 @@
  * @target MZ
  * @plugindesc Displays a cart sprite upon a character when they get on a cart.
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CartRide/js/plugins/CartRide.js
  *
  * @help CartRide.js
  * ver. 2.0.0
@@ -75,6 +76,7 @@
  * @target MZ
  * @plugindesc プレイヤーがトロッコに搭乗した状態のグラフィックに変化し、線路に沿って移動します。
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CartRide/js/plugins/CartRide.js
  *
  * @help CartRide.js
  * ver. 2.0.0

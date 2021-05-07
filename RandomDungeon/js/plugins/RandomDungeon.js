@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Generates random maps.
  * @author nz_prism
- * @url https://twitter.com/nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
  * ver. 1.0.0
@@ -125,7 +125,7 @@
  * @target MZ
  * @plugindesc ランダムダンジョンを自動生成します。
  * @author nz_prism
- * @url https://twitter.com/nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
  * ver. 1.0.0

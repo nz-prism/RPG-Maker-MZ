@@ -8,6 +8,7 @@
  * @orderAfter ButtonPicture
  * @plugindesc Adds a cursor sptrite to a button picture when selected.
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
  * ver. 1.1.0
@@ -124,6 +125,7 @@
  * @orderAfter ButtonPicture
  * @plugindesc ピクチャボタンにマウスカーソルが重なった時カーソルを表示します。
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
  * ver. 1.1.0
