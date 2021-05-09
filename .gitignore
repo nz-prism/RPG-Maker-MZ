@@ -30,3 +30,10 @@
 !/RandomDungeon/js/plugins/
 /RandomDungeon/js/plugins/*
 !/RandomDungeon/js/plugins/RandomDungeon.js
+/FieldAction/*
+!/FieldAction/data/
+!/FieldAction/js
+/FieldAction/js/*
+!/FieldAction/js/plugins/
+/FieldAction/js/plugins/*
+!/FieldAction/js/plugins/FieldAction.js
