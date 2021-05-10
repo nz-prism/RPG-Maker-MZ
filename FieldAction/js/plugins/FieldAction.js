@@ -31,6 +31,11 @@
  *
  * @help 
  *
+ * @param skillReactionPatterns
+ * @text スキル反応パターン
+ * @desc スキルに対する反応パターンを、反応の種類だけ定義します。
+ * @type struct<switchControll>[]
+ * 
  * @command toggleSwitchesByFacingSkillTargets
  * @text 直前イベントスイッチオン
  * @desc プレイヤーの目の前のイベントのメタタグに設定されているスイッチをオンにします。
@@ -44,6 +49,48 @@
  * @desc 表示するアニメーションの番号です。
  * @type animation
  * 
+ * 
+ */
+
+/*~struct~switchControll:ja
+ *
+ * @param identifier
+ * @text 識別子
+ * @desc スキル反応パターンの識別子です。
+ * @type string
+ *
+ * @param commonEventId
+ * @text コモンイベントID
+ * @desc イベントに作用するコモンイベントのIDです。
+ * @type common_event
+ * 
+ * @param selfSwitchCh
+ * @text セルフスイッチ記号
+ * @desc 変化するセルフスイッチの記号です。
+ * @default A
+ * @type combo
+ * @option A
+ * @option B
+ * @option C
+ * @option D
+ * 
+ * @param selfSwitchValue
+ * @text 変化後スイッチ
+ * @desc 反応後に変化するセルフスイッチの値です。
+ * @type boolean
+ * @default true
+ * 
+ * @param selfSwitchCondition
+ * @text セルフスイッチ条件
+ * @desc この反応を有効にするためにオンになっている必要があるセルフスイッチの記号です。
+ * @default なし
+ * @type combo
+ * @option なし
+ * @value null
+ * @option A
+ * @option B
+ * @option C
+ * @option D
  * 
  */
 
