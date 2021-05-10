@@ -9,6 +9,11 @@
  *
  * @help 
  *
+ * @param skillReactionPatterns
+ * @text Skill Reaction Patterns
+ * @desc Contains skill reaction patterns as many as necessary.
+ * @type struct<switchPatternList>[]
+ * 
  * @command toggleSwitchesByFacingSkillTargets
  * @text Turn Switches on by Events Faced by Player
  * @desc Turns on switches whose IDs correspond to <skillSwitchId: > note of events faced by the player.
@@ -21,6 +26,57 @@
  * @text Animation ID
  * @desc ID of the animation to be shown.
  * @type animation
+ * 
+ */
+
+/*~struct~switchPatternList:
+ *
+ * @param identifier
+ * @text Identifier
+ * @desc The identifier for skill reaction patterns.
+ * @type string
+ * 
+ * @param patterns
+ * @text Skill Reaction Pattern List
+ * @desc The list for skill reaction patterns.
+ * @type struct<switchPattern>[]
+ * 
+ */
+
+/*~struct~switchPattern:
+ *
+ * @param commonEventId
+ * @text Common Event ID
+ * @desc The common event ID which affects the event.
+ * @type common_event
+ * 
+ * @param selfSwitchCh
+ * @text Self Switch Character
+ * @desc The self switch character which will change.
+ * @default A
+ * @type combo
+ * @option A
+ * @option B
+ * @option C
+ * @option D
+ * 
+ * @param selfSwitchValue
+ * @text Self Switch Value
+ * @desc The changed Value of the self switch.
+ * @type boolean
+ * @default true
+ * 
+ * @param selfSwitchCondition
+ * @text Self Switch Condition
+ * @desc The self switch character which needs to be on for enabling this reaction.
+ * @default none
+ * @type combo
+ * @option none
+ * @value null
+ * @option A
+ * @option B
+ * @option C
+ * @option D
  * 
  */
 
