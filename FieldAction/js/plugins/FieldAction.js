@@ -34,7 +34,7 @@
  * @param skillReactionPatterns
  * @text スキル反応パターン
  * @desc スキルに対する反応パターンを、反応の種類だけ定義します。
- * @type struct<switchControll>[]
+ * @type struct<switchPatternList>[]
  * 
  * @command toggleSwitchesByFacingSkillTargets
  * @text 直前イベントスイッチオン
@@ -52,12 +52,21 @@
  * 
  */
 
-/*~struct~switchControll:ja
+/*~struct~switchPatternList:ja
  *
  * @param identifier
  * @text 識別子
  * @desc スキル反応パターンの識別子です。
  * @type string
+ * 
+ * @param patterns
+ * @text スキル反応パターンリスト
+ * @desc スキル反応パターンのリストです。
+ * @type struct<switchPattern>[]
+ * 
+ */
+
+/*~struct~switchPattern:ja
  *
  * @param commonEventId
  * @text コモンイベントID
