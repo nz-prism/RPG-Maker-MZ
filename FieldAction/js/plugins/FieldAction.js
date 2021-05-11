@@ -54,7 +54,7 @@
  * @text Self Switch Character
  * @desc The self switch character which will change.
  * @default A
- * @type combo
+ * @type select
  * @option A
  * @option B
  * @option C
@@ -70,7 +70,7 @@
  * @text Self Switch Condition
  * @desc The self switch character which needs to be on for enabling this reaction.
  * @default none
- * @type combo
+ * @type select
  * @option none
  * @value null
  * @option A
@@ -133,7 +133,7 @@
  * @text セルフスイッチ記号
  * @desc 変化するセルフスイッチの記号です。
  * @default A
- * @type combo
+ * @type select
  * @option A
  * @option B
  * @option C
@@ -149,7 +149,7 @@
  * @text セルフスイッチ条件
  * @desc この反応を有効にするためにオンになっている必要があるセルフスイッチの記号です。
  * @default なし
- * @type combo
+ * @type select
  * @option なし
  * @value null
  * @option A
@@ -164,6 +164,21 @@
 
 
     const PLUGIN_NAME = "FieldAction";
+
+
+    const skillReactionPatterns = JSON.parse(PluginManager.parameters(PLUGIN_NAME).skillReactionPatterns);
+    const SKILL_REACTION_PATTERNS = [];
+    for (const str of skillReactionPatterns) {
+        SKILL_REACTION_PATTERNS.push(JSON.parse(str));
+    }
+
+    for (let i=0; i<SKILL_REACTION_PATTERNS.length; i++) {
+        const str = SKILL_REACTION_PATTERNS[i].patterns;
+        const ary = JSON.parse(str);
+        SKILL_REACTION_PATTERNS[i].patterns = ary.map(s => JSON.parse(s));
+    }
+    console.log(SKILL_REACTION_PATTERNS);
+    
 
     PluginManager.registerCommand(PLUGIN_NAME, "toggleSwitchesByFacingSkillTargets", args => {
         $gamePlayer.toggleSwitchesByFacingSkillTargets();
