@@ -167,15 +167,19 @@
 
 
     const skillReactionPatterns = JSON.parse(PluginManager.parameters(PLUGIN_NAME).skillReactionPatterns);
-    const SKILL_REACTION_PATTERNS = [];
-    for (const str of skillReactionPatterns) {
-        SKILL_REACTION_PATTERNS.push(JSON.parse(str));
-    }
-
+    const SKILL_REACTION_PATTERNS = skillReactionPatterns.map(str => JSON.parse(str));
     for (let i=0; i<SKILL_REACTION_PATTERNS.length; i++) {
         const str = SKILL_REACTION_PATTERNS[i].patterns;
-        const ary = JSON.parse(str);
-        SKILL_REACTION_PATTERNS[i].patterns = ary.map(s => JSON.parse(s));
+        const ary = JSON.parse(str).map(s => JSON.parse(s));
+        for (let j=0; j<ary.length; j++) {
+            for (const key of Object.keys(ary[j])) {
+                const value = ary[j][key];
+                if (!["A","B","C","D"].includes(value)) {
+                    ary[j][key] = JSON.parse(value);
+                }
+            }
+        }
+        SKILL_REACTION_PATTERNS[i].patterns = ary;
     }
     console.log(SKILL_REACTION_PATTERNS);
     
