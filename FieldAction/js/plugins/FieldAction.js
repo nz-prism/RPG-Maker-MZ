@@ -16,7 +16,7 @@
  * 
  * @command toggleSwitchesByFacingSkillTargets
  * @text Turn Switches on by Events Faced by Player
- * @desc Turns on switches whose IDs correspond to <skillSwitchId: > note of events faced by the player.
+ * @desc Turns on switches whose IDs correspond to <skillReactionId: > note of events faced by the player.
  *
  * @command requestAnimationAtFacingSkillTargets
  * @text Show Animation at Facing Events
@@ -185,7 +185,6 @@
     for (const obj of skillReactionPatterns) {
         SKILL_REACTION_PATTERNS[obj.identifier] = obj.patterns;
     }
-    console.log(SKILL_REACTION_PATTERNS);
     
 
     PluginManager.registerCommand(PLUGIN_NAME, "toggleSwitchesByFacingSkillTargets", args => {
@@ -217,17 +216,30 @@
     Game_Player.prototype.toggleSwitchesByFacingSkillTargets = function() {
         const events = this.facingSkillTargets();
         for (const event of events) {
-            const switchId = event.skillSwitchId();
-            $gameSwitches.setValue(switchId, true);
+            const patterns = SKILL_REACTION_PATTERNS[event.skillReactionId()];
+            if (patterns) {
+                // 暫定措置として変数1番にコモンイベントIDを事前に代入しておく
+                const commonEventId = $gameVariables.value(1);
+                const struct = patterns.find(obj => obj.commonEventId === commonEventId);
+                if (struct) {
+                    const selfSwitchCondition = struct.selfSwitchCondition;
+                    const mapId = $gameMap.mapId();
+                    const eventId = event.eventId();
+                    let ok = false;
+                    if (!selfSwitchCondition) {
+                        ok = ["A","B","C","D"].every(ch => !$gameSelfSwitches.value([mapId, eventId, ch]));
+                    } else {
+                        ok = $gameSelfSwitches.value([mapId, eventId, selfSwitchCondition]);
+                    }
+                    if (ok) $gameSelfSwitches.setValue([mapId, eventId, struct.selfSwitchCh], struct.selfSwitchValue);
+                }
+            }
         }
     };
     
     
-    // Game_Event.prototype.skillSwitchId = function() {
-    //     return this.event().meta.skillSwitchId;
-    // };
-    Game_Event.prototype.skillSwitchId = function() {
-        return this.event().meta.skillSwitchId;
+    Game_Event.prototype.skillReactionId = function() {
+        return this.event().meta.skillReactionId || "";
     };
 
 })();
