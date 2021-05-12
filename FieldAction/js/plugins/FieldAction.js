@@ -166,10 +166,10 @@
     const PLUGIN_NAME = "FieldAction";
 
 
-    const skillReactionPatterns = JSON.parse(PluginManager.parameters(PLUGIN_NAME).skillReactionPatterns);
-    const SKILL_REACTION_PATTERNS = skillReactionPatterns.map(str => JSON.parse(str));
-    for (let i=0; i<SKILL_REACTION_PATTERNS.length; i++) {
-        const str = SKILL_REACTION_PATTERNS[i].patterns;
+    const skillReactionPatterns = JSON.parse(PluginManager.parameters(PLUGIN_NAME).skillReactionPatterns)
+        .map(str => JSON.parse(str));
+    for (let i=0; i<skillReactionPatterns.length; i++) {
+        const str = skillReactionPatterns[i].patterns;
         const ary = JSON.parse(str).map(s => JSON.parse(s));
         for (let j=0; j<ary.length; j++) {
             for (const key of Object.keys(ary[j])) {
@@ -179,7 +179,11 @@
                 }
             }
         }
-        SKILL_REACTION_PATTERNS[i].patterns = ary;
+        skillReactionPatterns[i].patterns = ary;
+    }
+    const SKILL_REACTION_PATTERNS = {};
+    for (const obj of skillReactionPatterns) {
+        SKILL_REACTION_PATTERNS[obj.identifier] = obj.patterns;
     }
     console.log(SKILL_REACTION_PATTERNS);
     
@@ -219,6 +223,9 @@
     };
     
     
+    // Game_Event.prototype.skillSwitchId = function() {
+    //     return this.event().meta.skillSwitchId;
+    // };
     Game_Event.prototype.skillSwitchId = function() {
         return this.event().meta.skillSwitchId;
     };
