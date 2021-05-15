@@ -42,3 +42,9 @@
 !/FieldAction/js/plugins/
 /FieldAction/js/plugins/*
 !/FieldAction/js/plugins/FieldAction.js
+/MenuStatusPictures/*
+!/MenuStatusPictures/js
+/MenuStatusPictures/js/*
+!/MenuStatusPictures/js/plugins/
+/MenuStatusPictures/js/plugins/*
+!/MenuStatusPictures/js/plugins/MenuStatusPictures.js
