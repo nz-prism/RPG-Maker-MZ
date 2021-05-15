@@ -34,7 +34,7 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param playCursorSe
+ * @param useSystemCursorSe
  * @text Play Cursor SE
  * @desc Set whether the system cursor SE is played when hovering.
  * @default false
@@ -133,6 +133,7 @@
  * [バージョン履歴]
  * 2021/02/24 ver 1.0.0 リリース
  * 2021/02/25 ver.1.1.0 軽微なバグ修正。枠線オフセット、カーソルSE演奏対応。
+ * 2021/05/15 ver.1.2.0 カーソルSE選択プラグインパラメータの追加。
  * 
  * このプラグインは、ピクチャにマウスカーソルが重なった時にカーソルを
  * 表示する機能を提供します。
@@ -151,11 +152,18 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param playCursorSe
- * @text カーソルSEの使用
- * @desc 画像にマウスオーバーした際にカーソル効果音を鳴らすかどうかを選択してください。
- * @default false
+ * @param useSystemCursorSe
+ * @text システムカーソルSEの使用
+ * @desc オンにするとカーソル選択時のSEとして、システムカーソルSEが使用されます。オフの場合、カーソルSEを設定してください。
+ * @default true
  * @type boolean
+ * 
+ * @param buttonPictureCursorSe
+ * @text カーソルSE
+ * @desc システムカーソルSEの使用がオフの場合に、カーソル選択時に鳴らす効果音を選択してください。
+ * @parent useSystemCursorSe
+ * @default 
+ * @type struct<se>
  * 
  * @param useCursorImage
  * @text カーソル画像の使用
@@ -203,6 +211,40 @@
  * 
  */
 
+/*~struct~se:
+ *
+ * @param name
+ * @text SEファイル名
+ * @desc SEのファイル名です。
+ * @type file
+ * @dir audio/se/
+ *
+ * @param pan
+ * @text SE位相（パン）
+ * @desc SEの位相（パン）値です。
+ * @default 0
+ * @type number
+ * @max 100
+ * @min -100
+ * 
+ * @param pitch
+ * @text SEピッチ
+ * @desc SEのピッチです。
+ * @default 100
+ * @type number
+ * @max 150
+ * @min 50
+ * 
+ * @param volume
+ * @text SE音量
+ * @desc SEの音量です。
+ * @default 90
+ * @type number
+ * @max 100
+ * @min 0
+ * 
+ */
+
 /*~struct~rgba:ja
  *
  * @param red
@@ -242,7 +284,7 @@
     const pluginName = "CursorApplicationToButtonPicture";
 
 
-    const PLAY_CURSOR_SE = PluginManager.parameters(pluginName).playCursorSe === "true";
+    const USE_SYSTEM_CURSOR_SE = PluginManager.parameters(pluginName).useSystemCursorSe === "true";
     const USE_CURSOR_IMAGE = PluginManager.parameters(pluginName).useCursorImage === "true";
     const CURSOR_IMAGE_NAME = PluginManager.parameters(pluginName).cursorImageName;
     const IS_CURSOR_X_RIGHT = PluginManager.parameters(pluginName).isCursorXRight === "true";
@@ -251,6 +293,16 @@
     const IS_BORDER_OFFSET = PluginManager.parameters(pluginName).isBorderOffset === "true";
     const bordrColorObj = JSON.parse(PluginManager.parameters(pluginName).borderColor);
     const BORDER_COLOR = "rgba(" + bordrColorObj.red + "," + bordrColorObj.green + "," + bordrColorObj.blue + "," + bordrColorObj.alpha + ")";
+    const BUTTON_PICTURE_CURSOR_SE = {};
+    for (const ary of Object.entries(JSON.parse(PluginManager.parameters(pluginName).buttonPictureCursorSe))) {
+        const key = ary[0];
+        BUTTON_PICTURE_CURSOR_SE[key] = (key === "name") ? ary[1] : Number(ary[1]);
+    }
+
+
+    SoundManager.playButtonPictureCursor = function() {
+        AudioManager.playStaticSe(BUTTON_PICTURE_CURSOR_SE);
+    };
 
 
     Sprite_Picture.prototype.createCursorSprite = function() {
@@ -287,7 +339,11 @@
         _Sprite_Picture_prototype_onMouseEnter.call(this);
         if (this.picture().mzkp_commonEventId) {
             if (!this._cursorSprite) this.createCursorSprite();
-            if (PLAY_CURSOR_SE) SoundManager.playCursor();
+            if (USE_SYSTEM_CURSOR_SE) {
+                SoundManager.playCursor();
+            } else {
+                SoundManager.playButtonPictureCursor();
+            }
             this._cursorSprite.show();
         }
     };
