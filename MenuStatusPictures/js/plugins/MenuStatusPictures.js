@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Shows back and fore images on a menu status window.
  * @author nz_prism
- * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures.js
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures/js/plugins/MenuStatusPictures.js
  *
  * @help MenuStatusPictures.js
  * ver 1.0.0
@@ -62,7 +62,7 @@
  * @target MZ
  * @plugindesc メニューステータスでウィンドウの背景と前景を設定するプラグインです。
  * @author nz_prism
- * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures.js
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures/js/plugins/MenuStatusPictures.js
  *
  * @help MenuStatusPictures.js
  * ver 1.0.0
