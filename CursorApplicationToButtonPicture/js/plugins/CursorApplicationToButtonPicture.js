@@ -11,11 +11,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
- * ver. 1.1.0
+ * ver. 1.2.0
  * 
  * [History]
  * 02/24/2021 ver 1.0.0 Released
  * 02/25/2021 ver.1.1.0 Corrected some glitches and implemented Border line offset and Cursor SE.
+ * 05/15/2021 ver.1.2.0 Added cursor SE plugin-parameters.
  *
  * This plugin provides a functionality to add a cursor sprite to
  * a button picture.
@@ -35,10 +36,16 @@
  * 
  * 
  * @param useSystemCursorSe
- * @text Play Cursor SE
- * @desc Set whether the system cursor SE is played when hovering.
- * @default false
+ * @text Use System Cursor SE
+ * @desc If ON, the system cursor SE will be used for the button pictures. If OFF, set the cursor SE.
+ * @default true
  * @type boolean
+ * 
+ * @param buttonPictureCursorSe
+ * @text Cursor SE
+ * @desc If Use System Cursor SE is OFF, set an SE played for cursoring button pictures.
+ * @default {"name":"","pan":"0","pitch":"100","volume":"90"}
+ * @type struct<se>
  * 
  * @param useCursorImage
  * @text Use Cursor Image
@@ -86,6 +93,40 @@
  * 
  */
 
+/*~struct~se:
+ *
+ * @param name
+ * @text SE File Name
+ * @desc The file name for the SE.
+ * @type file
+ * @dir audio/se/
+ *
+ * @param pan
+ * @text SE Pan
+ * @desc The pan of the SE.
+ * @default 0
+ * @type number
+ * @max 100
+ * @min -100
+ * 
+ * @param pitch
+ * @text SE Pitch
+ * @desc The pitch for the SE.
+ * @default 100
+ * @type number
+ * @max 150
+ * @min 50
+ * 
+ * @param volume
+ * @text SE Volume
+ * @desc The volume for the SE.
+ * @default 90
+ * @type number
+ * @max 100
+ * @min 0
+ * 
+ */
+
 /*~struct~rgba:
  *
  * @param red
@@ -128,7 +169,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
- * ver. 1.1.0
+ * ver. 1.2.0
  *
  * [バージョン履歴]
  * 2021/02/24 ver 1.0.0 リリース
@@ -160,9 +201,8 @@
  * 
  * @param buttonPictureCursorSe
  * @text カーソルSE
- * @desc システムカーソルSEの使用がオフの場合に、カーソル選択時に鳴らす効果音を選択してください。
- * @parent useSystemCursorSe
- * @default 
+ * @desc システムカーソルSEの使用がオフの場合に、カーソル選択時に鳴らす効果音を設定してください。
+ * @default {"name":"","pan":"0","pitch":"100","volume":"90"}
  * @type struct<se>
  * 
  * @param useCursorImage
@@ -219,13 +259,13 @@
  * @type file
  * @dir audio/se/
  *
- * @param pan
- * @text SE位相（パン）
- * @desc SEの位相（パン）値です。
- * @default 0
+ * @param volume
+ * @text SE音量
+ * @desc SEの音量です。
+ * @default 90
  * @type number
  * @max 100
- * @min -100
+ * @min 0
  * 
  * @param pitch
  * @text SEピッチ
@@ -235,13 +275,13 @@
  * @max 150
  * @min 50
  * 
- * @param volume
- * @text SE音量
- * @desc SEの音量です。
- * @default 90
+ * @param pan
+ * @text SE位相（パン）
+ * @desc SEの位相（パン）値です。
+ * @default 0
  * @type number
  * @max 100
- * @min 0
+ * @min -100
  * 
  */
 
@@ -345,6 +385,7 @@
                 SoundManager.playButtonPictureCursor();
             }
             this._cursorSprite.show();
+            console.log("test")
         }
     };
 
