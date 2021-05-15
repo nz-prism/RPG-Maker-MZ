@@ -15,6 +15,11 @@
 !/CursorApplicationToButtonPicture/js/plugins/
 /CursorApplicationToButtonPicture/js/plugins/*
 !/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
+!/CursorApplicationToButtonPicture/img
+/CursorApplicationToButtonPicture/img/*
+!/CursorApplicationToButtonPicture/img/system/
+/CursorApplicationToButtonPicture/img/system/*
+!/CursorApplicationToButtonPicture/img/system/Cursor.png
 /OptionEx/*
 !/OptionEx/js
 /OptionEx/js/*
