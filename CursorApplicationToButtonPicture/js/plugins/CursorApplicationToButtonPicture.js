@@ -385,7 +385,6 @@
                 SoundManager.playButtonPictureCursor();
             }
             this._cursorSprite.show();
-            console.log("test")
         }
     };
 
