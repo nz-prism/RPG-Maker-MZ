@@ -69,7 +69,7 @@
  * @param selfSwitchCondition
  * @text Self Switch Condition
  * @desc The self switch character which needs to be on for enabling this reaction.
- * @default none
+ * @default null
  * @type select
  * @option none
  * @value null
@@ -148,7 +148,7 @@
  * @param selfSwitchCondition
  * @text セルフスイッチ条件
  * @desc この反応を有効にするためにオンになっている必要があるセルフスイッチの記号です。
- * @default なし
+ * @default null
  * @type select
  * @option なし
  * @value null
@@ -218,8 +218,7 @@
         for (const event of events) {
             const patterns = SKILL_REACTION_PATTERNS[event.skillReactionId()];
             if (patterns) {
-                // 暫定措置として変数1番にコモンイベントIDを事前に代入しておく
-                const commonEventId = $gameVariables.value(1);
+                const commonEventId = $gameTemp.currentCommonEventId();
                 const struct = patterns.find(obj => obj.commonEventId === commonEventId);
                 if (struct) {
                     const selfSwitchCondition = struct.selfSwitchCondition;
@@ -240,6 +239,17 @@
     
     Game_Event.prototype.skillReactionId = function() {
         return this.event().meta.skillReactionId || "";
+    };
+
+
+    Game_Temp.prototype.retrieveCommonEvent = function() {
+        const commonEventId = this._commonEventQueue.shift();
+        this._currentCommonEventId = commonEventId;
+        return $dataCommonEvents[commonEventId];
+    };
+
+    Game_Temp.prototype.currentCommonEventId = function() {
+        return this._currentCommonEventId;
     };
 
 })();
