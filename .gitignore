@@ -39,6 +39,7 @@
 !/FieldAction/data/
 !/FieldAction/js
 /FieldAction/js/*
+!/FieldAction/js/plugins.js
 !/FieldAction/js/plugins/
 /FieldAction/js/plugins/*
 !/FieldAction/js/plugins/FieldAction.js
