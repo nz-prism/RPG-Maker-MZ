@@ -1,4 +1,10 @@
 /OLD/
+/ActorPictures/*
+!/ActorPictures/js
+/ActorPictures/js/*
+!/ActorPictures/js/plugins/
+/ActorPictures/js/plugins/*
+!/ActorPictures/js/plugins/ActorPictures.js
 /CartRide/*
 !/CartRide/data/
 /CartRide/data/*
