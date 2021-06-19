@@ -92,8 +92,8 @@
 /*~struct~damage:ja
  *
  * @param damageRate
- * @text ダメージ割合
- * @desc ダメージ差分の割合です。HP割合がこの値以下になると対応するピクチャが表示されます。
+ * @text ダメージ割合%
+ * @desc ダメージ差分の割合（パーセンテージ）です。HP割合がこの値以下になると対応するピクチャが表示されます。
  * @type number
  * @min 0
  * @max 100
