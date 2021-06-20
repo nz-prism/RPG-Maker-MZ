@@ -8,8 +8,108 @@
  * @author nz_prism
  *
  * @help ActorPictures.js
+ * ver 1.0.0
  *
+ * [History]
+ * 06/20/2021 1.0.0 Released
  * 
+ * This plugin manages pictures for actors.
+ * You can set normal, stated and damaged pictures for each actor.
+ * Stated pictures are shown when an actor is affected by a specific state.
+ * Damaged pictures are shown when the hp percentage of an actor is at a specific rate or less.
+ * Normal pictures are shown if none of the stated/damaged pictures can be applied.
+ * The priority is Stated > Damaged > Normal.
+ * You can set multiple pictures for each of normal, stated and damaged pictures in order to use as costumes or facial expressions.
+ * By setting Picture ID with a plugin command "Set Picture ID", a corresponding picture out of the pictures is shown.
+ * Picture ID is used in common with Normal, Stated and Damaged pictures.
+ * 
+ * 
+ * This plugin is released under MIT license.
+ * https://opensource.org/licenses/mit-license.php
+ *
+ * @param actorPictures
+ * @text Actor Pictures
+ * @desc Settings for actor pictures.
+ * @default []
+ * @type struct<picture>[]
+ * 
+ * 
+ * @command setPictureIndex
+ * @text Set Picture ID
+ * @desc Set the Picture ID for an actor in order to switch costumes/facial expressions.
+ * 
+ * @arg actorId
+ * @text Actor ID
+ * @desc Specify the Actor ID.
+ * @type actor
+ * @min 1
+ * 
+ * @arg pictureIndex
+ * @text Picture ID
+ * @desc Specify the Picture ID. Note it starts from 0.
+ * @type number
+ * @min 0
+ * 
+ */
+
+/*~struct~picture:
+ *
+ * @param actorId
+ * @text Actor ID
+ * @desc Specify the Actor ID.
+ * @type actor
+ * @min 1
+ * 
+ * @param normalPictures
+ * @text Normal Pictures
+ * @desc The normal pictures for an actor. The order corresponds to Picture ID. The top one is used as default.
+ * @type file[]
+ * @dir img/pictures
+ * @default []
+ * 
+ * @param statePictures
+ * @text Stated Pictures
+ * @desc The stated pictures for an actor. The priority to be shown reflects the order.
+ * @type struct<state>[]
+ * @default []
+ * 
+ * @param damagePictures
+ * @text Damaged Pictures
+ * @desc The damaged pictures for an actor. Multiple HP percentages can be set.
+ * @type struct<damage>[]
+ * @default []
+ * 
+ */
+
+/*~struct~state:
+ *
+ * @param stateId
+ * @text State ID
+ * @desc Specify a State ID for these pictures. If an actor has this state, one of them is shown.
+ * @type state
+ *
+ * @param pictures
+ * @text Pictures
+ * @desc Specify pictures for this state. Multiple pictures corresponding to Picture ID can be set.
+ * @dir img/pictures
+ * @type file[]
+ * 
+ */
+
+/*~struct~damage:
+ *
+ * @param damageRate
+ * @text Damage Percentage
+ * @desc Specify an HP percentage for these pictures. If the HP % is at this value or less, one of them is shown.
+ * @type number
+ * @min 0
+ * @max 100
+ *
+ * @param pictures
+ * @text Pictures
+ * @desc Specify pictures for this HP %. Multiple pictures corresponding to Picture ID can be set.
+ * @dir img/pictures
+ * @type file[]
  * 
  */
 
@@ -19,11 +119,29 @@
  * @author nz_prism
  *
  * @help ActorPictures.js
+ * ver 1.0.0
+ *
+ * [バージョン履歴]
+ * 2021/06/20 1.0.0 リリース
+ * 
+ * このプラグインは、アクターの立ち絵を管理します。
+ * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
+ * ステート差分は特定のステートにかかっている際に表示される立ち絵です。
+ * ダメージ差分はHPが一定割合以下になると表示される立ち絵であり、複数の割合を設定できます。
+ * 標準はステート・ダメージ差分に適用可能な立ち絵が存在しない場合に表示されるデフォルトピクチャです。
+ * 優先度はステート > ダメージ > 標準です。
+ * また、標準・ステート・ダメージのいずれにも立ち絵を複数設定することができ、衣装や表情差分等に利用できます。
+ * 複数設定されている立ち絵のうち、プラグインコマンド「ピクチャIDの設定」にて設定したピクチャIDに対応する立ち絵が表示されます。
+ * ピクチャIDは標準・ダメージ・ステート間で共通です。
+ * 
+ * 
+ * このプラグインはMITライセンスにてリリースされています。
+ * https://opensource.org/licenses/mit-license.php
  *
  * @param actorPictures
  * @text アクターピクチャ
  * @desc アクターのピクチャ設定です（複数設定可）
- * @default 
+ * @default []
  * @type struct<picture>[]
  * 
  * 
@@ -107,13 +225,13 @@
  */
 
 (() => {
+    'use strict';
 
     const PLUGIN_NAME = "ActorPictures";
 
 
-    const actorPictures = JSON.parse(PluginManager.parameters(PLUGIN_NAME).actorPictures);
     const ACTOR_PICTURES = [];
-    for (const str of actorPictures) {
+    for (const str of JSON.parse(PluginManager.parameters(PLUGIN_NAME).actorPictures)) {
         const obj = JSON.parse(str);
         const actorId = Number(obj.actorId);
         const normalPictures = JSON.parse(obj.normalPictures);
@@ -154,24 +272,34 @@
 
     
     Game_Actor.prototype.normalPictureName = function() {
-        const normals = ACTOR_PICTURES[this._actorId].normals;
-        return normals[this._pictureIndex] || normals[0] || "";
+        const obj = ACTOR_PICTURES[this._actorId];
+        if (obj) {
+            const normals = obj.normals;
+            if (normals) return normals[this._pictureIndex] || normals[0];
+        }
+        return "";
     };
 
     Game_Actor.prototype.statePictureName = function() {
-        const states = ACTOR_PICTURES[this._actorId].states;
-        for (let i=0; i<states.length; i++) {
-            const pictures = states[i];
-            if (pictures && this.isStateAffected(i)) return pictures[this._pictureIndex];
+        const obj = ACTOR_PICTURES[this._actorId];
+        if (obj) {
+            const states = obj.states;
+            for (let i=0; i<states.length; i++) {
+                const pictures = states[i];
+                if (pictures && this.isStateAffected(i)) return pictures[this._pictureIndex];
+            }
         }
         return "";
     };
     
     Game_Actor.prototype.damagePictureName = function() {
-        const damages = ACTOR_PICTURES[this._actorId].damages;
-        const hpRate = this.hpRate() * 100;
-        for (const obj of damages) {
-            if (hpRate <= obj.damageRate) return obj.pictures[this._pictureIndex];
+        const obj = ACTOR_PICTURES[this._actorId];
+        if (obj) {
+            const damages = obj.damages;
+            const hpRate = this.hpRate() * 100;
+            for (const damageObj of damages) {
+                if (damageObj && hpRate <= damageObj.damageRate) return damageObj.pictures[this._pictureIndex];
+            }
         }
         return "";
     };
