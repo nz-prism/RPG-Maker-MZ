@@ -6,6 +6,7 @@
  * @target MZ
  * @plugindesc Manages actor pictures.
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
  * ver 1.0.1
@@ -118,6 +119,7 @@
  * @target MZ
  * @plugindesc アクターの立ち絵を管理します。
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
  * ver 1.0.1
