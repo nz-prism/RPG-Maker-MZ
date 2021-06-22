@@ -9,10 +9,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures/js/plugins/MenuStatusPictures.js
  *
  * @help MenuStatusPictures.js
- * ver 1.0.0
+ * ver 1.0.1
  *
  * [History]
  * 05/15/2021 1.0.0 Released
+ * 06/22/2021 1.0.1 Sub-folder compatibility for RMMZ 1.3.0 or later
  * 
  * This plugin enables to show back and fore images on a menu status window.
  * You can specify XY coordinates for the pictures.
@@ -65,10 +66,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures/js/plugins/MenuStatusPictures.js
  *
  * @help MenuStatusPictures.js
- * ver 1.0.0
+ * ver 1.0.1
  *
  * [バージョン履歴]
  * 2021/05/15 1.0.0 リリース
+ * 2021/06/22 1.0.1 本体バージョン1.3.0以降のサブフォルダへの格納に対応
  * 
  * このプラグインは、メニューステータスにてウィンドウの背面と前面に画像を表示します。
  * 画像はそれぞれ座標を指定することができます。
@@ -116,19 +118,18 @@
 
 (() => {
     'use strict';
-
-
-    const PLUGIN_NAME = "MenuStatusPictures";
+    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
+    const pluginParams = PluginManager.parameters(PLUGIN_NAME);
 
     
     const BACK_IMAGE = {};
-    for (let ary of Object.entries(JSON.parse(PluginManager.parameters(PLUGIN_NAME).backImage))) {
+    for (let ary of Object.entries(JSON.parse(pluginParams.backImage))) {
         let key = ary[0];
         BACK_IMAGE[key] = (key === "pictureName") ? ary[1] : Number(ary[1]);
     }
 
     const FRONT_IMAGE = {};
-    for (let ary of Object.entries(JSON.parse(PluginManager.parameters(PLUGIN_NAME).frontImage))) {
+    for (let ary of Object.entries(JSON.parse(pluginParams.frontImage))) {
         let key = ary[0];
         FRONT_IMAGE[key] = (key === "pictureName") ? ary[1] : Number(ary[1]);
     }

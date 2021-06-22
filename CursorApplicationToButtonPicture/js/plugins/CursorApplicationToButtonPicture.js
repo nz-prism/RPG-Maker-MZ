@@ -11,12 +11,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
- * ver. 1.2.0
+ * ver. 1.2.1
  * 
  * [History]
- * 02/24/2021 ver 1.0.0 Released
- * 02/25/2021 ver.1.1.0 Corrected some glitches and implemented Border line offset and Cursor SE.
- * 05/15/2021 ver.1.2.0 Added cursor SE plugin-parameters.
+ * 02/24/2021 1.0.0 Released
+ * 02/25/2021 1.1.0 Corrected some glitches and implemented Border line offset and Cursor SE.
+ * 05/15/2021 1.2.0 Added cursor SE plugin-parameters.
+ * 06/22/2021 1.2.1 Sub-folder compatibility for RMMZ 1.3.0 or later
  *
  * This plugin provides a functionality to add a cursor sprite to
  * a button picture.
@@ -169,12 +170,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
- * ver. 1.2.0
+ * ver. 1.2.1
  *
  * [バージョン履歴]
- * 2021/02/24 ver 1.0.0 リリース
- * 2021/02/25 ver.1.1.0 軽微なバグ修正。枠線オフセット、カーソルSE演奏対応。
- * 2021/05/15 ver.1.2.0 カーソルSE選択プラグインパラメータの追加。
+ * 2021/02/24 1.0.0 リリース
+ * 2021/02/25 1.1.0 軽微なバグ修正。枠線オフセット、カーソルSE演奏対応。
+ * 2021/05/15 1.2.0 カーソルSE選択プラグインパラメータの追加。
+ * 2021/06/22 1.2.1 本体バージョン1.3.0以降のサブフォルダへの格納に対応
  * 
  * このプラグインは、ピクチャにマウスカーソルが重なった時にカーソルを
  * 表示する機能を提供します。
@@ -321,20 +323,21 @@
 (() => {
     'use strict';
 
-    const pluginName = "CursorApplicationToButtonPicture";
+    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
+    const pluginParams = PluginManager.parameters(PLUGIN_NAME);
 
 
-    const USE_SYSTEM_CURSOR_SE = PluginManager.parameters(pluginName).useSystemCursorSe === "true";
-    const USE_CURSOR_IMAGE = PluginManager.parameters(pluginName).useCursorImage === "true";
-    const CURSOR_IMAGE_NAME = PluginManager.parameters(pluginName).cursorImageName;
-    const IS_CURSOR_X_RIGHT = PluginManager.parameters(pluginName).isCursorXRight === "true";
-    const IS_CURSOR_Y_DOWN = PluginManager.parameters(pluginName).isCursorYDown === "true";
-    const BORDER_WIDTH = Number(PluginManager.parameters(pluginName).borderWidth);
-    const IS_BORDER_OFFSET = PluginManager.parameters(pluginName).isBorderOffset === "true";
-    const bordrColorObj = JSON.parse(PluginManager.parameters(pluginName).borderColor);
+    const USE_SYSTEM_CURSOR_SE = pluginParams.useSystemCursorSe === "true";
+    const USE_CURSOR_IMAGE = pluginParams.useCursorImage === "true";
+    const CURSOR_IMAGE_NAME = pluginParams.cursorImageName;
+    const IS_CURSOR_X_RIGHT = pluginParams.isCursorXRight === "true";
+    const IS_CURSOR_Y_DOWN = pluginParams.isCursorYDown === "true";
+    const BORDER_WIDTH = Number(pluginParams.borderWidth);
+    const IS_BORDER_OFFSET = pluginParams.isBorderOffset === "true";
+    const bordrColorObj = JSON.parse(pluginParams.borderColor);
     const BORDER_COLOR = "rgba(" + bordrColorObj.red + "," + bordrColorObj.green + "," + bordrColorObj.blue + "," + bordrColorObj.alpha + ")";
     const BUTTON_PICTURE_CURSOR_SE = {};
-    for (const ary of Object.entries(JSON.parse(PluginManager.parameters(pluginName).buttonPictureCursorSe))) {
+    for (const ary of Object.entries(JSON.parse(pluginParams.buttonPictureCursorSe))) {
         const key = ary[0];
         BUTTON_PICTURE_CURSOR_SE[key] = (key === "name") ? ary[1] : Number(ary[1]);
     }

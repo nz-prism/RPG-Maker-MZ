@@ -24,5 +24,7 @@
 
 (() => {
     'use strict';
+    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
+
 
 })();

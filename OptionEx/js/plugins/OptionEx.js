@@ -9,13 +9,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.1.0
+ * ver. 1.2.0
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
  * 03/03/2021 1.0.1 Corrected default tone glitches and calibrated the window height.
  * 03/05/2021 1.0.2 Fixed bugs when dash speed or fast message is unused.
  * 04/05/2021 1.1.0 Added Switch A/B Buttons and plugin parameters to disable standard items.
+ * 06/22/2021 1.2.0 Added several parameters and make it compatible with sub-folder.
  * 
  * This plugin extends the option scene.
  * It adds window-cosmetics, dash-speed and fast-message options.
@@ -70,6 +71,12 @@
  * @min 0
  * @max 31
  * 
+ * @param hideTouchUIForMobiles
+ * @text Hide Touch UI Option for Mobile Devices
+ * @desc Specify to hide "Touch UI" option if a player uses a smart phone or a tablet.
+ * @default true
+ * @type boolean
+ * 
  * @param useAlwaysDash
  * @text Use Always Dash
  * @desc Specify to enable an option to toggle auto-dash.
@@ -107,7 +114,7 @@
  * @type boolean
  * 
  * @param useSeVolume
-  * @text Use SE Volume
+ * @text Use SE Volume
  * @desc Specify to enable an option to tune SE volume.
  * @default true
  * @type boolean
@@ -210,6 +217,24 @@
  * @min 0
  * @max 100
  * 
+ * @param defaultAlwaysDash
+ * @text Default Always Dash
+ * @desc The default value for the always dash option.
+ * @default false
+ * @type boolean
+ * 
+ * @param defaultCommandRemember
+ * @text Default Command Remember
+ * @desc The default value for the command remember option.
+ * @default false
+ * @type boolean
+ * 
+ * @param defaultTouchUI
+ * @text Default Touch UI
+ * @desc The default value for the touch UI option.
+ * @default true
+ * @type boolean
+ * 
  * @param defaultSwitchABButtons
  * @text Default Switch A/B Buttons
  * @desc The default value for the switch A/B buttons option.
@@ -232,7 +257,7 @@
  * 
  * @param defaultWindowOpacity
  * @text Default Window Opacity
- * @desc The defalt value for the window opacity.
+ * @desc The defalt value for the window opacity. You don't have to specify it if your RMMZ version is 1.3.0 or later.
  * @default 195
  * @type number
  * @min 0
@@ -254,13 +279,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.1.0
+ * ver. 1.2.0
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
  * 2021/03/03 1.0.1 Wカラーデフォルト値に関するバグ修正、ウィンドウ高さの微調整
  * 2021/03/05 1.0.2 ダッシュ速度やメッセージ瞬間表示が不使用の場合のバグを修正
  * 2021/04/05 1.1.0 A/Bボタン入れ替え機能、標準項目不使用設定追加
+ * 2021/06/22 1.2.0 プラグインパラメータ多数追加、本体バージョン1.3.0以降のサブフォルダへの格納に対応
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
  * ウィンドウの外観を変更するオプションのほか、ダッシュ速度を変更するもの、
@@ -316,6 +342,12 @@
  * @type number
  * @min 0
  * @max 31
+ * 
+ * @param hideTouchUIForMobiles
+ * @text タッチデバイスでのタッチUIオプションの非表示
+ * @desc タッチUIオプションをスマートフォンやタブレットにて非表示にするかどうかを設定してください。
+ * @default true
+ * @type boolean
  * 
  * @param useAlwaysDash
  * @text 常時ダッシュの使用
@@ -457,6 +489,24 @@
  * @min 0
  * @max 100
  * 
+ * @param defaultAlwaysDash
+ * @text デフォルト常時ダッシュ
+ * @desc 常時ダッシュのデフォルト値です。
+ * @default false
+ * @type boolean
+ * 
+ * @param defaultCommandRemember
+ * @text デフォルトコマンド記憶
+ * @desc コマンド記憶のデフォルト値です。
+ * @default false
+ * @type boolean
+ * 
+ * @param defaultTouchUI
+ * @text デフォルトタッチUI
+ * @desc タッチUIのデフォルト値です。
+ * @default true
+ * @type boolean
+ * 
  * @param defaultSwitchABButtons
  * @text デフォルトA/Bボタン入れ替え
  * @desc A/Bボタン入れ替えのデフォルト値です。
@@ -479,7 +529,7 @@
  * 
  * @param defaultWindowOpacity
  * @text デフォルトウィンドウ不透明度
- * @desc ウィンドウ不透明度のデフォルト値です。
+ * @desc ウィンドウ不透明度のデフォルト値です。本体バージョン1.3.0以降の場合設定不要です。
  * @default 195
  * @type number
  * @min 0
@@ -496,50 +546,54 @@
 
 (() => {
     'use strict';
+    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
 
-
-    const pluginName = "OptionEx";
-
-
-    const WINDOW_WIDTH = Number(PluginManager.parameters(pluginName).windowWidth);
-    const ITEM_HEIGHT = Number(PluginManager.parameters(pluginName).itemHeight);
-    const FONT_SIZE = Number(PluginManager.parameters(pluginName).fontSize);
-    const DEFAULT_COMMAND_OFFSET = Number(PluginManager.parameters(pluginName).defaultCommandOffset);
-    const TITLE_COLOR = Number(PluginManager.parameters(pluginName).titleColor);
-
-    const USE_ALWAYS_DASH = PluginManager.parameters(pluginName).useAlwaysDash === "true";
-    const USE_COMMAND_REMEMBER = PluginManager.parameters(pluginName).useCommandRemember === "true";
-    const USE_TOUCH_UI = PluginManager.parameters(pluginName).useTouchUI === "true";
-    const USE_BGM_VOLUME = PluginManager.parameters(pluginName).useBgmVolume === "true";
-    const USE_BGS_VOLUME = PluginManager.parameters(pluginName).useBgsVolume === "true";
-    const USE_ME_VOLUME = PluginManager.parameters(pluginName).useMeVolume === "true";
-    const USE_SE_VOLUME = PluginManager.parameters(pluginName).useSeVolume === "true";
+    const pluginParams = PluginManager.parameters(PLUGIN_NAME);
     
-    const USE_SWITCH_AB_BUTTONS = PluginManager.parameters(pluginName).useSwitchABButtons === "true";
-    const USE_FAST_MESSAGE = PluginManager.parameters(pluginName).useFastMessage === "true";
-    const USE_DASH_SPEED = PluginManager.parameters(pluginName).useDashSpeed === "true";
-    const USE_WINDOWSKIN = PluginManager.parameters(pluginName).useWindowskin === "true";
-    const USE_WINDOW_TONE = PluginManager.parameters(pluginName).useWindowTone === "true";
-    const USE_WINDOW_OPACITY = PluginManager.parameters(pluginName).useWindowOpacity === "true";
+    const WINDOW_WIDTH = Number(pluginParams.windowWidth);
+    const ITEM_HEIGHT = Number(pluginParams.itemHeight);
+    const FONT_SIZE = Number(pluginParams.fontSize);
+    const DEFAULT_COMMAND_OFFSET = Number(pluginParams.defaultCommandOffset);
+    const TITLE_COLOR = Number(pluginParams.titleColor);
 
-    const SWITCH_AB_BUTTONS_NAME = PluginManager.parameters(pluginName).switchABButtonsName;
-    const FAST_MESSAGE_NAME = PluginManager.parameters(pluginName).fastMessageName;
-    const DASH_SPEED_NAME = PluginManager.parameters(pluginName).dashSpeedName;
-    const WINDOWSKIN_NAME = PluginManager.parameters(pluginName).windowskinName;
-    const WINDOW_TONE_RED_NAME = PluginManager.parameters(pluginName).windowToneRedName;
-    const WINDOW_TONE_GREEN_NAME = PluginManager.parameters(pluginName).windowToneGreenName;
-    const WINDOW_TONE_BLUE_NAME = PluginManager.parameters(pluginName).windowToneBlueName;
-    const WINDOW_OPACITY_NAME = PluginManager.parameters(pluginName).windowOpacityName;
-    const DEFAULT_COMMAND_NAME = PluginManager.parameters(pluginName).defaultCommandName;
+    const HIDE_TOUCH_UI_FOR_MOBILES = pluginParams.hideTouchUIForMobiles === "true";
 
-    const DEFAULT_VOLUME = Number(PluginManager.parameters(pluginName).defaultVolume);
-    const DEFAULT_SWITCH_AB_BUTTONS = PluginManager.parameters(pluginName).defaultSwitchABButtons === "true";
-    const DEFAULT_FAST_MESSAGE = PluginManager.parameters(pluginName).defaultFastMessage === "true";
-    const DEFAULT_DASH_SPEED = Number(PluginManager.parameters(pluginName).defaultDashSpeed);
-    const DEFAULT_WINDOW_OPACITY = Number(PluginManager.parameters(pluginName).defaultWindowOpacity);
+    const WINDOWSKINS = JSON.parse(pluginParams.windowskins);
 
-    const WINDOWSKINS = JSON.parse(PluginManager.parameters(pluginName).windowskins);
+    const USE_ALWAYS_DASH = pluginParams.useAlwaysDash === "true";
+    const USE_COMMAND_REMEMBER = pluginParams.useCommandRemember === "true";
+    const USE_TOUCH_UI = pluginParams.useTouchUI === "true";
+    const USE_BGM_VOLUME = pluginParams.useBgmVolume === "true";
+    const USE_BGS_VOLUME = pluginParams.useBgsVolume === "true";
+    const USE_ME_VOLUME = pluginParams.useMeVolume === "true";
+    const USE_SE_VOLUME = pluginParams.useSeVolume === "true";
+    
+    const USE_SWITCH_AB_BUTTONS = pluginParams.useSwitchABButtons === "true";
+    const USE_FAST_MESSAGE = pluginParams.useFastMessage === "true";
+    const USE_DASH_SPEED = pluginParams.useDashSpeed === "true";
+    const USE_WINDOWSKIN = pluginParams.useWindowskin === "true";
+    const USE_WINDOW_TONE = pluginParams.useWindowTone === "true";
+    const USE_WINDOW_OPACITY = pluginParams.useWindowOpacity === "true";
 
+    const SWITCH_AB_BUTTONS_NAME = pluginParams.switchABButtonsName;
+    const FAST_MESSAGE_NAME = pluginParams.fastMessageName;
+    const DASH_SPEED_NAME = pluginParams.dashSpeedName;
+    const WINDOWSKIN_NAME = pluginParams.windowskinName;
+    const WINDOW_TONE_RED_NAME = pluginParams.windowToneRedName;
+    const WINDOW_TONE_GREEN_NAME = pluginParams.windowToneGreenName;
+    const WINDOW_TONE_BLUE_NAME = pluginParams.windowToneBlueName;
+    const WINDOW_OPACITY_NAME = pluginParams.windowOpacityName;
+    const DEFAULT_COMMAND_NAME = pluginParams.defaultCommandName;
+
+    const DEFAULT_VOLUME = Number(pluginParams.defaultVolume);
+    const DEFAULT_ALWAYS_DASH = pluginParams.defaultAlwaysDash === "true";
+    const DEFAULT_COMMAND_REMEMBER = pluginParams.defaultCommandRemember === "true";
+    const DEFAULT_TOUCH_UI = pluginParams.defaultTouchUI === "true";
+    const DEFAULT_SWITCH_AB_BUTTONS = pluginParams.defaultSwitchABButtons === "true";
+    const DEFAULT_FAST_MESSAGE = pluginParams.defaultFastMessage === "true";
+    const DEFAULT_DASH_SPEED = Number(pluginParams.defaultDashSpeed);
+    const DEFAULT_WINDOW_OPACITY = Number(pluginParams.defaultWindowOpacity);
+    
 
     ConfigManager.switchABButtons = false;
     ConfigManager.fastMessage = false;
@@ -568,6 +622,10 @@
     ConfigManager.applyData = function(config) {
         _ConfigManager_applyData.call(this, config);
         const tone = $dataSystem.windowTone;
+        const opacity = $dataSystem.advanced.windowOpacity ?? DEFAULT_WINDOW_OPACITY;
+        this.alwaysDash = this.readFlag(config, "alwaysDash", DEFAULT_ALWAYS_DASH);
+        this.commandRemember = this.readFlag(config, "commandRemember", DEFAULT_COMMAND_REMEMBER);
+        this.touchUI = this.readFlag(config, "touchUI", DEFAULT_TOUCH_UI);
         this.switchABButtons = this.readFlag(config, "switchABButtons", DEFAULT_SWITCH_AB_BUTTONS);
         this.fastMessage = this.readFlag(config, "fastMessage", DEFAULT_FAST_MESSAGE);
         this.dashSpeed = this.readNumber(config, "dashSpeed", 2, DEFAULT_DASH_SPEED);
@@ -575,7 +633,7 @@
         this.windowToneRed = this.readTone(config, "windowToneRed", tone[0]);
         this.windowToneGreen = this.readTone(config, "windowToneGreen", tone[1]);
         this.windowToneBlue = this.readTone(config, "windowToneBlue", tone[2]);
-        this.windowOpacity = this.readNumber(config, "windowOpacity", 255, DEFAULT_WINDOW_OPACITY);
+        this.windowOpacity = this.readNumber(config, "windowOpacity", 255, opacity);
     };
 
     ConfigManager.readNumber = function(config, name, maxValue, defaultValue) {
@@ -604,6 +662,14 @@
 
     ConfigManager.windowTone = function() {
         return [this.windowToneRed, this.windowToneGreen, this.windowToneBlue, 0];
+    };
+
+    ConfigManager.useTouchUI = function() {
+        return USE_TOUCH_UI && (!HIDE_TOUCH_UI_FOR_MOBILES || !Utils.isMobileDevice())
+    };
+
+    ConfigManager.useWindowskin = function() {
+        return WINDOWSKINS.length > 1;
     };
 
 
@@ -692,7 +758,7 @@
         let result = 1;
         if (USE_ALWAYS_DASH) result++;
         if (USE_COMMAND_REMEMBER) result++;
-        if (USE_TOUCH_UI) result++;
+        if (ConfigManager.useTouchUI()) result++;
         if (USE_BGM_VOLUME) result++;
         if (USE_BGS_VOLUME) result++;
         if (USE_ME_VOLUME) result++;
@@ -700,7 +766,7 @@
         if (USE_SWITCH_AB_BUTTONS) result++;
         if (USE_FAST_MESSAGE) result++;
         if (USE_DASH_SPEED) result++;
-        if (USE_WINDOWSKIN) result++;
+        if (ConfigManager.useWindowskin()) result++;
         if (USE_WINDOW_TONE) result += 3;
         if (USE_WINDOW_OPACITY) result++;
         return result;
@@ -750,7 +816,7 @@
     const _Window_Base_prototype_updateBackOpacity = Window_Base.prototype.updateBackOpacity;
     Window_Base.prototype.updateBackOpacity = function() {
         if (USE_WINDOW_OPACITY) {
-            this.backOpacity = ConfigManager.windowOpacity ?? DEFAULT_WINDOW_OPACITY;
+            this.backOpacity = ConfigManager.windowOpacity ?? $dataSystem.advanced.windowOpacity ?? DEFAULT_WINDOW_OPACITY;
         } else {
             _Window_Base_prototype_updateBackOpacity.call(this);
         }
@@ -797,11 +863,11 @@
     Window_Options.prototype.addGeneralOptions = function() {
         if (USE_ALWAYS_DASH) this.addCommand(TextManager.alwaysDash, "alwaysDash");
         if (USE_COMMAND_REMEMBER) this.addCommand(TextManager.commandRemember, "commandRemember");
-        if (USE_TOUCH_UI) this.addCommand(TextManager.touchUI, "touchUI");
+        if (ConfigManager.useTouchUI()) this.addCommand(TextManager.touchUI, "touchUI");
         if (USE_SWITCH_AB_BUTTONS) this.addCommand(SWITCH_AB_BUTTONS_NAME, "switchABButtons");
         if (USE_FAST_MESSAGE) this.addCommand(FAST_MESSAGE_NAME, "fastMessage");
         if (USE_DASH_SPEED) this.addCommand(DASH_SPEED_NAME, "dashSpeed");
-        if (USE_WINDOWSKIN) this.addCommand(WINDOWSKIN_NAME, "windowskin");
+        if (ConfigManager.useWindowskin()) this.addCommand(WINDOWSKIN_NAME, "windowskin");
         if (USE_WINDOW_TONE) {
             this.addCommand(WINDOW_TONE_RED_NAME, "windowToneRed");
             this.addCommand(WINDOW_TONE_GREEN_NAME, "windowToneGreen");
@@ -1145,9 +1211,9 @@
 
     Window_Options.prototype.restoreDefaultValues = function() {
         const tone = $dataSystem.windowTone;
-        ConfigManager["alwaysDash"] = false;
-        ConfigManager["commandRemember"] = false;
-        ConfigManager["touchUI"] = true;
+        ConfigManager["alwaysDash"] = DEFAULT_ALWAYS_DASH;
+        ConfigManager["commandRemember"] = DEFAULT_COMMAND_REMEMBER;
+        ConfigManager["touchUI"] = DEFAULT_TOUCH_UI;
         ConfigManager["switchABButtons"] = DEFAULT_SWITCH_AB_BUTTONS;
         ConfigManager["fastMessage"] = DEFAULT_FAST_MESSAGE;
         ConfigManager["dashSpeed"] = DEFAULT_DASH_SPEED;
@@ -1155,7 +1221,7 @@
         ConfigManager["windowToneRed"] = tone[0];
         ConfigManager["windowToneGreen"] = tone[1];
         ConfigManager["windowToneBlue"] = tone[2];
-        ConfigManager["windowOpacity"] = DEFAULT_WINDOW_OPACITY;
+        ConfigManager["windowOpacity"] = $dataSystem.advanced.windowOpacity ?? DEFAULT_WINDOW_OPACITY;
         ConfigManager["bgmVolume"] = DEFAULT_VOLUME;
         ConfigManager["bgsVolume"] = DEFAULT_VOLUME;
         ConfigManager["meVolume"] = DEFAULT_VOLUME;
