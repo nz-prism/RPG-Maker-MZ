@@ -9,11 +9,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.0.1
+ * ver 1.1.0
  *
  * [History]
  * 06/20/2021 1.0.0 Released
- * 06/23/2021 1.0.1 Fixed the State Picture priority and preloading functionality
+ * 06/23/2021 1.1.0 Fixed the State Picture priority and preloading functionality
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
@@ -163,11 +163,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.0.1
+ * ver 1.1.0
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
- * 2021/06/23 1.0.1 ステート立ち絵優先度の修正およびプリロード機能を変更
+ * 2021/06/23 1.1.0 ステート立ち絵優先度の修正およびプリロード機能を変更
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
