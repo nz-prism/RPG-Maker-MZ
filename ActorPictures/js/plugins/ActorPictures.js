@@ -13,17 +13,38 @@
  *
  * [History]
  * 06/20/2021 1.0.0 Released
- * 06/22/2021 1.0.1 Fixed an issue that the State Picture priority didn't reflect the order of the parameters.
+ * 06/23/2021 1.0.1 Fixed the State Picture priority and preloading functionality
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
- * Stated pictures are shown when an actor is affected by a specific state.
- * Damaged pictures are shown when the hp percentage of an actor is at a specific rate or less.
- * Normal pictures are shown if none of the stated/damaged pictures can be applied.
+ * Stated pictures are shown when an actor is affected by a
+ * specific state.
+ * Damaged pictures are shown when the HP percentage of an actor is
+ * at a specific rate or less.
+ * Normal pictures are shown if none of the stated/damaged pictures
+ * can be applied.
  * The priority is Stated > Damaged > Normal.
- * You can set multiple pictures for each of normal, stated and damaged pictures in order to use as costumes or facial expressions.
- * By setting Picture ID with a plugin command "Set Picture ID", a corresponding picture out of the pictures is shown.
- * Picture ID is used in common with Normal, Stated and Damaged pictures.
+ * 
+ * You can set multiple pictures for each of normal, stated and
+ * damaged pictures in order to use as costumes or facial
+ * expressions.
+ * By setting Picture Index with a plugin command "Set Picture
+ * Index", a corresponding picture out of the pictures is shown.
+ * Picture Index is used in common with Normal, Stated and Damaged
+ * pictures.
+ * 
+ * Actor pictures are sometimes not shown for the first time
+ * they are displayed. In that case, preloading them may solve
+ * the issue.
+ * There are 2 ways to preload pictures; automatic method using
+ * a plugin parameter and manual method using a plugin command.
+ * If an plugin parameter "Preload All Pictures Automatically
+ * at Every Scene" is set true, all the actor pictures will be
+ * preloaded automatically at the start of every scene.
+ * If there are so many pictures that the performance gets low,
+ * set it false.
+ * In this case, use a plugin command "Preload Pictures" to
+ * preload actor pictures manually.
  * 
  * 
  * This plugin is released under MIT license.
@@ -35,10 +56,16 @@
  * @default []
  * @type struct<picture>[]
  * 
+ * @param preloadAllPicturesAtEveryScene
+ * @text Preload All Pictures Automatically at Every Scene
+ * @desc By setting it ON, all the actor pictures will be preloaded automatically at the start of every scene.
+ * @default false
+ * @type boolean
+ * 
  * 
  * @command setPictureIndex
- * @text Set Picture ID
- * @desc Set the Picture ID for an actor in order to switch costumes/facial expressions.
+ * @text Set Picture Index
+ * @desc Set the Picture Index for an actor in order to switch costumes/facial expressions.
  * 
  * @arg actorId
  * @text Actor ID
@@ -47,10 +74,24 @@
  * @min 1
  * 
  * @arg pictureIndex
- * @text Picture ID
- * @desc Specify the Picture ID. Note it starts from 0.
+ * @text Picture Index
+ * @desc Specify the Picture Index. Note it starts from 0.
  * @type number
  * @min 0
+ * 
+ * @command preloadPictures
+ * @text Preload Pictures
+ * @desc Preload actor pictures manually.
+ * 
+ * @arg pictureScope
+ * @text Picture Scope
+ * @desc Select the scope for pictures to be preloaded.
+ * @default all
+ * @type select
+ * @option All
+ * @value all
+ * @option Party Actors
+ * @value party
  * 
  */
 
@@ -64,7 +105,7 @@
  * 
  * @param normalPictures
  * @text Normal Pictures
- * @desc The normal pictures for an actor. The order corresponds to Picture ID. The top one is used as default.
+ * @desc The normal pictures for an actor. The order corresponds to Picture Index. The top one is used as default.
  * @type file[]
  * @dir img/pictures
  * @default []
@@ -92,7 +133,7 @@
  *
  * @param pictures
  * @text Pictures
- * @desc Specify pictures for this state. Multiple pictures corresponding to Picture ID can be set.
+ * @desc Specify pictures for this state. Multiple pictures corresponding to Picture Index can be set.
  * @dir img/pictures
  * @type file[]
  * 
@@ -109,7 +150,7 @@
  *
  * @param pictures
  * @text Pictures
- * @desc Specify pictures for this HP %. Multiple pictures corresponding to Picture ID can be set.
+ * @desc Specify pictures for this HP %. Multiple pictures corresponding to Picture Index can be set.
  * @dir img/pictures
  * @type file[]
  * 
@@ -126,17 +167,34 @@
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
- * 2021/06/22 1.0.1 ステート立ち絵がパラメータ順の優先度になっていなかった不具合を修正
+ * 2021/06/23 1.0.1 ステート立ち絵優先度の修正およびプリロード機能を変更
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
  * ステート差分は特定のステートにかかっている際に表示される立ち絵です。
- * ダメージ差分はHPが一定割合以下になると表示される立ち絵であり、複数の割合を設定できます。
- * 標準はステート・ダメージ差分に適用可能な立ち絵が存在しない場合に表示されるデフォルト立ち絵です。
+ * ダメージ差分はHPが一定割合以下になると表示される立ち絵であり、複数の割合を
+ * 設定できます。
+ * 標準はステート・ダメージ差分に適用可能な立ち絵が存在しない場合に表示される
+ * デフォルト立ち絵です。
  * 優先度はステート > ダメージ > 標準です。
- * また、標準・ステート・ダメージのいずれにも立ち絵を複数設定することができ、衣装や表情差分等に利用できます。
- * 複数設定されている立ち絵のうち、プラグインコマンド「立ち絵インデックスの設定」にて設定した立ち絵インデックスに対応する立ち絵が表示されます。
+ * 
+ * また、標準・ステート・ダメージのいずれにも立ち絵を複数設定することができ、
+ * 衣装や表情差分等に利用できます。
+ * 複数設定されている立ち絵のうち、プラグインコマンド「立ち絵インデックスの設定
+ * 」にて設定した立ち絵インデックスに対応する立ち絵が表示されます。
  * 立ち絵インデックスは標準・ダメージ・ステート間で共通です。
+ * 
+ * まれに立ち絵が初回表示時に描画されないことがあります。立ち絵をプリロード
+ * （事前読み込み）することで解決できる可能性があります。
+ * プリロードには自動的な方法と手動による方法の２種類が用意されています。
+ * 自動的方法はプラグインパラメータを、手動的方法はプラグインコマンドを使用しま
+ * す。
+ * プラグインパラメータ「全ての立ち絵をシーン開始時にプリロード」をオンにする
+ * と、各シーン開始時に全ての立ち絵がプリロードされるようになります。
+ * もし立ち絵が非常に多く、そのために動作が重いと感じる場合、このパラメータをオ
+ * フにしてください。
+ * その場合、立ち絵表示の直前にプラグインコマンド「全ての立ち絵をプリロードす
+ * る」を呼び出すことで手動プリロードできます。
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
@@ -147,6 +205,12 @@
  * @desc アクターの立ち絵設定です（複数設定可）
  * @default []
  * @type struct<picture>[]
+ * 
+ * @param preloadAllPicturesAtEveryScene
+ * @text 全ての立ち絵をシーン開始時に自動プリロード
+ * @desc オンにすると全ての立ち絵がシーン開始時に自動的にプリロードされるようになります。
+ * @default false
+ * @type boolean
  * 
  * 
  * @command setPictureIndex
@@ -164,6 +228,20 @@
  * @desc 立ち絵のインデックスです。0から始まる点にご注意ください。
  * @type number
  * @min 0
+ * 
+ * @command preloadPictures
+ * @text 立ち絵をプリロードする
+ * @desc 立ち絵を手動プリロードします。
+ * 
+ * @arg pictureScope
+ * @text プリロード範囲
+ * @desc プリロードする立ち絵の範囲を選択してください。
+ * @default all
+ * @type select
+ * @option すべて
+ * @value all
+ * @option パーティ内アクター
+ * @value party
  * 
  */
 
@@ -231,10 +309,10 @@
 (() => {
     'use strict';
     const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
-
+    const pluginParams = PluginManager.parameters(PLUGIN_NAME);
 
     const ACTOR_PICTURES = [];
-    for (const str of JSON.parse(PluginManager.parameters(PLUGIN_NAME).actorPictures)) {
+    for (const str of JSON.parse(pluginParams.actorPictures)) {
         const obj = JSON.parse(str);
         const actorId = Number(obj.actorId);
         const normalPictures = JSON.parse(obj.normalPictures);
@@ -262,11 +340,36 @@
         };
     }
 
+    const PRELOAD_ALL_PICTURES_AT_EVERY_SCENE = pluginParams.preloadAllPicturesAtEveryScene === "true";
+
 
     PluginManager.registerCommand(PLUGIN_NAME, "setPictureIndex", args => {
         $gameActors.actor(Number(args.actorId)).setPictureIndex(Number(args.pictureIndex));
     });
 
+    PluginManager.registerCommand(PLUGIN_NAME, "preloadPictures", args => {
+        ImageManager.preloadActorPictures(args.pictureScope);
+    });
+
+
+
+    ImageManager.preloadActorPictures = function(scope) {
+        let objects;
+        switch (scope) {
+            case "party":
+                objects = $gameParty.allMembers().map(actor => ACTOR_PICTURES[actor.actorId()]);
+                break;
+            default:
+                objects = ACTOR_PICTURES;
+                break;
+        }
+        let ary = [];
+        for (const obj of objects) {
+            if (!obj) continue;
+            ary = ary.concat(obj.normals, obj.states.map(o => o.pictures), obj.damages.map(o => o.pictures));
+        }
+        ary.flat().filter(name => !!name).forEach(name => this.loadPicture(name));
+    };
 
 
     const _Game_Actor_prototype_initMembers = Game_Actor.prototype.initMembers;
@@ -320,21 +423,18 @@
     const _Scene_Base_prototype_create = Scene_Base.prototype.create;
     Scene_Base.prototype.create = function() {
         _Scene_Base_prototype_create.call(this);
-        if (this.shouldPreloadAllActorPictures()) this.preloadAllActorPictures();
+        if (this.shouldPreloadActorPictures()) ImageManager.preloadActorPictures("all");
     };
 
-    Scene_Base.prototype.preloadAllActorPictures = function() {
-        let ary = [];
-        for (const obj of ACTOR_PICTURES) {
-            if (!obj) continue;
-            ary = ary.concat(obj.normals, obj.states.map(o => o.pictures), obj.damages.map(o => o.pictures));
-        }
-        ary.flat().filter(name => !!name).forEach(name => ImageManager.loadPicture(name));
+    Scene_Base.prototype.shouldPreloadActorPictures = function() {
+        return PRELOAD_ALL_PICTURES_AT_EVERY_SCENE;
     };
 
-    Scene_Base.prototype.shouldPreloadAllActorPictures = function() {
-        return true;
+    
+    Scene_Boot.prototype.shouldPreloadActorPictures = function() {
+        return false;
     };
+
 
     Window_Base.prototype.drawActorPicture = function(actor, x, y) {
         const bitmap = ImageManager.loadPicture(actor.pictureName());
