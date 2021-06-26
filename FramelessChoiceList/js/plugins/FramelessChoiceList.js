@@ -9,10 +9,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js
  *
  * @help FramelessChoiceList.js
- * ver 1.0.0
+ * ver 1.1.0
  *
  * [History]
  * 06/26/2021 1.0.0 Released
+ * 06/26/2021 1.1.0 Added a plugin parameter Y Axis Offset.
  * 
  * This plugin makes the choice window frameless and display black
  * backs with gradation for choices. It also display selection
@@ -29,7 +30,7 @@
  * @param windowWidthPlus
  * @text Window Width Plus
  * @desc The value added to the choice window width.
- * @default 160
+ * @default 480
  * @type number
  * @min -10000
  * 
@@ -44,6 +45,13 @@
  * @text Row Spacing
  * @desc The height allowance for the choices.
  * @default 4
+ * @type number
+ * @min 0
+ * 
+ * @param offsetY
+ * @text Y Axis Offset
+ * @desc The distance between the message and the choice windows.
+ * @default 24
  * @type number
  * @min 0
  * 
@@ -86,10 +94,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js
  *
  * @help FramelessChoiceList.js
- * ver 1.0.0
+ * ver 1.1.0
  *
  * [バージョン履歴]
  * 2021/06/26 1.0.0 リリース
+ * 2021/06/26 1.1.0 プラグインパラメータ「Y座標オフセット」を追加
  * 
  * このプラグインは、選択肢ウィンドウの枠をなくして代わりに背景をグラデーション
  * 付き黒背景にします。選択肢の行頭には選択時・非選択時に表示が切り替わる選択画
@@ -105,7 +114,7 @@
  * @param windowWidthPlus
  * @text ウィンドウ幅加算値
  * @desc 選択肢ウィンドウの幅に加算する値です。
- * @default 160
+ * @default 480
  * @type number
  * @min -10000
  * 
@@ -120,6 +129,13 @@
  * @text 行間隔
  * @desc 選択肢項目間の余白の高さです。
  * @default 4
+ * @type number
+ * @min 0
+ * 
+ * @param offsetY
+ * @text Y座標オフセット
+ * @desc 選択肢ウィンドウとメッセージウィンドウの距離です。
+ * @default 24
  * @type number
  * @min 0
  * 
@@ -164,6 +180,7 @@
     const WINDOW_WIDTH_PLUS = Number(pluginParams.windowWidthPlus);
     const LINE_HEIGHT = Number(pluginParams.lineHeight);
     const ROW_SPACING = Number(pluginParams.rowSpacing);
+    const OFFSET_Y = Number(pluginParams.offsetY);
 
     const USE_SELECTION_IMAGE = pluginParams.useSelectionImage === "true";
     const ACTIVE_SELECTION_IMAGE = pluginParams.activeSelectionImage;
@@ -213,6 +230,15 @@
     
     Window_ChoiceList.prototype.windowX = function() {
         return Graphics.boxWidth / 2 - this.windowWidth() / 2;
+    };
+
+    Window_ChoiceList.prototype.windowY = function() {
+        const messageY = this._messageWindow.y;
+        if (messageY >= Graphics.boxHeight / 2) {
+            return messageY - (this.windowHeight() + OFFSET_Y);
+        } else {
+            return messageY + this._messageWindow.height + OFFSET_Y;
+        }
     };
     
     Window_ChoiceList.prototype.lineHeight = function() {
