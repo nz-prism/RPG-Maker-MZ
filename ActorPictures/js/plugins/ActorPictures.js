@@ -440,7 +440,7 @@
         const bitmap = ImageManager.loadPicture(actor.pictureName());
         const width = bitmap.width;
         const height = bitmap.height;
-        this.contents.blt(bitmap, x, y, width, height, 0, 0);
+        this.contents.blt(bitmap, 0, 0, width, height, x, y);
     };
 
 })();

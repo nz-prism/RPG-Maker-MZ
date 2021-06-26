@@ -55,3 +55,15 @@
 !/MenuStatusPictures/js/plugins/
 /MenuStatusPictures/js/plugins/*
 !/MenuStatusPictures/js/plugins/MenuStatusPictures.js
+/FramelessChoiceList/*
+!/FramelessChoiceList/js
+/FramelessChoiceList/js/*
+!/FramelessChoiceList/js/plugins/
+/FramelessChoiceList/js/plugins/*
+!/FramelessChoiceList/js/plugins/FramelessChoiceList.js
+!/FramelessChoiceList/img
+/FramelessChoiceList/img/*
+!/FramelessChoiceList/img/system/
+/FramelessChoiceList/img/system/*
+!/FramelessChoiceList/img/system/Selection_Active.png
+!/FramelessChoiceList/img/system/Selection_Deactive.png
