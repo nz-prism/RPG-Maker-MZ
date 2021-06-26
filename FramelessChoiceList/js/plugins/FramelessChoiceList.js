@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Makes the choice window frameless.
  * @author nz_prism
- * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js
  *
  * @help FramelessChoiceList.js
  * ver 1.0.0
@@ -83,7 +83,7 @@
  * @target MZ
  * @plugindesc 選択肢ウィンドウの外見を枠のない黒背景に変更します。
  * @author nz_prism
- * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js
  *
  * @help FramelessChoiceList.js
  * ver 1.0.0
