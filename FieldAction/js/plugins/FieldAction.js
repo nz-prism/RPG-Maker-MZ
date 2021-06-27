@@ -252,4 +252,31 @@
         return this._currentCommonEventId;
     };
 
+
+    Scene_Map.prototype.createItemWindow = function() {
+        const rect = this.itemWindowRect();
+        this._itemWindow = new Window_SkillList(rect);
+        // this._itemWindow.setHelpWindow(this._helpWindow);
+        // this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
+        // this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
+        // this._skillTypeWindow.setSkillWindow(this._itemWindow);
+        this.addWindow(this._itemWindow);
+    };
+
+    const _Scene_Map_prototype_createAllWindows = Scene_Map.prototype.createAllWindows;
+    Scene_Map.prototype.createAllWindows = function() {
+        _Scene_Map_prototype_createAllWindows.call(this);
+        this.createItemWindow();
+    };
+
+    Scene_Map.prototype.itemWindowRect = function() {
+        const wx = 0;
+        // const wy = this._statusWindow.y + this._statusWindow.height;
+        const wy = 0; // 暫定値
+        const ww = Graphics.boxWidth;
+        // const wh = this.mainAreaHeight() - this._statusWindow.height;
+        const wh = 300; // 暫定値
+        return new Rectangle(wx, wy, ww, wh);
+    };
+
 })();
