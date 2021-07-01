@@ -9,11 +9,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [History]
  * 06/20/2021 1.0.0 Released
  * 06/23/2021 1.1.0 Fixed the State Picture priority and preloading functionality
+ * 07/01/2021 1.1.1 Added arguments for drawActorPicture function
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
@@ -163,11 +164,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
  * 2021/06/23 1.1.0 ステート立ち絵優先度の修正およびプリロード機能を変更
+ * 2021/07/01 1.1.1 drawActorPicture関数の引数を追加
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
@@ -436,11 +438,9 @@
     };
 
 
-    Window_Base.prototype.drawActorPicture = function(actor, x, y) {
+    Window_Base.prototype.drawActorPicture = function(actor, x, y, width, height, sx, sy) {
         const bitmap = ImageManager.loadPicture(actor.pictureName());
-        const width = bitmap.width;
-        const height = bitmap.height;
-        this.contents.blt(bitmap, 0, 0, width, height, x, y);
+        this.contents.blt(bitmap, sx || 0, sy || 0, width || bitmap.width, height || bitmap.height, x, y);
     };
 
 })();
