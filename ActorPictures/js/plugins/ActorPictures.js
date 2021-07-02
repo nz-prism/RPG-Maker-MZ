@@ -9,12 +9,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.1.1
+ * ver 1.2.0
  *
  * [History]
  * 06/20/2021 1.0.0 Released
  * 06/23/2021 1.1.0 Fixed the State Picture priority and preloading functionality
  * 07/01/2021 1.1.1 Added arguments for drawActorPicture function
+ * 07/02/2021 1.2.0 Added a plugin parameter which calibrates picture positions
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
@@ -33,6 +34,12 @@
  * Index", a corresponding picture out of the pictures is shown.
  * Picture Index is used in common with Normal, Stated and Damaged
  * pictures.
+ * 
+ * Some pictures don't locate their face at the horizontal center
+ * or locate them lower because of upper accessories, such as
+ * hats. If those are misaligned, use a plugin parameter
+ * "Picture Calibrations" to calibrate the alignment for each
+ * picture.
  * 
  * Actor pictures are sometimes not shown for the first time
  * they are displayed. In that case, preloading them may solve
@@ -56,6 +63,12 @@
  * @desc Settings for actor pictures.
  * @default []
  * @type struct<picture>[]
+ * 
+ * @param pictureCalibrations
+ * @text Picture Calibrations
+ * @desc The calibration settings for each picture file which requires offsetting.
+ * @default []
+ * @type struct<calibration>[]
  * 
  * @param preloadAllPicturesAtEveryScene
  * @text Preload All Pictures Automatically at Every Scene
@@ -157,6 +170,30 @@
  * 
  */
 
+/*~struct~calibration:
+ *
+ * @param pictureName
+ * @text Picture Name
+ * @desc The picture name which requires calibration.
+ * @type file
+ * @dir img/pictures
+ * 
+ * @param centerX
+ * @text Center X
+ * @desc The coordinate X at the center of the face. If it's negative value, half of the width will be used.
+ * @type number
+ * @default -1
+ * @min -1
+ * 
+ * @param offsetY
+ * @text Offset Y
+ * @desc The vertical offset value. Can be set negative value.
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ */
+
 /*:ja
  * @target MZ
  * @plugindesc アクターの立ち絵を管理します。
@@ -164,12 +201,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.1.1
+ * ver 1.2.0
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
  * 2021/06/23 1.1.0 ステート立ち絵優先度の修正およびプリロード機能を変更
  * 2021/07/01 1.1.1 drawActorPicture関数の引数を追加
+ * 2021/07/02 1.2.0 立ち絵のズレを調整するためのプラグインパラメータを追加
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
@@ -185,6 +223,11 @@
  * 複数設定されている立ち絵のうち、プラグインコマンド「立ち絵インデックスの設定
  * 」にて設定した立ち絵インデックスに対応する立ち絵が表示されます。
  * 立ち絵インデックスは標準・ダメージ・ステート間で共通です。
+ * 
+ * 立ち絵によっては顔の位置が画像の中央に来ていなかったり、帽子などの装飾品によ
+ * り画像が縦に長いこともあります。そうした立ち絵がズレて表示されてしまう場合、
+ * プラグインパラメータ「立ち絵位置調整」を使用して表示位置を調整してください。
+ * 画像ごとに設定することができます。
  * 
  * まれに立ち絵が初回表示時に描画されないことがあります。立ち絵をプリロード
  * （事前読み込み）することで解決できる可能性があります。
@@ -207,6 +250,12 @@
  * @desc アクターの立ち絵設定です（複数設定可）
  * @default []
  * @type struct<picture>[]
+ * 
+ * @param pictureCalibrations
+ * @text 立ち絵位置調整
+ * @desc 立ち絵ごとの表示座標調整設定です。設定されていない立ち絵はデフォルト設定が使用されます。
+ * @default []
+ * @type struct<calibration>[]
  * 
  * @param preloadAllPicturesAtEveryScene
  * @text 全ての立ち絵をシーン開始時に自動プリロード
@@ -308,6 +357,30 @@
  * 
  */
 
+/*~struct~calibration:ja
+ *
+ * @param pictureName
+ * @text 立ち絵ファイル名
+ * @desc 座標を調整したい画像ファイルです。
+ * @type file
+ * @dir img/pictures
+ * 
+ * @param centerX
+ * @text 中心X座標
+ * @desc 顔の中心部のX座標です。マイナスにした場合、画像の幅の半分が中心座標になります。
+ * @type number
+ * @default -1
+ * @min -1
+ * 
+ * @param offsetY
+ * @text Y座標オフセット
+ * @desc 立ち絵を垂直方向にずらす値です。マイナスにもできます。
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ */
+
 (() => {
     'use strict';
     const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
@@ -342,6 +415,12 @@
         };
     }
 
+    const PICTURE_CALIBRATIONS = {};
+    for (const str of JSON.parse(pluginParams.pictureCalibrations)) {
+        const obj = JSON.parse(str);
+        PICTURE_CALIBRATIONS[obj.pictureName] = {centerX: Number(obj.centerX), offsetY: Number(obj.offsetY)};
+    }
+
     const PRELOAD_ALL_PICTURES_AT_EVERY_SCENE = pluginParams.preloadAllPicturesAtEveryScene === "true";
 
 
@@ -371,6 +450,24 @@
             ary = ary.concat(obj.normals, obj.states.map(o => o.pictures), obj.damages.map(o => o.pictures));
         }
         ary.flat().filter(name => !!name).forEach(name => this.loadPicture(name));
+    };
+
+    ImageManager.centerX = function(pictureName) {
+        const obj = PICTURE_CALIBRATIONS[pictureName];
+        if (obj) {
+            return obj.centerX;
+        } else {
+            return -1;
+        }
+    };
+
+    ImageManager.offsetY = function(pictureName) {
+        const obj = PICTURE_CALIBRATIONS[pictureName];
+        if (obj) {
+            return obj.offsetY;
+        } else {
+            return 0;
+        }
     };
 
 
@@ -438,9 +535,21 @@
     };
 
 
-    Window_Base.prototype.drawActorPicture = function(actor, x, y, width, height, sx, sy) {
-        const bitmap = ImageManager.loadPicture(actor.pictureName());
-        this.contents.blt(bitmap, sx || 0, sy || 0, width || bitmap.width, height || bitmap.height, x, y);
+    Window_Base.prototype.drawActorPicture = function(actor, x, y, width, height, alignCenter=false, offsetVertically=false) {
+        const pictureName = actor.pictureName();
+        const bitmap = ImageManager.loadPicture(pictureName);
+        const bw = bitmap.width;
+        const bh = bitmap.height;
+        const w = width || bw;
+        const h = height || bh;
+        let sx = 0;
+        if (alignCenter && w < bw) {
+            const centerX = ImageManager.centerX(pictureName);
+            const cx = (centerX > 0) ? centerX : (bw / 2);
+            sx = (cx - w / 2).clamp(0, bw);
+        }
+        const sy = offsetVertically ? ImageManager.offsetY(pictureName) : 0;
+        this.contents.blt(bitmap, sx, sy, w, h, x, y);
     };
 
 })();

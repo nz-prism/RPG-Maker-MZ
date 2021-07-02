@@ -8,30 +8,20 @@
  * @author nz_prism
  * @base ActorPictures
  * @base AltMenuScreen
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js
  *
  * @help ActorPictureOnAltMenuScreen.js
+ * ver 1.1.0
+ *
+ * [History]
+ * 07/01/2021 1.0.0 Released
+ * 07/02/2021 1.1.0 Updated in accordance with ActorPictures.js
  *
  * This plugin changes actor faces into pictures on AltMenuScreen.
  * It reequires both ActorPictures.js and AltMenuScreen.js.
- * If the pictures aren't at right place, use plugin parameters
- * "Picture Offset X" and "Picture Offset Y".
  *
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
- * 
- * @param pictureSx
- * @text Picture Offset X
- * @desc Specify the X offset value for pictures.
- * @default 56
- * @type number
- * @min -10000
- * 
- * @param pictureSy
- * @text Picture Offset Y
- * @desc Specify the Y offset value for pictures.
- * @default 0
- * @type number
- * @min -10000
  * 
  */
 
@@ -41,41 +31,26 @@
  * @author nz_prism
  * @base ActorPictures
  * @base AltMenuScreen
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js
  *
  * @help ActorPictureOnAltMenuScreen.js
+ * ver 1.1.0
+ *
+ * [バージョン履歴]
+ * 2021/07/01 1.0.0 リリース
+ * 2021/07/02 1.1.0 ActorPictures.jsに合わせて更新
  *
  * このプラグインは、AltMenuScreenにて描画される顔グラフィックをアクターの立ち絵
  * に変更します。
  * ActorPictures.jsおよびAltMenuScreen.jsが前提プラグインとなります。
- * 立ち絵がずれる場合、プラグインパラメータ「立ち絵オフセットX」「立ち絵オフセッ
- * トY」にて調整してください。
  *
  * このプラグインはMITライセンスにてリリースされています。
  * https://opensource.org/licenses/mit-license.php
- * 
- * @param pictureSx
- * @text 立ち絵オフセットX
- * @desc アクターの立ち絵のX座標オフセット値です。
- * @default 56
- * @type number
- * @min -10000
- * 
- * @param pictureSy
- * @text 立ち絵オフセットY
- * @desc アクターの立ち絵のY座標オフセット値です。
- * @default 0
- * @type number
- * @min -10000
  * 
  */
 
 (() => {
     'use strict';
-    const PLUGIN_NAME = "ActorPictureOnAltMenuScreen";
-    const pluginParams = PluginManager.parameters(PLUGIN_NAME);
-
-    const PICTURE_SX = Number(pluginParams.pictureSx);
-    const PICTURE_SY = Number(pluginParams.pictureSy);
 
 
     Window_MenuStatus.prototype.drawItemImage = function(index) {
@@ -84,9 +59,8 @@
         const w = rect.width;
         const h = rect.height;
         this.changePaintOpacity(actor.isBattleMember());
-        this.drawActorPicture(actor, rect.x, rect.y, w, h, PICTURE_SX, PICTURE_SY);
+        this.drawActorPicture(actor, rect.x, rect.y, w, h, true, true);
         this.changePaintOpacity(true);
     };
 
-    
 })();
