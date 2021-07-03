@@ -6,6 +6,7 @@
 /ActorPictures/js/plugins/*
 !/ActorPictures/js/plugins/ActorPictures.js
 !/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js
+!/ActorPictures/js/plugins/PictureMessage.js
 /CartRide/*
 !/CartRide/data/
 /CartRide/data/*

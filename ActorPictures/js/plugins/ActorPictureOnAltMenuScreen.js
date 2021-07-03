@@ -18,7 +18,7 @@
  * 07/02/2021 1.1.0 Updated in accordance with ActorPictures.js
  *
  * This plugin changes actor faces into pictures on AltMenuScreen.
- * It reequires both ActorPictures.js and AltMenuScreen.js.
+ * It requires both ActorPictures.js and AltMenuScreen.js.
  *
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
