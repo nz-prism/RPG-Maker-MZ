@@ -7,7 +7,7 @@
  * @plugindesc Displays actor pictures on messages automatically.
  * @author nz_prism
  * @base ActorPictures
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
  * ver 1.0.0
@@ -210,7 +210,7 @@
  * @plugindesc 会話時に自動的に立ち絵を表示するプラグインです。
  * @author nz_prism
  * @base ActorPictures
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
  * ver 1.0.0
