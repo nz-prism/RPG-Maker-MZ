@@ -13,7 +13,7 @@
  * ver 1.0.0
  *
  * [History]
- * 07/02/2021 1.0.0 Released
+ * 07/03/2021 1.0.0 Released
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -216,7 +216,7 @@
  * ver 1.0.0
  *
  * [バージョン履歴]
- * 2021/07/02 1.0.0 リリース
+ * 2021/07/03 1.0.0 リリース
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
