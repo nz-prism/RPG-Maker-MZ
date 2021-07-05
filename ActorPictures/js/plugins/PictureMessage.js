@@ -10,10 +10,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.0.0
+ * ver 1.1.0
  *
  * [History]
  * 07/03/2021 1.0.0 Released
+ * 07/05/2021 1.1.0 Added picture animation and inverse functionality
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -54,6 +55,9 @@
  * messages. Use a plugin command "Erase Picture" to erase them.
  * It can erase an individual picture or all the pictures at once.
  * 
+ * Pictures can be animated. If plugin parameters of ActorPictures.js
+ * are set, the pictures will be animated while they are displayed.
+ * 
  * 
  * ■ Control Characters for the name field
  *   \AP[nPOSITION]
@@ -67,6 +71,31 @@
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
  * 
+ * 
+ * @param pictureMirror
+ * @text PictureMirror
+ * @desc Settings to invert pictures.
+ * 
+ * @param leftMirror
+ * @parent pictureMirror
+ * @text Left Picture Mirror
+ * @desc If true, the left picture will be inverted horizontally.
+ * @default true
+ * @type boolean
+ * 
+ * @param centerMirror
+ * @parent pictureMirror
+ * @text Center Picture Mirror
+ * @desc If true, the center picture will be inverted horizontally.
+ * @default false
+ * @type boolean
+ * 
+ * @param rightMirror
+ * @parent pictureMirror
+ * @text Right Picture Mirror
+ * @desc If true, the right picture will be inverted horizontally.
+ * @default false
+ * @type boolean
  * 
  * @param pictureCoordinates
  * @text Picture Coordinates
@@ -213,10 +242,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.0.0
+ * ver 1.1.0
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
+ * 2021/07/05 1.1.0 アニメーションへの対応、位置ごとの反転設定の追加
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -255,6 +285,10 @@
  * り続けます。立ち絵を非表示にするには、プラグインコマンド「立ち絵退場」を使
  * 用してください。個別に退場させることも、全て一括で退場させることも可能です。
  * 
+ * 立ち絵のアニメーションにも対応しています。ActorPictures.jsのプラグイン
+ * パラメータ「立ち絵アニメ設定」にて設定した立ち絵は、表示されている間アニメ
+ * するようになります。
+ * 
  * 
  * ■ 名前欄に使用する制御文字
  *   \AP[n位置]
@@ -268,6 +302,31 @@
  * このプラグインはMITライセンスにてリリースされています。
  * https://opensource.org/licenses/mit-license.php
  * 
+ * 
+ * @param pictureMirror
+ * @text 立ち絵反転
+ * @desc 立ち絵を反転させるかどうかの設定です
+ * 
+ * @param leftMirror
+ * @parent pictureMirror
+ * @text 左立ち絵反転
+ * @desc 左側の立ち絵を反転させるかどうかの設定です
+ * @default true
+ * @type boolean
+ * 
+ * @param centerMirror
+ * @parent pictureMirror
+ * @text 中央立ち絵反転
+ * @desc 中央の立ち絵を反転させるかどうかの設定です
+ * @default false
+ * @type boolean
+ * 
+ * @param rightMirror
+ * @parent pictureMirror
+ * @text 右立ち絵反転
+ * @desc 右側の立ち絵を反転させるかどうかの設定です
+ * @default false
+ * @type boolean
  * 
  * @param pictureCoordinates
  * @text 立ち絵座標
@@ -411,6 +470,12 @@
     const PLUGIN_NAME = "PictureMessage";
     const pluginParams = PluginManager.parameters(PLUGIN_NAME);
 
+    const PICTURE_MIRRORS = [
+        pluginParams.leftMirror === "true",
+        pluginParams.centerMirror === "true",
+        pluginParams.rightMirror === "true"
+    ];
+
     const BOTTOM_Y_ORIGIN = pluginParams.bottomYOrigin === "true";
 
     const PICTURE_COORDINATES = [
@@ -547,8 +612,9 @@
         Sprite_Clickable.prototype.initialize.call(this);
         this._position = position;
         this._pictureName = "";
-        this.scale.x = position === 0 ? -1 : 1;
+        this.scale.x = PICTURE_MIRRORS[position] ? -1 : 1;
         this.anchor.y = BOTTOM_Y_ORIGIN ? 1 : 0;
+        this.setupAnimation("");
     };
 
     Sprite_MessagePicture.prototype.isSpeaking = function() {
@@ -559,6 +625,8 @@
         Sprite_Clickable.prototype.update.call(this);
         if (!this.updateEasing()) {
             this.updateSpeaker(this.updateBitmap());
+            this.updateFrame();
+            this.updateAnimation();
             this.updateSpeaking();
         }
     };
@@ -630,6 +698,37 @@
         }
     };
 
+    Sprite_MessagePicture.prototype.updateFrame = function() {
+        const bitmap = this.bitmap;
+        if (bitmap) {
+            let pw, px;
+            if (this._hasAnimation) {
+                const numPattern = this._animationNumPattern;
+                const pattern = this._pattern < numPattern ? this._pattern : 0;
+                pw = bitmap.width / numPattern;
+                px = pw * pattern;
+            } else {
+                pw = bitmap.width;
+                px = 0;
+            }
+            this.setFrame(px, 0, pw, bitmap.height);
+        }
+    };
+
+    Sprite_MessagePicture.prototype.updateAnimation = function() {
+        if (this._hasAnimation) {
+            this._animationCount += this._animationPatternCounts[this._pattern];
+            if (this._animationCount >= this._animationRepeatDurations[this._animationRepeatIndex]) {
+                this._pattern = (this._pattern + 1) % this._animationNumPattern;
+                this._animationCount = 0;
+                if (this._pattern === 0) {
+                    this._animationRepeatIndex++;
+                    if (this._animationRepeatIndex >= this._animationNumRepeat) this._animationRepeatIndex = 0;
+                }
+            }
+        }
+    };
+    
     Sprite_MessagePicture.prototype.changeBitmap = function(pictureName) {
         const bitmap = ImageManager.loadPicture(pictureName);
         const width = bitmap.width;
@@ -637,6 +736,22 @@
         const cx = (centerX > 0) ? centerX : (width / 2);
         this.bitmap = bitmap;
         this.anchor.x = cx / width;
+        this.setupAnimation(pictureName);
+    };
+
+    Sprite_MessagePicture.prototype.setupAnimation = function(pictureName) {
+        if (ImageManager.hasPictureAnimation(pictureName)) {
+            this._hasAnimation = true;
+            this._pattern = 0;
+            this._animationCount = 0;
+            this._animationRepeatIndex = 0;
+            this._animationNumPattern = ImageManager.animationNumPattern(pictureName);
+            this._animationPatternCounts = ImageManager.animationPatternCounts(pictureName);
+            this._animationNumRepeat = ImageManager.animationNumRepeat(pictureName);
+            this._animationRepeatDurations = ImageManager.animationRepeatDurations(pictureName);
+        } else {
+            this._hasAnimation = false;
+        }
     };
 
     Sprite_MessagePicture.prototype.calcEasing = function(t) {

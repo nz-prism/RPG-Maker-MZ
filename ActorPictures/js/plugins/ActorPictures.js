@@ -9,13 +9,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.2.0
+ * ver 1.3.0
  *
  * [History]
  * 06/20/2021 1.0.0 Released
  * 06/23/2021 1.1.0 Fixed the State Picture priority and preloading functionality
  * 07/01/2021 1.1.1 Added arguments for drawActorPicture function
  * 07/02/2021 1.2.0 Added a plugin parameter which calibrates picture positions
+ * 07/05/2021 1.3.0 Added animation settings for pictures
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
@@ -54,6 +55,13 @@
  * In this case, use a plugin command "Preload Pictures" to
  * preload actor pictures manually.
  * 
+ * You can also configure animation settings for pictures. If you
+ * want to animate a picture, create a image with as many patterns
+ * aligned horizontally as you like. Specify that number of
+ * patterns into a plugin parameter "Animation Patterns". Animation
+ * frames can be calibrated with plugin parameters. Configure them
+ * seeing actual animations in the game.
+ * 
  * 
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
@@ -69,6 +77,12 @@
  * @desc The calibration settings for each picture file which requires offsetting.
  * @default []
  * @type struct<calibration>[]
+ * 
+ * @param animationPictures
+ * @text Picture Animation Settings
+ * @desc The settings to animate pictures.
+ * @default []
+ * @type struct<animation>[]
  * 
  * @param preloadAllPicturesAtEveryScene
  * @text Preload All Pictures Automatically at Every Scene
@@ -194,6 +208,46 @@
  * 
  */
 
+/*~struct~animation:ja
+ *
+ * @param pictureName
+ * @text Picture Name
+ * @desc The picture name to be animated.
+ * @type file
+ * @dir img/pictures
+ * 
+ * @param numPattern
+ * @text Animation Patterns
+ * @desc The number of patterns for animation.
+ * @type number
+ * @default 3
+ * @min 1
+ * 
+ * @param patternCounts
+ * @parent numPattern
+ * @text Pattern Counts
+ * @desc The number of counts before the next pattern. Set as many as Animation Patterns.
+ * @type number[]
+ * @default ["1","2","2"]
+ * @min 1
+ * 
+ * @param numRepeat
+ * @text Pattern Repeats
+ * @desc The number of pattern sets within an animation loop.
+ * @type number
+ * @default 4
+ * @min 1
+ * 
+ * @param repeatDurations
+ * @parent numRepeat
+ * @text Repeat Durations
+ * @desc The number of frames before the next pattern set. Set as many as Pattern Repeats.
+ * @type number[]
+ * @default ["30","24","10","6"]
+ * @min 1
+ * 
+ */
+
 /*:ja
  * @target MZ
  * @plugindesc アクターの立ち絵を管理します。
@@ -201,13 +255,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.2.0
+ * ver 1.3.0
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
  * 2021/06/23 1.1.0 ステート立ち絵優先度の修正およびプリロード機能を変更
  * 2021/07/01 1.1.1 drawActorPicture関数の引数を追加
  * 2021/07/02 1.2.0 立ち絵のズレを調整するためのプラグインパラメータを追加
+ * 2021/07/05 1.3.0 立ち絵のアニメーション設定を追加
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
@@ -241,6 +296,12 @@
  * その場合、立ち絵表示の直前にプラグインコマンド「全ての立ち絵をプリロードす
  * る」を呼び出すことで手動プリロードできます。
  * 
+ * 立ち絵のアニメーションも設定することができます。立ち絵をアニメさせたい場合、
+ * 任意の数のパターンを横に並べてください。プラグインパラメータ「立ち絵アニメ設
+ * 定」にてその立ち絵画像ファイルを指定し、「アニメパターン数」にて並べたパター
+ * ンの数を指定してください。また、アニメのフレームもパラメータにて細かく指定す
+ * ることが可能です。実際に動かしながら調整してください。
+ * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
  * https://opensource.org/licenses/mit-license.php
@@ -256,6 +317,12 @@
  * @desc 立ち絵ごとの表示座標調整設定です。設定されていない立ち絵はデフォルト設定が使用されます。
  * @default []
  * @type struct<calibration>[]
+ * 
+ * @param animationPictures
+ * @text 立ち絵アニメ設定
+ * @desc 立ち絵のアニメーション設定です。
+ * @default []
+ * @type struct<animation>[]
  * 
  * @param preloadAllPicturesAtEveryScene
  * @text 全ての立ち絵をシーン開始時に自動プリロード
@@ -381,6 +448,46 @@
  * 
  */
 
+/*~struct~animation:ja
+ *
+ * @param pictureName
+ * @text 立ち絵ファイル名
+ * @desc アニメを設定したい画像ファイルです。
+ * @type file
+ * @dir img/pictures
+ * 
+ * @param numPattern
+ * @text アニメパターン数
+ * @desc アニメのパターン数（コマ数）です。
+ * @type number
+ * @default 3
+ * @min 1
+ * 
+ * @param patternCounts
+ * @parent numPattern
+ * @text パターンカウント数
+ * @desc 次のパターンまでの間、1フレームにカウントされる数です。アニメパターン数と同じ個数になるように設定してください。
+ * @type number[]
+ * @default ["1","2","2"]
+ * @min 1
+ * 
+ * @param numRepeat
+ * @text パターン繰り返し数
+ * @desc 一つのアニメループ内で、パターンセットを繰り返す回数です。
+ * @type number
+ * @default 4
+ * @min 1
+ * 
+ * @param repeatDurations
+ * @parent numRepeat
+ * @text 繰り返しフレーム数
+ * @desc 次のパターンセットまでのフレーム数です。パターン繰り返し数と同じ個数になるように設定してください。
+ * @type number[]
+ * @default ["30","24","10","6"]
+ * @min 1
+ * 
+ */
+
 (() => {
     'use strict';
     const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
@@ -421,6 +528,17 @@
         PICTURE_CALIBRATIONS[obj.pictureName] = {centerX: Number(obj.centerX), offsetY: Number(obj.offsetY)};
     }
 
+    const ANIMATION_PICTURES = {};
+    for (const str of JSON.parse(pluginParams.animationPictures)) {
+        const obj = JSON.parse(str);
+        ANIMATION_PICTURES[obj.pictureName] = {
+            numPattern: Number(obj.numPattern),
+            patternCounts: JSON.parse(obj.patternCounts).map(n => Number(n)),
+            numRepeat: Number(obj.numRepeat),
+            repeatDurations: JSON.parse(obj.repeatDurations).map(n => Number(n)),
+        }
+    }
+
     const PRELOAD_ALL_PICTURES_AT_EVERY_SCENE = pluginParams.preloadAllPicturesAtEveryScene === "true";
 
 
@@ -454,20 +572,36 @@
 
     ImageManager.centerX = function(pictureName) {
         const obj = PICTURE_CALIBRATIONS[pictureName];
-        if (obj) {
-            return obj.centerX;
-        } else {
-            return -1;
-        }
+        return obj ? obj.centerX : -1;
     };
 
     ImageManager.offsetY = function(pictureName) {
         const obj = PICTURE_CALIBRATIONS[pictureName];
-        if (obj) {
-            return obj.offsetY;
-        } else {
-            return 0;
-        }
+        return obj ? obj.offsetY : 0;
+    };
+
+    ImageManager.hasPictureAnimation = function(pictureName) {
+        return !!ANIMATION_PICTURES[pictureName];
+    };
+
+    ImageManager.animationNumPattern = function(pictureName) {
+        const obj = ANIMATION_PICTURES[pictureName];
+        return obj ? obj.numPattern : 0;
+    };
+
+    ImageManager.animationPatternCounts = function(pictureName) {
+        const obj = ANIMATION_PICTURES[pictureName];
+        return obj ? obj.patternCounts : [];
+    };
+
+    ImageManager.animationNumRepeat = function(pictureName) {
+        const obj = ANIMATION_PICTURES[pictureName];
+        return obj ? obj.numRepeat : 0;
+    };
+
+    ImageManager.animationRepeatDurations = function(pictureName) {
+        const obj = ANIMATION_PICTURES[pictureName];
+        return obj ? obj.repeatDurations : [];
     };
 
 
@@ -538,8 +672,9 @@
     Window_Base.prototype.drawActorPicture = function(actor, x, y, width, height, alignCenter=false, offsetVertically=false) {
         const pictureName = actor.pictureName();
         const bitmap = ImageManager.loadPicture(pictureName);
-        const bw = bitmap.width;
+        let bw = bitmap.width;
         const bh = bitmap.height;
+        if (ImageManager.hasPictureAnimation(pictureName)) bw /= ImageManager.animationNumPattern(pictureName);
         const w = width || bw;
         const h = height || bh;
         let sx = 0;
