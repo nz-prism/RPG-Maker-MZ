@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.0
+ * ver. 1.2.1
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
@@ -17,6 +17,7 @@
  * 03/05/2021 1.0.2 Fixed bugs when dash speed or fast message is unused.
  * 04/05/2021 1.1.0 Added Switch A/B Buttons and plugin parameters to disable standard items.
  * 06/22/2021 1.2.0 Added several parameters and make it compatible with sub-folder.
+ * 07/06/2021 1.2.1 Supported sub-folder improvement of RMMZ 1.3.2
  * 
  * This plugin extends the option scene.
  * It adds window-cosmetics, dash-speed and fast-message options.
@@ -279,7 +280,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.0
+ * ver. 1.2.1
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
@@ -287,6 +288,7 @@
  * 2021/03/05 1.0.2 ダッシュ速度やメッセージ瞬間表示が不使用の場合のバグを修正
  * 2021/04/05 1.1.0 A/Bボタン入れ替え機能、標準項目不使用設定追加
  * 2021/06/22 1.2.0 プラグインパラメータ多数追加、本体バージョン1.3.0以降のサブフォルダへの格納に対応
+ * 2021/07/06 1.2.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
  * ウィンドウの外観を変更するオプションのほか、ダッシュ速度を変更するもの、
@@ -546,7 +548,7 @@
 
 (() => {
     'use strict';
-    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
+    const PLUGIN_NAME = "OptionEx";
 
     const pluginParams = PluginManager.parameters(PLUGIN_NAME);
     

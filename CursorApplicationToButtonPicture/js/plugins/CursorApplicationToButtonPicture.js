@@ -11,13 +11,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
- * ver. 1.2.1
+ * ver. 1.2.2
  * 
  * [History]
  * 02/24/2021 1.0.0 Released
  * 02/25/2021 1.1.0 Corrected some glitches and implemented Border line offset and Cursor SE.
  * 05/15/2021 1.2.0 Added cursor SE plugin-parameters.
  * 06/22/2021 1.2.1 Sub-folder compatibility for RMMZ 1.3.0 or later
+ * 07/06/2021 1.2.2 Supported sub-folder improvement of RMMZ 1.3.2
  *
  * This plugin provides a functionality to add a cursor sprite to
  * a button picture.
@@ -170,13 +171,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CursorApplicationToButtonPicture/js/plugins/CursorApplicationToButtonPicture.js
  *
  * @help CursorApplicationToButtonPicture.js
- * ver. 1.2.1
+ * ver. 1.2.2
  *
  * [バージョン履歴]
  * 2021/02/24 1.0.0 リリース
  * 2021/02/25 1.1.0 軽微なバグ修正。枠線オフセット、カーソルSE演奏対応。
  * 2021/05/15 1.2.0 カーソルSE選択プラグインパラメータの追加。
  * 2021/06/22 1.2.1 本体バージョン1.3.0以降のサブフォルダへの格納に対応
+ * 2021/07/06 1.2.2 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 
  * このプラグインは、ピクチャにマウスカーソルが重なった時にカーソルを
  * 表示する機能を提供します。
@@ -323,7 +325,7 @@
 (() => {
     'use strict';
 
-    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
+    const PLUGIN_NAME = "CursorApplicationToButtonPicture";
     const pluginParams = PluginManager.parameters(PLUGIN_NAME);
 
 

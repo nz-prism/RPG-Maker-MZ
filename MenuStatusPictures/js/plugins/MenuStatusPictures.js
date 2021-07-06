@@ -9,11 +9,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures/js/plugins/MenuStatusPictures.js
  *
  * @help MenuStatusPictures.js
- * ver 1.0.1
+ * ver 1.0.2
  *
  * [History]
  * 05/15/2021 1.0.0 Released
  * 06/22/2021 1.0.1 Sub-folder compatibility for RMMZ 1.3.0 or later
+ * 07/06/2021 1.0.2 Supported sub-folder improvement of RMMZ 1.3.2
  * 
  * This plugin enables to show back and fore images on a menu status window.
  * You can specify XY coordinates for the pictures.
@@ -66,11 +67,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/MenuStatusPictures/js/plugins/MenuStatusPictures.js
  *
  * @help MenuStatusPictures.js
- * ver 1.0.1
+ * ver 1.0.2
  *
  * [バージョン履歴]
  * 2021/05/15 1.0.0 リリース
  * 2021/06/22 1.0.1 本体バージョン1.3.0以降のサブフォルダへの格納に対応
+ * 2021/07/06 1.0.2 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 
  * このプラグインは、メニューステータスにてウィンドウの背面と前面に画像を表示します。
  * 画像はそれぞれ座標を指定することができます。
@@ -118,7 +120,7 @@
 
 (() => {
     'use strict';
-    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
+    const PLUGIN_NAME = "MenuStatusPictures";
     const pluginParams = PluginManager.parameters(PLUGIN_NAME);
 
     

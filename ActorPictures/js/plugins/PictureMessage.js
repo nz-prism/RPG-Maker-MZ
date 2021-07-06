@@ -10,11 +10,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [History]
  * 07/03/2021 1.0.0 Released
  * 07/05/2021 1.1.0 Added picture animation and inverse functionality
+ * 07/06/2021 1.1.1 Fixed easing direction did not reflect the mirror settings
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -242,11 +243,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
  * 2021/07/05 1.1.0 アニメーションへの対応、位置ごとの反転設定の追加
+ * 2021/07/06 1.1.1 イージングの方向が立ち絵反転設定を反映していなかった不具合を修正
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -828,7 +830,8 @@
     };
     
     Sprite_MessagePicture.prototype.easingOffsetX = function() {
-        return this._position === 0 ? this.originalX() - EASING_OFFSET : this.originalX() + EASING_OFFSET;
+        const originalX = this.originalX();
+        return PICTURE_MIRRORS[this._position] ? originalX - EASING_OFFSET : originalX + EASING_OFFSET;
     };
     
     Sprite_MessagePicture.prototype.easingOffsetY = function() {

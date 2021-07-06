@@ -9,13 +9,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CartRide/js/plugins/CartRide.js
  *
  * @help CartRide.js
- * ver. 2.0.1
+ * ver. 2.0.2
  * 
  * [History]
  * 09/26/2020 1.0.0 Released
  * 09/27/2020 1.0.1 Supported images which is not 48 x 48.
  * 02/25/2021 2.0.0 Excluded the cart image file from unused file exclusion. Not compatible with older versions.
  * 06/22/2021 2.0.1 Sub-folder compatibility for RMMZ 1.3.0 or later
+ * 07/06/2021 2.0.2 Supported sub-folder improvement of RMMZ 1.3.2
  * 
  * This plugin provides a capability to force the player move along the rail
  * with a cart sprite.
@@ -80,13 +81,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CartRide/js/plugins/CartRide.js
  *
  * @help CartRide.js
- * ver. 2.0.1
+ * ver. 2.0.2
  * 
  * [バージョン履歴]
  * 2020/09/26 1.0.0 リリース
  * 2020/09/27 1.0.1 48x48サイズでないトロッコのキャラクターグラフィックに対応
  * 2021/02/25 2.0.0 トロッコ画像が未使用素材削除対象にならないように修正。旧版との互換性なし
  * 2021/06/22 2.0.1 本体バージョン1.3.0以降のサブフォルダへの格納に対応
+ * 2021/07/06 2.0.2 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 
  * このプラグインは、プレイヤーが自動的に線路に沿って移動する機能を提供します。
  * その際、グラフィックもトロッコに搭乗した状態に変化します。
@@ -148,7 +150,7 @@
     'use strict';
 
 
-    const PLUGIN_NAME = document.currentScript.src.replace(/^.*\/plugins\/(.*).js$/, (s, a1)=> decodeURIComponent(a1));
+    const PLUGIN_NAME = "CartRide";
 
 
     const CART_CHARACTER = JSON.parse(PluginManager.parameters(PLUGIN_NAME)["cartCharacter"]);
