@@ -501,11 +501,6 @@
     Game_Message.prototype.initialize = function() {
         _Game_Message_prototype_initialize.call(this);
         this.clearSpeakerIds();
-    };
-
-    const _Game_Message_prototype_clear = Game_Message.prototype.clear;
-    Game_Message.prototype.clear = function() {
-        _Game_Message_prototype_clear.apply(this);
         this._currentPosition = -1;
     };
 
@@ -559,7 +554,7 @@
             this._speakerIds[position] = actorId;
             this._speakerName = speakerName.replace(reg, actor.name());
         } else {
-            _Game_Message_prototype_setSpeakerName.call(this);
+            _Game_Message_prototype_setSpeakerName.call(this, speakerName);
         }
     };
 
