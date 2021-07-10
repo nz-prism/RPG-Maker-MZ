@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.3.1
+ * ver 1.3.2
  *
  * [History]
  * 06/20/2021 1.0.0 Released
@@ -18,6 +18,7 @@
  * 07/02/2021 1.2.0 Added a plugin parameter which calibrates picture positions
  * 07/05/2021 1.3.0 Added animation settings for pictures
  * 07/06/2021 1.3.1 Supported sub-folder improvement of RMMZ 1.3.2
+ * 07/10/2021 1.3.2 Added some functions for PictureMessage.js
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
@@ -256,7 +257,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.3.1
+ * ver 1.3.2
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
@@ -265,6 +266,7 @@
  * 2021/07/02 1.2.0 立ち絵のズレを調整するためのプラグインパラメータを追加
  * 2021/07/05 1.3.0 立ち絵のアニメーション設定を追加
  * 2021/07/06 1.3.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
+ * 2021/07/10 1.3.2 PictureMessage.js用に関数を追加
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
