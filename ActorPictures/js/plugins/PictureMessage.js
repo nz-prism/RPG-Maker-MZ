@@ -10,12 +10,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.1.1
+ * ver 1.2.0
  *
  * [History]
  * 07/03/2021 1.0.0 Released
  * 07/05/2021 1.1.0 Added picture animation and inverse functionality
  * 07/06/2021 1.1.1 Fixed easing direction did not reflect the mirror settings
+ * 07/10/2021 1.2.0 Added some commands and enabled picture states to be saved
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -177,11 +178,23 @@
  * @default 30
  * @min 1
  * 
+ * @param deactiveToneSettings
+ * @text Deactive Tone Settings
+ * @desc The tone settings for actors who aren't speaking.
+ * 
  * @param deactiveTone
  * @text Deactive Speaker Tone
  * @desc The tone for actors who aren't speaking.
  * @type struct<rgbg>
  * @default {"red":"0","green":"0","blue":"0","gray":"128"}
+ * 
+ * @param deactiveFrames
+ * @parent deactiveToneSettings
+ * @text Deactive Frames
+ * @desc The duration of tone change.
+ * @type number
+ * @default 15
+ * @min 1
  * 
  * @command clearPictures
  * @text Erase Pictures
@@ -200,6 +213,391 @@
  * @value 1
  * @option Right Picture
  * @value 2
+ * 
+ * @command activateAllPictures
+ * @text Activate All Pictures
+ * @desc Change tones for all the actor pictures into active tones.
+ * 
+ * @command showPicture
+ * @text Show Picture
+ * @desc Show an actor picture.
+ * 
+ * @arg position
+ * @text Position
+ * @desc The position where the picture stands.
+ * @default 0
+ * @type select
+ * @option Left
+ * @value 0
+ * @option Center
+ * @value 1
+ * @option Right
+ * @value 2
+ * 
+ * @arg actorId
+ * @text Actor
+ * @desc The actor whose picture will be shown.
+ * @default 1
+ * @type actor
+ * 
+ * @arg leaveX
+ * @text Leave X
+ * @desc Leave the x axis as it is.
+ * @type boolean
+ * @default true
+ * 
+ * @arg targetX
+ * @parent leaveX
+ * @text Target X
+ * @desc The X axis to be moved to. Specify it if Leave X is false.
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg leaveY
+ * @text Leave Y
+ * @desc The Y axis to be moved to. Specify it if Leave Y is false.
+ * @type boolean
+ * @default true
+ * 
+ * @arg targetY
+ * @parent leaveY
+ * @text Target Y
+ * @desc The Y axis to be moved to. Specify it if Leave Y is false.
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg scaleX
+ * @text Width Scale
+ * @desc The width scale in percentage. If it's negative value, the picture will be inverted horizontally.
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg scaleY
+ * @text Height Scale
+ * @desc The height scale in percentage. If it's negative value, the picture will be inverted vertically.
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg opacity
+ * @text Opacity
+ * @desc The opacity to be.
+ * @type number
+ * @default 255
+ * @min -255
+ * @max 255
+ * 
+ * @arg blendMode
+ * @text Blend Mode
+ * @desc The blend mode with which the picture will be drawn.
+ * @default 0
+ * @type select
+ * @option Normal
+ * @value 0
+ * @option Additive
+ * @value 1
+ * @option Multiply
+ * @value 2
+ * @option Screen
+ * @value 3
+ * 
+ * @command movePicture
+ * @text Move Picture
+ * @desc Moves an actor picture.
+ * 
+ * @arg position
+ * @text Position
+ * @desc The position where the actor picture to be moved stands.
+ * @default 0
+ * @type select
+ * @option Left
+ * @value 0
+ * @option Center
+ * @value 1
+ * @option Right
+ * @value 2
+ * 
+ * @arg easingType
+ * @text Easing Type
+ * @desc The type of easing.
+ * @default 0
+ * @type select
+ * @option Constant speed
+ * @value 0
+ * @option Slow start
+ * @value 1
+ * @option Slow end
+ * @value 2
+ * @option Slow start and end
+ * @value 3
+ * 
+ * @arg leaveX
+ * @text Leave X
+ * @desc Leave the x axis as it is.
+ * @type boolean
+ * @default true
+ * 
+ * @arg targetX
+ * @parent leaveX
+ * @text Target X
+ * @desc The X axis to be moved to. Specify it if Leave X is false.
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg leaveY
+ * @text Leave Y
+ * @desc The Y axis to be moved to. Specify it if Leave Y is false.
+ * @type boolean
+ * @default true
+ * 
+ * @arg targetY
+ * @parent leaveY
+ * @text Target Y
+ * @desc The Y axis to be moved to. Specify it if Leave Y is false.
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg scaleX
+ * @text Width Scale
+ * @desc The width scale in percentage. If it's negative value, the picture will be inverted horizontally.
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg scaleY
+ * @text Height Scale
+ * @desc The height scale in percentage. If it's negative value, the picture will be inverted vertically.
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg opacity
+ * @text Opacity
+ * @desc The opacity to be.
+ * @type number
+ * @default 255
+ * @min -255
+ * @max 255
+ * 
+ * @arg blendMode
+ * @text Blend Mode
+ * @desc The blend mode with which the picture will be drawn.
+ * @default 0
+ * @type select
+ * @option Normal
+ * @value 0
+ * @option Additive
+ * @value 1
+ * @option Multiply
+ * @value 2
+ * @option Screen
+ * @value 3
+ * 
+ * @arg duration
+ * @text Duration
+ * @desc The duration for move.
+ * @type number
+ * @default 60
+ * @min 1
+ * 
+ * @arg waitForCompletion
+ * @text Wait for Completion
+ * @desc It waits until the move ends.
+ * @type boolean
+ * @default false
+ * 
+ * @command rotatePicture
+ * @text Rotate Picture
+ * @desc Rotates an actor picture.
+ * 
+ * @arg targetMessagePicture
+ * @text Target Picture
+ * @desc The picture to be rotated.
+ * @default leftMessagePicture
+ * @type select
+ * @option Left Picture
+ * @value leftMessagePicture
+ * @option Center Picture
+ * @value centerMessagePicture
+ * @option Right Picture
+ * @value rightMessagePicture
+ * 
+ * @arg speed
+ * @text Speed
+ * @desc The speed at which the picture rotation angle increments. Positive value represents counterclockwise.
+ * @default 0
+ * @type number
+ * @min -90
+ * @max 90
+ * 
+ * @command tintPicture
+ * @text Tint Picture
+ * @desc Tints an actor picture.
+ * 
+ * @arg targetMessagePicture
+ * @text Target Picture
+ * @desc The picture to be tinted.
+ * @default leftMessagePicture
+ * @type select
+ * @option Left Picture
+ * @value leftMessagePicture
+ * @option Center Picture
+ * @value centerMessagePicture
+ * @option Right Picture
+ * @value rightMessagePicture
+ * 
+ * @arg tone
+ * @text Tone
+ * @desc The tone to be.
+ * @type struct<rgbg>
+ * @default {"red":"0","green":"0","blue":"0","gray":"0"}
+ * 
+ * @arg duration
+ * @text Dration
+ * @desc The duration for tint.
+ * @type number
+ * @default 60
+ * @min 1
+ * @max 999
+ * 
+ * @arg waitForCompletion
+ * @text Wait for Completion
+ * @desc It waits until the tint ends.
+ * @type boolean
+ * @default false
+ * 
+ * @command initPicture
+ * @text Initialize Picture
+ * @desc Initializes the settings for an actor picture.
+ * 
+ * @arg position
+ * @text Position
+ * @desc The position where the actor picture to be initialized stands.
+ * @default 0
+ * @type select
+ * @option Left
+ * @value 0
+ * @option Center
+ * @value 1
+ * @option Right
+ * @value 2
+ * 
+ * @command showBalloon
+ * @text Show Balloon Icon
+ * @desc Shows a balloon icon for an actor picture.
+ * 
+ * @arg targetMessagePicture
+ * @text Target Picture
+ * @desc The picture at which the balloon icon to be shown.
+ * @default leftMessagePicture
+ * @type select
+ * @option Left Picture
+ * @value leftMessagePicture
+ * @option Center Picture
+ * @value centerMessagePicture
+ * @option Right Picture
+ * @value rightMessagePicture
+ * 
+ * @arg balloonId
+ * @text Balloon Icon
+ * @desc The balloon icon to be shown.
+ * @default 1
+ * @type select
+ * @option Exclamation
+ * @value 1
+ * @option Question
+ * @value 2
+ * @option Music Note
+ * @value 3
+ * @option Heart
+ * @value 4
+ * @option Anger
+ * @value 5
+ * @option Sweat
+ * @value 6
+ * @option Frustration
+ * @value 7
+ * @option Silence
+ * @value 8
+ * @option Light Bulb
+ * @value 9
+ * @option Zzz
+ * @value 10
+ * @option User-defined 1
+ * @value 11
+ * @option User-defined 2
+ * @value 12
+ * @option User-defined 3
+ * @value 13
+ * @option User-defined 4
+ * @value 14
+ * @option User-defined 5
+ * @value 15
+ * 
+ * @arg offsetX
+ * @text Balloon Offset X
+ * @desc The offset value from the picture's X axis.
+ * @type number
+ * @default -120
+ * @min -100000
+ * 
+ * @arg offsetY
+ * @text Balloon Offset Y
+ * @desc The offset value from the picture's Y axis.
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg scaleX
+ * @text Balloon Width Scale
+ * @desc The width scale for the balloon icon in percentage.
+ * @type number
+ * @default 200
+ * @min 10
+ * 
+ * @arg scaleY
+ * @text Balloon Height Scale
+ * @desc The height scale for the balloon icon in percentage.
+ * @type number
+ * @default 200
+ * @min 10
+ * 
+ * @command showAnimation
+ * @text Show Animation
+ * @desc Shows an animation for an actor picture.
+ * 
+ * @arg targetMessagePicture
+ * @text Target Picture
+ * @desc The picture at which the animation to be shown.
+ * @default leftMessagePicture
+ * @type select
+ * @option Left Picture
+ * @value leftMessagePicture
+ * @option Center Picture
+ * @value centerMessagePicture
+ * @option Right Picture
+ * @value rightMessagePicture
+ * 
+ * @arg animationId
+ * @text Animation
+ * @desc The animation to be shown.
+ * @type animation
+ * @default 1
+ * 
+ * @arg mirror
+ * @text Animation Mirror
+ * @desc Inverts the animation horizontally.
+ * @type boolean
+ * @default false
  * 
  */
 
@@ -243,12 +641,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.1.1
+ * ver 1.2.0
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
  * 2021/07/05 1.1.0 アニメーションへの対応、位置ごとの反転設定の追加
  * 2021/07/06 1.1.1 イージングの方向が立ち絵反転設定を反映していなかった不具合を修正
+ * 2021/07/10 1.2.0 多数のプラグインコマンドを追加、立ち絵状態をセーブ可能に
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -332,7 +731,7 @@
  * 
  * @param pictureCoordinates
  * @text 立ち絵座標
- * @desc 立ち絵の表示座標です
+ * @desc 立ち絵の表示座標です。
  * 
  * @param bottomYOrigin
  * @parent pictureCoordinates
@@ -409,11 +808,25 @@
  * @default 30
  * @min 1
  * 
- * @param deactiveTone
- * @text 非アクティブ話者トーン
+ * @param deactiveToneSettings
+ * @text 非アクティブ話者色調設定
  * @desc 話していないアクターの立ち絵にかかる色調の設定です。
+ * 
+ * @param deactiveTone
+ * @parent deactiveToneSettings
+ * @text 非アクティブ話者色調
+ * @desc 話していないアクターの立ち絵にかかる色調です。
  * @type struct<rgbg>
  * @default {"red":"0","green":"0","blue":"0","gray":"128"}
+ * 
+ * @param deactiveFrames
+ * @parent deactiveToneSettings
+ * @text 非アクティブ話者色調変化フレーム数
+ * @desc 話していないアクターの立ち絵にかかる色調変化のフレーム数です。
+ * @type number
+ * @default 15
+ * @min 1
+ * 
  * 
  * @command clearPictures
  * @text 立ち絵退場
@@ -432,6 +845,391 @@
  * @value 1
  * @option 右側立ち絵
  * @value 2
+ * 
+ * @command activateAllPictures
+ * @text すべての立ち絵をアクティブ話者色調にする
+ * @desc 表示されているすべての立ち絵の色調をアクティブ状態にします。
+ * 
+ * @command showPicture
+ * @text 立ち絵の表示
+ * @desc 立ち絵を表示させます。
+ * 
+ * @arg position
+ * @text 立ち絵表示位置
+ * @desc 立ち絵を表示させる位置です。
+ * @default 0
+ * @type select
+ * @option 左側
+ * @value 0
+ * @option 中央
+ * @value 1
+ * @option 右側
+ * @value 2
+ * 
+ * @arg actorId
+ * @text アクター
+ * @desc 立ち絵を表示させるアクターです。
+ * @default 1
+ * @type actor
+ * 
+ * @arg leaveX
+ * @text X座標移動なし
+ * @desc X座標を現在の値のままにします。
+ * @type boolean
+ * @default true
+ * 
+ * @arg targetX
+ * @parent leaveX
+ * @text 対象X座標
+ * @desc 移動先のX座標です。X座標移動なしがオフの場合に設定してください。
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg leaveY
+ * @text Y座標移動なし
+ * @desc Y座標を現在の値のままにします。
+ * @type boolean
+ * @default true
+ * 
+ * @arg targetY
+ * @parent leaveY
+ * @text 対象Y座標
+ * @desc 移動先のY座標です。Y座標移動なしがオフの場合に設定してください。
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg scaleX
+ * @text 幅拡大率
+ * @desc 立ち絵の幅の拡大率（パーセント）です。マイナスにすると水平方向に反転します。
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg scaleY
+ * @text 高さ拡大率
+ * @desc 立ち絵の高さの拡大率（パーセント）です。マイナスにすると垂直方向に反転します。
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg opacity
+ * @text 不透明度
+ * @desc 変化後の不透明度です。
+ * @type number
+ * @default 255
+ * @min -255
+ * @max 255
+ * 
+ * @arg blendMode
+ * @text 合成方法
+ * @desc 立ち絵の描画の合成方法です。
+ * @default 0
+ * @type select
+ * @option 通常
+ * @value 0
+ * @option 加算
+ * @value 1
+ * @option 乗算
+ * @value 2
+ * @option スクリーン
+ * @value 3
+ * 
+ * @command movePicture
+ * @text 立ち絵の移動
+ * @desc 表示されている立ち絵を移動させます。
+ * 
+ * @arg position
+ * @text 移動対象立ち絵
+ * @desc 移動させる立ち絵です。
+ * @default 0
+ * @type select
+ * @option 左側立ち絵
+ * @value 0
+ * @option 中央立ち絵
+ * @value 1
+ * @option 右側立ち絵
+ * @value 2
+ * 
+ * @arg easingType
+ * @text イージングタイプ
+ * @desc イージングの種類です。
+ * @default 0
+ * @type select
+ * @option 一定速度
+ * @value 0
+ * @option ゆっくり始まる
+ * @value 1
+ * @option ゆっくり終わる
+ * @value 2
+ * @option ゆっくり始まってゆっくり終わる
+ * @value 3
+ * 
+ * @arg leaveX
+ * @text X座標移動なし
+ * @desc X座標を現在の値のままにします。
+ * @type boolean
+ * @default false
+ * 
+ * @arg targetX
+ * @parent leaveX
+ * @text 対象X座標
+ * @desc 移動先のX座標です。X座標移動なしがオフの場合に設定してください。
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg leaveY
+ * @text Y座標移動なし
+ * @desc Y座標を現在の値のままにします。
+ * @type boolean
+ * @default false
+ * 
+ * @arg targetY
+ * @parent leaveY
+ * @text 対象Y座標
+ * @desc 移動先のY座標です。Y座標移動なしがオフの場合に設定してください。
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg scaleX
+ * @text 幅拡大率
+ * @desc 立ち絵の幅の拡大率（パーセント）です。マイナスにすると水平方向に反転します。
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg scaleY
+ * @text 高さ拡大率
+ * @desc 立ち絵の高さの拡大率（パーセント）です。マイナスにすると垂直方向に反転します。
+ * @type number
+ * @default 100
+ * @min -2000
+ * @max 2000
+ * 
+ * @arg opacity
+ * @text 不透明度
+ * @desc 変化後の不透明度です。
+ * @type number
+ * @default 255
+ * @min -255
+ * @max 255
+ * 
+ * @arg blendMode
+ * @text 合成方法
+ * @desc 立ち絵の描画の合成方法です。
+ * @default 0
+ * @type select
+ * @option 通常
+ * @value 0
+ * @option 加算
+ * @value 1
+ * @option 乗算
+ * @value 2
+ * @option スクリーン
+ * @value 3
+ * 
+ * @arg duration
+ * @text 時間
+ * @desc 持続フレームです。
+ * @type number
+ * @default 60
+ * @min 1
+ * 
+ * @arg waitForCompletion
+ * @text 完了までウェイト
+ * @desc 効果が終わるまで待ちます。
+ * @type boolean
+ * @default false
+ * 
+ * @command rotatePicture
+ * @text 立ち絵の回転
+ * @desc 立ち絵を回転させます。
+ * 
+ * @arg targetMessagePicture
+ * @text 回転対象立ち絵
+ * @desc 回転させる立ち絵です。
+ * @default leftMessagePicture
+ * @type select
+ * @option 左側立ち絵
+ * @value leftMessagePicture
+ * @option 中央立ち絵
+ * @value centerMessagePicture
+ * @option 右側立ち絵
+ * @value rightMessagePicture
+ * 
+ * @arg speed
+ * @text 速度
+ * @desc 立ち絵を回転させる角度の増減値です。正の値が反時計回りです。
+ * @default 0
+ * @type number
+ * @min -90
+ * @max 90
+ * 
+ * @command tintPicture
+ * @text 立ち絵の色調変更
+ * @desc 立ち絵の色調を変更します。
+ * 
+ * @arg targetMessagePicture
+ * @text 色調変更対象立ち絵
+ * @desc 色調変更させる立ち絵です。
+ * @default leftMessagePicture
+ * @type select
+ * @option 左側立ち絵
+ * @value leftMessagePicture
+ * @option 中央立ち絵
+ * @value centerMessagePicture
+ * @option 右側立ち絵
+ * @value rightMessagePicture
+ * 
+ * @arg tone
+ * @text 色調
+ * @desc 変更する色調です。
+ * @type struct<rgbg>
+ * @default {"red":"0","green":"0","blue":"0","gray":"0"}
+ * 
+ * @arg duration
+ * @text 時間
+ * @desc 色調を変更する時間です。
+ * @type number
+ * @default 60
+ * @min 1
+ * @max 999
+ * 
+ * @arg waitForCompletion
+ * @text 完了までウェイト
+ * @desc 効果が終わるまで待ちます。
+ * @type boolean
+ * @default true
+ * 
+ * @command initPicture
+ * @text 立ち絵の初期化
+ * @desc 立ち絵の表示設定を初期化します。
+ * 
+ * @arg position
+ * @text 初期化対象立ち絵
+ * @desc 初期化させる立ち絵です。
+ * @default 0
+ * @type select
+ * @option 左側立ち絵
+ * @value 0
+ * @option 中央立ち絵
+ * @value 1
+ * @option 右側立ち絵
+ * @value 2
+ * 
+ * @command showBalloon
+ * @text フキダシアイコンの表示
+ * @desc 立ち絵にフキダシアイコンを表示します。
+ * 
+ * @arg targetMessagePicture
+ * @text 対象立ち絵
+ * @desc フキダシを表示する対象の立ち絵です。
+ * @default leftMessagePicture
+ * @type select
+ * @option 左側立ち絵
+ * @value leftMessagePicture
+ * @option 中央立ち絵
+ * @value centerMessagePicture
+ * @option 右側立ち絵
+ * @value rightMessagePicture
+ * 
+ * @arg balloonId
+ * @text フキダシアイコンタイプ
+ * @desc 表示する吹き出しの種類です。
+ * @default 1
+ * @type select
+ * @option びっくり
+ * @value 1
+ * @option はてな
+ * @value 2
+ * @option 音符
+ * @value 3
+ * @option ハート
+ * @value 4
+ * @option 怒り
+ * @value 5
+ * @option 汗
+ * @value 6
+ * @option くしゃくしゃ
+ * @value 7
+ * @option 沈黙
+ * @value 8
+ * @option 電球
+ * @value 9
+ * @option Zzz
+ * @value 10
+ * @option ユーザー定義1
+ * @value 11
+ * @option ユーザー定義2
+ * @value 12
+ * @option ユーザー定義3
+ * @value 13
+ * @option ユーザー定義4
+ * @value 14
+ * @option ユーザー定義5
+ * @value 15
+ * 
+ * @arg offsetX
+ * @text フキダシオフセットX
+ * @desc 立ち絵のX座標からのオフセット距離です。
+ * @type number
+ * @default -120
+ * @min -100000
+ * 
+ * @arg offsetY
+ * @text フキダシオフセットY
+ * @desc 立ち絵のY座標からのオフセット距離です。
+ * @type number
+ * @default 0
+ * @min -100000
+ * 
+ * @arg scaleX
+ * @text フキダシ幅拡大率
+ * @desc フキダシアイコンの幅の拡大率（パーセント）です。
+ * @type number
+ * @default 200
+ * @min 10
+ * 
+ * @arg scaleY
+ * @text フキダシ高さ拡大率
+ * @desc フキダシアイコンの高さの拡大率（パーセント）です。
+ * @type number
+ * @default 200
+ * @min 10
+ * 
+ * @command showAnimation
+ * @text アニメーションの表示
+ * @desc 立ち絵にアニメーションを表示します。
+ * 
+ * @arg targetMessagePicture
+ * @text 対象立ち絵
+ * @desc アニメーションを表示する対象の立ち絵です。
+ * @default leftMessagePicture
+ * @type select
+ * @option 左側立ち絵
+ * @value leftMessagePicture
+ * @option 中央立ち絵
+ * @value centerMessagePicture
+ * @option 右側立ち絵
+ * @value rightMessagePicture
+ * 
+ * @arg animationId
+ * @text アニメーション
+ * @desc 表示するアニメーションです。
+ * @type animation
+ * @default 1
+ * 
+ * @arg mirror
+ * @text アニメーション反転
+ * @desc 表示するアニメーションを反転させます。
+ * @type boolean
+ * @default false
  * 
  */
 
@@ -467,6 +1265,14 @@
  * 
  */
 
+
+function Game_MessagePicture() {
+    this.initialize(...arguments);
+}
+Game_MessagePicture.prototype = Object.create(Game_Picture.prototype);
+Game_MessagePicture.prototype.constructor = Game_MessagePicture;
+
+
 (() => {
     'use strict';
     const PLUGIN_NAME = "PictureMessage";
@@ -490,35 +1296,178 @@
     const EASING_FRAMES = Number(pluginParams.easingFrames);
 
     const DEACTIVE_TONE = Object.values(JSON.parse(pluginParams.deactiveTone)).map(s => Number(s));
+    const DEACTIVE_FRAMES = Number(pluginParams.deactiveFrames);
 
 
     PluginManager.registerCommand(PLUGIN_NAME, "clearPictures", args => {
-        $gameMessage.clearSpeakerIds(Number(args.targetPosition));
+        $gameScreen.clearSpeaker(Number(args.targetPosition));
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "activateAllPictures", args => {
+        $gameScreen.clearSpeakerIndex();
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "showPicture", function(args) {
+        const position = Number(args.position);
+        const picture = $gameScreen.messagePicture(position);
+        const actorId = Number(args.actorId);
+        const x = (args.leaveX === "true") ? picture.x() : Number(args.targetX);
+        const y = (args.leaveY === "true") ? picture.y() : Number(args.targetY);
+        let scaleX = Number(args.scaleX);
+        if (PICTURE_MIRRORS[position]) scaleX *= -1;
+        const scaleY = Number(args.scaleY);
+        const opacity = Number(args.opacity);
+        const blend = Number(args.blendMode);
+        $gameScreen.setSpeaker(position, actorId);
+        picture.movePosition(0, x, y, scaleX, scaleY, opacity, blend, 1, 0);
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "movePicture", function(args) {
+        const position = Number(args.position);
+        const picture = $gameScreen.messagePicture(position);
+        const x = (args.leaveX === "true") ? picture.x() : Number(args.targetX);
+        const y = (args.leaveY === "true") ? picture.y() : Number(args.targetY);
+        let scaleX = Number(args.scaleX);
+        if (PICTURE_MIRRORS[position]) scaleX *= -1;
+        const scaleY = Number(args.scaleY);
+        const opacity = Number(args.opacity);
+        const blend = Number(args.blendMode);
+        const duration = Number(args.duration);
+        picture.movePosition(0, x, y, scaleX, scaleY, opacity, blend, duration, Number(args.easingType));
+        if (args.waitForCompletion === "true") this.wait(duration);
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "rotatePicture", args => {
+        $gameScreen.rotatePicture(args.targetMessagePicture, Number(args.speed));
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "tintPicture", function(args) {
+        const tone = Object.values(JSON.parse(args.tone)).map(s => Number(s));
+        const duration = Number(args.duration);
+        $gameScreen.tintPicture(args.targetMessagePicture, tone, duration);
+        if (args.waitForCompletion === "true") this.wait(duration);
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "initPicture", args => {
+        $gameScreen.messagePicture(Number(args.position)).applyDefaultBasic();
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "showBalloon", args => {
+        const offsetX = Number(args.offsetX);
+        const offsetY = Number(args.offsetY);
+        const scaleX = Number(args.scaleX) / 100;
+        const scaleY = Number(args.scaleY) / 100;
+        $gameTemp.requestBalloon(args.targetMessagePicture, Number(args.balloonId), offsetX, offsetY, scaleX, scaleY);
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "showAnimation", args => {
+        $gameTemp.requestAnimation([args.targetMessagePicture], Number(args.animationId), args.mirror === "true");
     });
 
 
-    const _Game_Message_prototype_initialize = Game_Message.prototype.initialize;
-    Game_Message.prototype.initialize = function() {
-        _Game_Message_prototype_initialize.call(this);
-        this.clearSpeakerIds();
-        this._currentPosition = -1;
+    Game_Temp.prototype.requestBalloon = function(target, balloonId, offsetX, offsetY, scaleX, scaleY) {
+        const request = {
+            target: target,
+            balloonId: balloonId,
+            offsetX: offsetX,
+            offsetY: offsetY,
+            scaleX: scaleX,
+            scaleY: scaleY
+        };
+        this._balloonQueue.push(request);
+        if (target.startBalloon) target.startBalloon();
     };
 
-    Game_Message.prototype.clearSpeakerIds = function(position = -1) {
+    const _Game_Screen_prototype_clear = Game_Screen.prototype.clear;
+    Game_Screen.prototype.clear = function() {
+        _Game_Screen_prototype_clear.call(this);
+        this.clearMessagePictureSettings();
+    };
+
+    Game_Screen.prototype.clearMessagePictureSettings = function() {
+        this._messagePictures = [];
+        for (let i=0; i<3; i++) {
+            this._messagePictures[i] = new Game_MessagePicture(i);
+        }
+        this._speakers = [];
+        this._speakerIndex = -1;
+    };
+
+    Game_Screen.prototype.messagePicture = function(position) {
+        return this._messagePictures[position];
+    };
+
+    Game_Screen.prototype.speaker = function(position) {
+        return $gameActors.actor(this._speakers[position]);
+    };
+
+    Game_Screen.prototype.clearSpeakerIndex = function() {
+        this._speakerIndex = -1;
+    };
+
+    Game_Screen.prototype.speakerIndex = function() {
+        return this._speakerIndex;
+    };
+
+    Game_Screen.prototype.clearSpeaker = function(position = -1) {
         if (position === -1) {
-            this._speakerIds = [];
+            this._speakers = [];
         } else {
-            this._speakerIds[position] = null;
+            this._speakers[position] = null;
+        }
+    };
+
+    Game_Screen.prototype.setSpeaker = function(position, actorId) {
+        this._speakers[position] = actorId;
+        this._speakerIndex = position;
+    };
+
+    const _Game_Screen_prototype_update = Game_Screen.prototype.update;
+    Game_Screen.prototype.update = function() {
+        _Game_Screen_prototype_update.call(this);
+        this.updateMessagePictures();
+    };
+
+    Game_Screen.prototype.updateMessagePictures = function() {
+        for (const picture of this._messagePictures) {
+            if (picture) picture.update();
+        }
+    };
+
+    const _Game_Screen_prototype_rotatePicture = Game_Screen.prototype.rotatePicture;
+    Game_Screen.prototype.rotatePicture = function(pictureId, speed) {
+        switch (pictureId) {
+            case "leftMessagePicture":
+                this._messagePictures[0].rotate(speed);
+                break;
+            case "centerMessagePicture":
+                this._messagePictures[1].rotate(speed);
+                break;
+            case "rightMessagePicture":
+                this._messagePictures[2].rotate(speed);
+                break;
+            default:
+                return _Game_Screen_prototype_rotatePicture.apply(this, arguments);
         }
     };
     
-    Game_Message.prototype.currentPosition = function() {
-        return this._currentPosition;
+    const _Game_Screen_prototype_tintPicture = Game_Screen.prototype.tintPicture;
+    Game_Screen.prototype.tintPicture = function(pictureId, tone, duration) {
+        switch (pictureId) {
+            case "leftMessagePicture":
+                this._messagePictures[0].tint(tone, duration);
+                break;
+            case "centerMessagePicture":
+                this._messagePictures[1].tint(tone, duration);
+                break;
+            case "rightMessagePicture":
+                this._messagePictures[2].tint(tone, duration);
+                break;
+            default:
+                return _Game_Screen_prototype_tintPicture.apply(this, arguments);
+        }
     };
-
-    Game_Message.prototype.speaker = function(position) {
-        return $gameActors.actor(this._speakerIds[position]);
-    };
+    
     
     const _Game_Message_prototype_setSpeakerName = Game_Message.prototype.setSpeakerName;
     Game_Message.prototype.setSpeakerName = function(speakerName) {
@@ -550,169 +1499,174 @@
                 actor.setPictureIndex(this._faceIndex);
                 this._faceName = "";
             }
-            this._currentPosition = position;
-            this._speakerIds[position] = actorId;
+            $gameScreen.setSpeaker(position, actorId);
             this._speakerName = speakerName.replace(reg, actor.name());
         } else {
             _Game_Message_prototype_setSpeakerName.call(this, speakerName);
         }
     };
 
-    
-    const _Spriteset_Base_prototype_createUpperLayer = Spriteset_Base.prototype.createUpperLayer;
-    Spriteset_Base.prototype.createUpperLayer = function() {
-        _Spriteset_Base_prototype_createUpperLayer.call(this);
-        this.createMessagePictureSprites();
+
+    Game_MessagePicture.prototype.initialize = function(position) {
+        Game_Picture.prototype.initialize.call(this);
+        this.initPrimaryMembers(position);
+        this.initAnimation();
+        this.applyDefaultBasic();
     };
 
-    Spriteset_Base.prototype.createMessagePictureSprites = function() {
-        this._messagePictureContainer = new Sprite_PictureContainer();
-        for (let i=0; i<3; i++) this._messagePictureContainer.addChild(new Sprite_MessagePicture(i));
-        this.addChild(this._messagePictureContainer);
-    };
-
-    function Sprite_PictureContainer() {
-        this.initialize(...arguments);
-    }
-    
-    Sprite_PictureContainer.prototype = Object.create(Sprite.prototype);
-    Sprite_PictureContainer.prototype.constructor = Sprite_PictureContainer;
-
-    Sprite_PictureContainer.prototype.update = function() {
-        Sprite.prototype.update.call(this);
-        this.sortChildren();
-    };
-
-    Sprite_PictureContainer.prototype.sortChildren = function() {
-        this.children.sort(this.compareChildOrder.bind(this));
-    };
-    
-    Sprite_PictureContainer.prototype.compareChildOrder = function(a, b) {
-        if (a.z !== b.z) {
-            return a.z - b.z;
-        } else if (a.y !== b.y) {
-            return a.y - b.y;
-        } else {
-            return a.spriteId - b.spriteId;
-        }
-    };
-
-
-    function Sprite_MessagePicture() {
-        this.initialize(...arguments);
-    }
-    
-    Sprite_MessagePicture.prototype = Object.create(Sprite_Clickable.prototype);
-    Sprite_MessagePicture.prototype.constructor = Sprite_MessagePicture;
-    
-    Sprite_MessagePicture.prototype.initialize = function(position) {
-        Sprite_Clickable.prototype.initialize.call(this);
+    Game_MessagePicture.prototype.initPrimaryMembers = function(position) {
         this._position = position;
-        this._pictureName = "";
-        this.scale.x = PICTURE_MIRRORS[position] ? -1 : 1;
-        this.anchor.y = BOTTOM_Y_ORIGIN ? 1 : 0;
-        this.setupAnimation("");
+        this._width = 1;
+        this._height = 1;
+        this._offsetY = 0;
+        this._changingName = "";
     };
 
-    Sprite_MessagePicture.prototype.isSpeaking = function() {
-        return this._position === $gameMessage.currentPosition();
+    Game_MessagePicture.prototype.applyDefaultBasic = function() {
+        this._x = PICTURE_COORDINATES[this._position].x;
+        this._y = PICTURE_COORDINATES[this._position].y;
+        this._z = 5;
+        if (!BOTTOM_Y_ORIGIN) this._y -= this._offsetY;
+        this._scaleX = PICTURE_MIRRORS[this._position] ? -100 : 100;
+        this._scaleY = 100;
+        this._opacity = 255;
+        this._blendMode = 0;
+        this._tone = [0, 0, 0, 0];
+        this._originalX = this._x;
+        this._originalY = this._y;
+        this._originalOpacity = this._opacity;
+        this._originalTone = [0, 0, 0, 0];
     };
 
-    Sprite_MessagePicture.prototype.update = function() {
-        Sprite_Clickable.prototype.update.call(this);
-        if (!this.updateEasing()) {
-            this.updateSpeaker(this.updateBitmap());
-            this.updateFrame();
+    Game_MessagePicture.prototype.initAnimation = function() {
+        this._hasAnimation = false;
+        this._pattern = 0;
+        this._animationCount = 0;
+        this._animationRepeatIndex = 0;
+        this._animationNumPattern = 1;
+        this._animationPatternCounts = [0];
+        this._animationNumRepeat = 1;
+        this._animationRepeatDurations = [0];
+    };
+
+    Game_MessagePicture.prototype.z = function() {
+        return this._z;
+    };
+
+    Game_MessagePicture.prototype.offsetY = function() {
+        return this._offsetY;
+    };
+
+    Game_MessagePicture.prototype.hasAnimation = function() {
+        return this._hasAnimation;
+    };
+
+    Game_MessagePicture.prototype.pattern = function() {
+        return this._pattern;
+    };
+
+    Game_MessagePicture.prototype.animationNumPattern = function() {
+        return this._animationNumPattern;
+    };
+
+    Game_MessagePicture.prototype.isSpeaking = function() {
+        return [this._position, -1].includes($gameScreen.speakerIndex());
+    };
+
+    Game_MessagePicture.prototype.setName = function(name) {
+        const offsetY = ImageManager.offsetY(name);
+        if (!BOTTOM_Y_ORIGIN) {
+            this._y += this._offsetY;
+            this._y -= offsetY;
+            this._originalY = this._y;
+        }
+        this._name = name;
+        this._width = ImageManager.pictureWidth(name);
+        this._height = ImageManager.pictureHeight(name);
+        this._offsetY = offsetY;
+        this.setupAnimation(name);
+    };
+
+    Game_MessagePicture.prototype.update = function() {
+        Game_Picture.prototype.update.call(this);
+        if (!this.isMoving()) {
+            this.updateSpeaker();
             this.updateAnimation();
             this.updateSpeaking();
         }
     };
 
-    Sprite_MessagePicture.prototype.updateBitmap = function() {
-        if (this._changingBitmap) {
-            this.changeBitmap(this._pictureName);
-            this._changingBitmap = false;
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    Sprite_MessagePicture.prototype.updateSpeaker = function(bitmapChanged) {
-        let actorChanged = false;
-        let easingCondition = bitmapChanged ? 1 : 0;
-        const lastActor = this._actor;
-        const speaker = $gameMessage.speaker(this._position);
+    Game_MessagePicture.prototype.updateSpeaker = function() {
+        const lastActorId = this._actorId;
+        const speaker = $gameScreen.speaker(this._position);
+        const speakerId = speaker ? speaker.actorId() : 0;
         const pictureName = speaker ? speaker.pictureName() : "";
-        if (this._actor !== speaker) {
-            this._actor = speaker;
+        let actorChanged;
+        let easingCondition;
+        if (this._actorId !== speakerId) {
+            this._actorId = speakerId;
             actorChanged = true;
+        } else {
+            actorChanged = false;
         }
-        if (!bitmapChanged) {
-            if (this._pictureName !== pictureName) {
-                this._pictureName = pictureName;
-                if (actorChanged && lastActor) {
-                    this._changingBitmap = true;
+        if (this._changingName) {
+            this.setName(this._changingName);
+            this._changingName = "";
+            easingCondition = 1;
+        } else {
+            if (this._name !== pictureName) {
+                if (actorChanged && lastActorId) {
+                    this._changingName = pictureName;
                 } else {
-                    this.changeBitmap(pictureName);
+                    this.setName(pictureName);
                 }
             }
-            if (speaker) {
-                if (!lastActor) {
-                    easingCondition = 1;
-                } else {
+            if (lastActorId) {
+                if (speaker) {
                     easingCondition = actorChanged ? -1 : 0;
+                } else {
+                    easingCondition = -1;
                 }
             } else {
-                easingCondition = -1;
+                if (speaker) {
+                    easingCondition = 1;
+                } else {
+                    easingCondition = 0;
+                }
             }
         }
         switch (easingCondition) {
             case 1:
-                this.x = this.easingOffsetX();
-                this.y = this.originalY();
-                this.opacity = 0;
+                this._x = this.easingOffsetX();
+                this._y = this.easingOffsetY();
+                this._opacity = 0;
                 this.appearWithEase(EASING_FRAMES);
                 break;
             case -1:
-                this.opacity = this.originalOpacity();
+                this._originalX = this._x;
+                this._originalY = this._y;
+                this._originalOpacity = this._opacity;
                 this.disappearWithEase(EASING_FRAMES);
                 break;
         }
     };
 
-    Sprite_MessagePicture.prototype.updateSpeaking = function() {
+    Game_MessagePicture.prototype.updateSpeaking = function() {
         const isSpeaking = this.isSpeaking();
         if (this._isSpeaking !== isSpeaking) {
             this._isSpeaking = isSpeaking;
             if (isSpeaking) {
-                this.z = 2;
-                this.setColorTone([0, 0, 0, 0]);
+                this._z = 6;
+                this.tint(this._originalTone, DEACTIVE_FRAMES);
             } else {
-                this.z = 1;
-                this.setColorTone(DEACTIVE_TONE);
+                this._z = 5;
+                this._originalTone = this._tone.clone();
+                this.tint(DEACTIVE_TONE, DEACTIVE_FRAMES);
             }
         }
     };
 
-    Sprite_MessagePicture.prototype.updateFrame = function() {
-        const bitmap = this.bitmap;
-        if (bitmap) {
-            let pw, px;
-            if (this._hasAnimation) {
-                const numPattern = this._animationNumPattern;
-                const pattern = this._pattern < numPattern ? this._pattern : 0;
-                pw = bitmap.width / numPattern;
-                px = pw * pattern;
-            } else {
-                pw = bitmap.width;
-                px = 0;
-            }
-            this.setFrame(px, 0, pw, bitmap.height);
-        }
-    };
-
-    Sprite_MessagePicture.prototype.updateAnimation = function() {
+    Game_MessagePicture.prototype.updateAnimation = function() {
         if (this._hasAnimation) {
             this._animationCount += this._animationPatternCounts[this._pattern];
             if (this._animationCount >= this._animationRepeatDurations[this._animationRepeatIndex]) {
@@ -725,18 +1679,8 @@
             }
         }
     };
-    
-    Sprite_MessagePicture.prototype.changeBitmap = function(pictureName) {
-        const bitmap = ImageManager.loadPicture(pictureName);
-        const width = bitmap.width;
-        const centerX = ImageManager.centerX(pictureName);
-        const cx = (centerX > 0) ? centerX : (width / 2);
-        this.bitmap = bitmap;
-        this.anchor.x = cx / width;
-        this.setupAnimation(pictureName);
-    };
 
-    Sprite_MessagePicture.prototype.setupAnimation = function(pictureName) {
+    Game_MessagePicture.prototype.setupAnimation = function(pictureName) {
         if (ImageManager.hasPictureAnimation(pictureName)) {
             this._hasAnimation = true;
             this._pattern = 0;
@@ -747,90 +1691,264 @@
             this._animationNumRepeat = ImageManager.animationNumRepeat(pictureName);
             this._animationRepeatDurations = ImageManager.animationRepeatDurations(pictureName);
         } else {
-            this._hasAnimation = false;
+            this.initAnimation();
         }
     };
 
-    Sprite_MessagePicture.prototype.calcEasing = function(t) {
-        return Game_Picture.prototype.calcEasing.call(this, t);
+    Game_MessagePicture.prototype.movePosition = function(origin, x, y, scaleX, scaleY, opacity, blendMode, duration, easingType) {
+        this._originalX = x;
+        this._originalY = y;
+        this._originalOpacity = opacity;
+        this.move(origin, x, y, scaleX, scaleY, opacity, blendMode, duration, easingType);
+    };
+
+    Game_MessagePicture.prototype.isMoving = function() {
+        return this._duration > 0;
     };
     
-    Sprite_MessagePicture.prototype.easeIn = function(t, exponent) {
-        return Game_Picture.prototype.easeIn.call(this, t, exponent);
+    Game_MessagePicture.prototype.appearWithEase = function(duration=30) {
+        this.move(0, this._originalX, this._originalY, this._scaleX, this._scaleY, this._originalOpacity, this._blendMode, duration, 2);
+    };
+
+    Game_MessagePicture.prototype.disappearWithEase = function(duration=30) {
+        this.move(0, this.easingOffsetX(), this.easingOffsetY(), this._scaleX, this._scaleY, 0, this._blendMode, duration, 1);
     };
     
-    Sprite_MessagePicture.prototype.easeOut = function(t, exponent) {
-        return Game_Picture.prototype.easeOut.call(this, t, exponent);
+    Game_MessagePicture.prototype.easingOffsetX = function() {
+        return this._scaleX < 0 ? this._x - EASING_OFFSET : this._x + EASING_OFFSET;
     };
     
-    Sprite_MessagePicture.prototype.easeInOut = function(t, exponent) {
-        return Game_Picture.prototype.easeInOut.call(this, t, exponent);
+    Game_MessagePicture.prototype.easingOffsetY = function() {
+        return this._y;
     };
-    
-    Sprite_MessagePicture.prototype.ease = function(x, y, opacity, duration, easingType) {
-        this._targetX = x;
-        this._targetY = y;
-        this._targetOpacity = opacity;
-        this._easingDuration = duration;
-        this._wholeDuration = duration;
-        this._easingType = easingType;
-        this._easingExponent = 2;
-    };
-    
-    Sprite_MessagePicture.prototype.updateEasing = function() {
-        if (this._easingDuration > 0) {
-            this.x = this.applyEasing(this.x, this._targetX);
-            this.y = this.applyEasing(this.y, this._targetY);
-            this.opacity = this.applyEasing(this.opacity, this._targetOpacity);
-            this._easingDuration--;
-            return true;
+
+    Game_MessagePicture.prototype.balloonX = function() {
+        if (PICTURE_MIRRORS[this._position]) {
+            return this._x + this._width / 2;
         } else {
-            return false;
+            return this._x - this._width / 2;
         }
     };
+
+    Game_MessagePicture.prototype.balloonY = function() {
+        if (BOTTOM_Y_ORIGIN) {
+            return this._y - this._height + this._offsetY;
+        } else {
+            return this._y + this._offsetY * 2;
+        }
+    };
+
+
+    const _Sprite_Balloon_prototype_setup = Sprite_Balloon.prototype.setup;
+    Sprite_Balloon.prototype.setup = function(targetSprite, balloonId, offsetX, offsetY, scaleX, scaleY) {
+        _Sprite_Balloon_prototype_setup.call(this, targetSprite, balloonId);
+        this._offsetX = offsetX || 0;
+        this._offsetY = offsetY || 0;
+        this.scale.x = scaleX ? (targetSprite.scale.x < 0 ? scaleX : -scaleX) : 1;
+        this.scale.y = scaleY || 1;
+        this.z = 7;
+    };
+
+    const _Sprite_Balloon_prototype_updatePosition = Sprite_Balloon.prototype.updatePosition;
+    Sprite_Balloon.prototype.updatePosition = function() {
+        if (this._target.balloonX && this._target.balloonY) {
+            this.x = this._target.balloonX();
+            this.x += (this.scale.x < 0) ? -this._offsetX : this._offsetX;
+            this.y = this._target.balloonY() + this._offsetY;
+        } else {
+            _Sprite_Balloon_prototype_updatePosition.call(this);
+        }
+    };
+
+
+    const _Sprite_Animation_prototype_targetSpritePosition = Sprite_Animation.prototype.targetSpritePosition;
+    Sprite_Animation.prototype.targetSpritePosition = function(sprite) {
+        if (sprite instanceof Sprite_MessagePicture) {
+            const point = new Point(0, sprite.offsetY() + sprite.height / 4);
+            if (this._animation.alignBottom) point.y = Graphics.height;
+            sprite.updateTransform();
+            return sprite.worldTransform.apply(point);
+        } else {
+            return _Sprite_Animation_prototype_targetSpritePosition.call(this, sprite);
+        }
+    };
+
+
+    function Sprite_MessagePicture() {
+        this.initialize(...arguments);
+    }
     
-    Sprite_MessagePicture.prototype.applyEasing = function(current, target) {
-        const d = this._easingDuration;
-        const wd = this._wholeDuration;
-        const lt = this.calcEasing((wd - d) / wd);
-        const t = this.calcEasing((wd - d + 1) / wd);
-        const start = (current - target * lt) / (1 - lt);
-        return start + (target - start) * t;
+    Sprite_MessagePicture.prototype = Object.create(Sprite_Picture.prototype);
+    Sprite_MessagePicture.prototype.constructor = Sprite_MessagePicture;
+    
+    Sprite_MessagePicture.prototype.initialize = function(position) {
+        Sprite_Clickable.prototype.initialize.call(this);
+        this._position = position;
+        this._pictureName = "";
+        this.update();
+    };
+
+    Sprite_MessagePicture.prototype.picture = function() {
+        return $gameScreen.messagePicture(this._position);
+    };
+
+    Sprite_MessagePicture.prototype.offsetY = function() {
+        return this.picture().offsetY();
+    };
+
+    Sprite_MessagePicture.prototype.balloonX = function() {
+        return this.picture().balloonX();
+    };
+
+    Sprite_MessagePicture.prototype.balloonY = function() {
+        return this.picture().balloonY();
+    };
+
+    Sprite_MessagePicture.prototype.update = function() {
+        Sprite_Clickable.prototype.update.call(this);
+        this.updateBitmap();
+        if (this.visible) {
+            this.updateFrame();
+            this.updateOrigin();
+            this.updatePosition();
+            this.updateScale();
+            this.updateTone();
+            this.updateOther();
+        }
+    };
+
+    Sprite_MessagePicture.prototype.updateFrame = function() {
+        const bitmap = this.bitmap;
+        const picture = this.picture();
+        if (bitmap && picture) {
+            const pw = bitmap.width / picture.animationNumPattern();
+            this.setFrame(pw * picture.pattern(), 0, pw, bitmap.height);
+        }
+    };
+
+    Sprite_MessagePicture.prototype.updateOrigin = function() {
+        const bitmap = this.bitmap;
+        if (bitmap) {
+            const width = bitmap.width;
+            const centerX = ImageManager.centerX(this._pictureName);
+            const cx = (centerX > 0) ? centerX : (width / 2);
+            this.anchor.x = cx / width;
+            this.anchor.y = BOTTOM_Y_ORIGIN ? 1 : 0;
+        }
+    };
+
+    Sprite_MessagePicture.prototype.updatePosition = function() {
+        const picture = this.picture();
+        this.x = Math.round(picture.x());
+        this.y = Math.round(picture.y());
+        this.z = Math.round(picture.z());
+    };
+
+
+    Spriteset_Base.prototype.createMessagePictureSprites = function() {
+        this._messagePictureSprites = [];
+        for (let i=0; i<3; i++) {
+            const sprite = new Sprite_MessagePicture(i)
+            this._messagePictureSprites[i] = sprite;
+            this._tilemap.addChild(sprite);
+        }
+    };
+
+
+    const _Spriteset_Map_prototype_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;
+    Spriteset_Map.prototype.createLowerLayer = function() {
+        _Spriteset_Map_prototype_createLowerLayer.call(this);
+        this.createMessagePictureSprites();
+    };
+
+    Spriteset_Map.prototype.createBalloon = function(request) {
+        const targetSprite = this.findTargetSprite(request.target);
+        if (targetSprite) {
+            const sprite = new Sprite_Balloon();
+            sprite.targetObject = request.target;
+            sprite.setup(targetSprite, request.balloonId, request.offsetX, request.offsetY, request.scaleX, request.scaleY);
+            this._effectsContainer.addChild(sprite);
+            this._balloonSprites.push(sprite);
+        }
+    };
+
+    const _Spriteset_Map_prototype_findTargetSprite = Spriteset_Map.prototype.findTargetSprite;
+    Spriteset_Map.prototype.findTargetSprite = function(target) {
+        switch (target) {
+            case "leftMessagePicture":
+                return this._messagePictureSprites[0];
+            case "centerMessagePicture":
+                return this._messagePictureSprites[1];
+            case "rightMessagePicture":
+                return this._messagePictureSprites[2];
+            default:
+                return _Spriteset_Map_prototype_findTargetSprite.call(this, target);
+        }
+    };
+
+
+    const _Spriteset_Battle_prototype_initialize = Spriteset_Battle.prototype.initialize;
+    Spriteset_Battle.prototype.initialize = function() {
+        _Spriteset_Battle_prototype_initialize.call(this);
+        this._balloonSprites = [];
+    };
+
+    const _Spriteset_Battle_prototype_createLowerLayer = Spriteset_Battle.prototype.createLowerLayer;
+    Spriteset_Battle.prototype.createLowerLayer = function() {
+        _Spriteset_Battle_prototype_createLowerLayer.call(this);
+        this.createTilemap();
+        this.createMessagePictureSprites();
+    };
+
+    Spriteset_Battle.prototype.createTilemap = function() {
+        const tilemap = new Tilemap();
+        this._battleField.addChild(tilemap);
+        this._tilemap = tilemap;
+    };
+
+    Spriteset_Battle.prototype.destroy = function(options) {
+        this.removeAllBalloons();
+        Spriteset_Base.prototype.destroy.call(this, options);
+    };
+
+    const _Spriteset_Battle_prototype_findTargetSprite = Spriteset_Battle.prototype.findTargetSprite;
+    Spriteset_Battle.prototype.findTargetSprite = function(target) {
+        switch (target) {
+            case "leftMessagePicture":
+                return this._messagePictureSprites[0];
+            case "centerMessagePicture":
+                return this._messagePictureSprites[1];
+            case "rightMessagePicture":
+                return this._messagePictureSprites[2];
+            default:
+                return _Spriteset_Battle_prototype_findTargetSprite.call(this, target);
+        }
+    };
+
+    const _Spriteset_Battle_prototype_update = Spriteset_Battle.prototype.update;
+    Spriteset_Battle.prototype.update = function() {
+        _Spriteset_Battle_prototype_update.call(this);
+        this.updateBalloons();
+    };
+
+    Spriteset_Battle.prototype.updateBalloons = function() {
+        Spriteset_Map.prototype.updateBalloons.call(this);
     };
     
-    Sprite_MessagePicture.prototype.isEasing = function() {
-        return this._easingDuration > 0;
+    Spriteset_Battle.prototype.processBalloonRequests = function() {
+        Spriteset_Map.prototype.processBalloonRequests.call(this);
     };
     
-    Sprite_MessagePicture.prototype.appearWithEase = function(duration=30) {
-        this.ease(this.originalX(), this.originalY(), this.originalOpacity(), duration, 2);
+    Spriteset_Battle.prototype.createBalloon = function(request) {
+        Spriteset_Map.prototype.createBalloon.call(this, request);
     };
     
-    Sprite_MessagePicture.prototype.disappearWithEase = function(duration=30) {
-        this.ease(this.easingOffsetX(), this.easingOffsetY(), 0, duration, 1);
+    Spriteset_Battle.prototype.removeBalloon = function(sprite) {
+        Spriteset_Map.prototype.removeBalloon.call(this, sprite);
     };
     
-    Sprite_MessagePicture.prototype.originalX = function() {
-        return PICTURE_COORDINATES[this._position].x;
-    };
-    
-    Sprite_MessagePicture.prototype.originalY = function() {
-        let y = PICTURE_COORDINATES[this._position].y;
-        if (!BOTTOM_Y_ORIGIN) y -= ImageManager.offsetY(this._pictureName);
-        return y;
-    };
-    
-    Sprite_MessagePicture.prototype.originalOpacity = function() {
-        return 255;
-    };
-    
-    Sprite_MessagePicture.prototype.easingOffsetX = function() {
-        const originalX = this.originalX();
-        return PICTURE_MIRRORS[this._position] ? originalX - EASING_OFFSET : originalX + EASING_OFFSET;
-    };
-    
-    Sprite_MessagePicture.prototype.easingOffsetY = function() {
-        return this.y;
+    Spriteset_Battle.prototype.removeAllBalloons = function() {
+        Spriteset_Map.prototype.removeAllBalloons.call(this);
     };
 
 })();

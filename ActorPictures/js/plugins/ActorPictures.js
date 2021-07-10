@@ -582,13 +582,23 @@
         return obj ? obj.offsetY : 0;
     };
 
+    ImageManager.pictureWidth = function(pictureName) {
+        const bitmap = this.loadPicture(pictureName);
+        return bitmap ? bitmap.width / this.animationNumPattern(pictureName) : 1;
+    };
+
+    ImageManager.pictureHeight = function(pictureName) {
+        const bitmap = this.loadPicture(pictureName);
+        return bitmap ? bitmap.height : 1;
+    };
+
     ImageManager.hasPictureAnimation = function(pictureName) {
         return !!ANIMATION_PICTURES[pictureName];
     };
 
     ImageManager.animationNumPattern = function(pictureName) {
         const obj = ANIMATION_PICTURES[pictureName];
-        return obj ? obj.numPattern : 0;
+        return obj ? obj.numPattern : 1;
     };
 
     ImageManager.animationPatternCounts = function(pictureName) {
@@ -598,7 +608,7 @@
 
     ImageManager.animationNumRepeat = function(pictureName) {
         const obj = ANIMATION_PICTURES[pictureName];
-        return obj ? obj.numRepeat : 0;
+        return obj ? obj.numRepeat : 1;
     };
 
     ImageManager.animationRepeatDurations = function(pictureName) {
