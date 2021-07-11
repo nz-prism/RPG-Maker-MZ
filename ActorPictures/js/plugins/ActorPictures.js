@@ -686,9 +686,8 @@
     Window_Base.prototype.drawActorPicture = function(actor, x, y, width, height, alignCenter=false, offsetVertically=false) {
         const pictureName = actor.pictureName();
         const bitmap = ImageManager.loadPicture(pictureName);
-        let bw = bitmap.width;
-        const bh = bitmap.height;
-        if (ImageManager.hasPictureAnimation(pictureName)) bw /= ImageManager.animationNumPattern(pictureName);
+        const bw = ImageManager.pictureWidth(pictureName);
+        const bh = ImageManager.pictureHeight(pictureName);
         const w = width || bw;
         const h = height || bh;
         let sx = 0;
