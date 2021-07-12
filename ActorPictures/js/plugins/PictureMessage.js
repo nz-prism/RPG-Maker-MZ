@@ -10,13 +10,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.2.0
+ * ver 1.3.0
  *
  * [History]
  * 07/03/2021 1.0.0 Released
  * 07/05/2021 1.1.0 Added picture animation and inverse functionality
  * 07/06/2021 1.1.1 Fixed easing direction did not reflect the mirror settings
  * 07/10/2021 1.2.0 Added some commands and enabled picture states to be saved
+ * 07/12/2021 1.3.0 Enabled an actor picture is shown in battle
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -59,6 +60,11 @@
  * 
  * Pictures can be animated. If plugin parameters of ActorPictures.js
  * are set, the pictures will be animated while they are displayed.
+ * 
+ * If a plugin parameter "Show Picture on Battle Command" is true,
+ * when inputting the actor command, the actor picture will be shown.
+ * If a picture is already shown at the same position, the actor for
+ * the command will replace it.
  * 
  * 
  * ■ Control Characters for the name field
@@ -195,6 +201,26 @@
  * @type number
  * @default 15
  * @min 1
+ * 
+ * @param showPictureOnBattleCommand
+ * @text Show Picture on Battle Command
+ * @desc If true, when inputting the battle actor command, the actor picture will be shown.
+ * @type boolean
+ * @default true
+ * 
+ * @param battleCommandPicturePosition
+ * @parent showPictureOnBattleCommand
+ * @text Battle Command Picture Position
+ * @desc The position where the actor picture stands when inputting the battle actor command.
+ * @default 2
+ * @type select
+ * @option Left
+ * @value 0
+ * @option Center
+ * @value 1
+ * @option Right
+ * @value 2
+ * 
  * 
  * @command clearPictures
  * @text Erase Pictures
@@ -641,13 +667,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.2.0
+ * ver 1.3.0
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
  * 2021/07/05 1.1.0 アニメーションへの対応、位置ごとの反転設定の追加
  * 2021/07/06 1.1.1 イージングの方向が立ち絵反転設定を反映していなかった不具合を修正
  * 2021/07/10 1.2.0 多数のプラグインコマンドを追加、立ち絵状態をセーブ可能に
+ * 2021/07/12 1.3.0 戦闘中コマンド入力時立ち絵表示機能を追加
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -689,6 +716,10 @@
  * 立ち絵のアニメーションにも対応しています。ActorPictures.jsのプラグイン
  * パラメータ「立ち絵アニメ設定」にて設定した立ち絵は、表示されている間アニメ
  * するようになります。
+ * 
+ * プラグインパラメータ「戦闘コマンド入力時立ち絵表示」をオンにすると、戦闘中
+ * アクターコマンド入力時にそのアクターの立ち絵が表示されるようになります。同
+ * じ位置に立ち絵が表示されていた場合、その立ち絵と入れ替わります。
  * 
  * 
  * ■ 名前欄に使用する制御文字
@@ -826,6 +857,25 @@
  * @type number
  * @default 15
  * @min 1
+ * 
+ * @param showPictureOnBattleCommand
+ * @text 戦闘コマンド入力時立ち絵表示
+ * @desc オンにすると戦闘中のアクターコマンド入力時、そのアクターの立ち絵が表示されます。
+ * @type boolean
+ * @default true
+ * 
+ * @param battleCommandPicturePosition
+ * @parent showPictureOnBattleCommand
+ * @text 戦闘コマンド入力時立ち絵位置
+ * @desc 戦闘中のアクターコマンド入力時に表示されるアクターの立ち絵の位置です。
+ * @default 2
+ * @type select
+ * @option 左側
+ * @value 0
+ * @option 中央
+ * @value 1
+ * @option 右側
+ * @value 2
  * 
  * 
  * @command clearPictures
@@ -1298,6 +1348,9 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     const DEACTIVE_TONE = Object.values(JSON.parse(pluginParams.deactiveTone)).map(s => Number(s));
     const DEACTIVE_FRAMES = Number(pluginParams.deactiveFrames);
 
+    const SHOW_PICTURE_ON_BATTLE_COMMAND = pluginParams.showPictureOnBattleCommand === "true";
+    const BATTLE_COMMAND_PICTURE_POSITION = Number(pluginParams.battleCommandPicturePosition);
+
 
     PluginManager.registerCommand(PLUGIN_NAME, "clearPictures", args => {
         $gameScreen.clearSpeaker(Number(args.targetPosition));
@@ -1349,7 +1402,9 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     });
 
     PluginManager.registerCommand(PLUGIN_NAME, "initPicture", args => {
-        $gameScreen.messagePicture(Number(args.position)).applyDefaultBasic();
+        const picture = $gameScreen.messagePicture(Number(args.position));
+        picture.applyDefaultBasic();
+        picture.initRotation();
     });
 
     PluginManager.registerCommand(PLUGIN_NAME, "showBalloon", args => {
@@ -1363,6 +1418,21 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     PluginManager.registerCommand(PLUGIN_NAME, "showAnimation", args => {
         $gameTemp.requestAnimation([args.targetMessagePicture], Number(args.animationId), args.mirror === "true");
     });
+
+
+    const _BattleManager_startActorInput = BattleManager.startActorInput;
+    BattleManager.startActorInput = function() {
+        _BattleManager_startActorInput.call(this);
+        if (SHOW_PICTURE_ON_BATTLE_COMMAND && this._currentActor) {
+            $gameScreen.setSpeaker(BATTLE_COMMAND_PICTURE_POSITION, this._currentActor.actorId());
+        }
+    };
+
+    const _BattleManager_startTurn = BattleManager.startTurn;
+    BattleManager.startTurn = function() {
+        _BattleManager_startTurn.call(this);
+        if (SHOW_PICTURE_ON_BATTLE_COMMAND) $gameScreen.clearSpeaker(BATTLE_COMMAND_PICTURE_POSITION);
+    };
 
 
     Game_Temp.prototype.requestBalloon = function(target, balloonId, offsetX, offsetY, scaleX, scaleY) {
