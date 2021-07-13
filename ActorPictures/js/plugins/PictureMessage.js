@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.0
+ * ver 1.3.1
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -18,6 +18,7 @@
  * 07/06/2021 1.1.1 Fixed easing direction did not reflect the mirror settings
  * 07/10/2021 1.2.0 Added some commands and enabled picture states to be saved
  * 07/12/2021 1.3.0 Enabled an actor picture is shown in battle
+ * 07/13/2021 1.3.1 Fixed battle picture issues on TPB
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -80,41 +81,20 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param pictureMirror
- * @text PictureMirror
- * @desc Settings to invert pictures.
- * 
- * @param leftMirror
- * @parent pictureMirror
- * @text Left Picture Mirror
- * @desc If true, the left picture will be inverted horizontally.
- * @default true
- * @type boolean
- * 
- * @param centerMirror
- * @parent pictureMirror
- * @text Center Picture Mirror
- * @desc If true, the center picture will be inverted horizontally.
- * @default false
- * @type boolean
- * 
- * @param rightMirror
- * @parent pictureMirror
- * @text Right Picture Mirror
- * @desc If true, the right picture will be inverted horizontally.
- * @default false
- * @type boolean
- * 
- * @param pictureCoordinates
- * @text Picture Coordinates
- * @desc The coordinates for the pictures.
- * 
  * @param bottomYOrigin
- * @parent pictureCoordinates
  * @text Use Bottom as Y Axis Origin
  * @desc If true, the bottom of the picture will be used as Y-axis origin. If false, the top will be the origin.
  * @type boolean
  * @default false
+ * 
+ * @param defaultPictureSettings
+ * @text Default Picture Settings
+ * @desc The default settings for each picture.
+ * 
+ * @param pictureCoordinates
+ * @parent defaultPictureSettings
+ * @text Coordinates
+ * @desc The coordinates for the pictures.
  * 
  * @param leftPictureX
  * @parent pictureCoordinates
@@ -164,6 +144,32 @@
  * @default 0
  * @min -100000
  * 
+ * @param pictureMirror
+ * @parent defaultPictureSettings
+ * @text Mirror
+ * @desc Settings to invert pictures.
+ * 
+ * @param leftMirror
+ * @parent pictureMirror
+ * @text Left Picture Mirror
+ * @desc If true, the left picture will be inverted horizontally.
+ * @default true
+ * @type boolean
+ * 
+ * @param centerMirror
+ * @parent pictureMirror
+ * @text Center Picture Mirror
+ * @desc If true, the center picture will be inverted horizontally.
+ * @default false
+ * @type boolean
+ * 
+ * @param rightMirror
+ * @parent pictureMirror
+ * @text Right Picture Mirror
+ * @desc If true, the right picture will be inverted horizontally.
+ * @default false
+ * @type boolean
+ * 
  * @param easing
  * @text Easing
  * @desc The easing values for the appearance/disappearance of pictures.
@@ -189,6 +195,7 @@
  * @desc The tone settings for actors who aren't speaking.
  * 
  * @param deactiveTone
+ * @parent deactiveToneSettings
  * @text Deactive Speaker Tone
  * @desc The tone for actors who aren't speaking.
  * @type struct<rgbg>
@@ -667,7 +674,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.0
+ * ver 1.3.1
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -675,6 +682,7 @@
  * 2021/07/06 1.1.1 イージングの方向が立ち絵反転設定を反映していなかった不具合を修正
  * 2021/07/10 1.2.0 多数のプラグインコマンドを追加、立ち絵状態をセーブ可能に
  * 2021/07/12 1.3.0 戦闘中コマンド入力時立ち絵表示機能を追加
+ * 2021/07/13 1.3.1 タイムプログレスバトル時の立ち絵表示の不具合を修正
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -735,41 +743,20 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param pictureMirror
- * @text 立ち絵反転
- * @desc 立ち絵を反転させるかどうかの設定です
- * 
- * @param leftMirror
- * @parent pictureMirror
- * @text 左立ち絵反転
- * @desc 左側の立ち絵を反転させるかどうかの設定です
- * @default true
- * @type boolean
- * 
- * @param centerMirror
- * @parent pictureMirror
- * @text 中央立ち絵反転
- * @desc 中央の立ち絵を反転させるかどうかの設定です
- * @default false
- * @type boolean
- * 
- * @param rightMirror
- * @parent pictureMirror
- * @text 右立ち絵反転
- * @desc 右側の立ち絵を反転させるかどうかの設定です
- * @default false
- * @type boolean
- * 
- * @param pictureCoordinates
- * @text 立ち絵座標
- * @desc 立ち絵の表示座標です。
- * 
  * @param bottomYOrigin
- * @parent pictureCoordinates
  * @text 立ち絵Y座標原点を下にする
  * @desc オンにすると画像の下端が立ち絵のY座標原点になります。オフにすると上端が原点になります。
  * @type boolean
  * @default false
+ * 
+ * @param defaultPictureSettings
+ * @text 立ち絵デフォルト設定
+ * @desc 各立ち絵のデフォルト設定です。
+ * 
+ * @param pictureCoordinates
+ * @parent defaultPictureSettings
+ * @text 座標
+ * @desc 立ち絵の表示座標です。
  * 
  * @param leftPictureX
  * @parent pictureCoordinates
@@ -818,6 +805,32 @@
  * @type number
  * @default 0
  * @min -100000
+ * 
+ * @param pictureMirror
+ * @parent defaultPictureSettings
+ * @text 反転
+ * @desc 立ち絵を反転させるかどうかの設定です
+ * 
+ * @param leftMirror
+ * @parent pictureMirror
+ * @text 左立ち絵反転
+ * @desc 左側の立ち絵を反転させるかどうかの設定です
+ * @default true
+ * @type boolean
+ * 
+ * @param centerMirror
+ * @parent pictureMirror
+ * @text 中央立ち絵反転
+ * @desc 中央の立ち絵を反転させるかどうかの設定です
+ * @default false
+ * @type boolean
+ * 
+ * @param rightMirror
+ * @parent pictureMirror
+ * @text 右立ち絵反転
+ * @desc 右側の立ち絵を反転させるかどうかの設定です
+ * @default false
+ * @type boolean
  * 
  * @param easing
  * @text イージング
@@ -1428,9 +1441,9 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         }
     };
 
-    const _BattleManager_startTurn = BattleManager.startTurn;
-    BattleManager.startTurn = function() {
-        _BattleManager_startTurn.call(this);
+    const _BattleManager_finishActorInput = BattleManager.finishActorInput;
+    BattleManager.finishActorInput = function() {
+        _BattleManager_finishActorInput.call(this);
         if (SHOW_PICTURE_ON_BATTLE_COMMAND) $gameScreen.clearSpeaker(BATTLE_COMMAND_PICTURE_POSITION);
     };
 
@@ -1793,7 +1806,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     };
 
     Game_MessagePicture.prototype.balloonX = function() {
-        if (PICTURE_MIRRORS[this._position]) {
+        if (this._scaleX < 0) {
             return this._x + this._width / 2;
         } else {
             return this._x - this._width / 2;
