@@ -8,14 +8,16 @@
  * @author nz_prism
  * @base ActorPictures
  * @base AltMenuScreen
+ * @orderBefore MenuStatusPictures
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js
  *
  * @help ActorPictureOnAltMenuScreen.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [History]
  * 07/01/2021 1.0.0 Released
  * 07/02/2021 1.1.0 Updated in accordance with ActorPictures.js
+ * 09/01/2021 1.1.1 Solved conflict with MenuStatusPictures.js
  *
  * This plugin changes actor faces into pictures on AltMenuScreen.
  * It requires both ActorPictures.js and AltMenuScreen.js.
@@ -31,14 +33,16 @@
  * @author nz_prism
  * @base ActorPictures
  * @base AltMenuScreen
+ * @orderBefore MenuStatusPictures
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js
  *
  * @help ActorPictureOnAltMenuScreen.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [バージョン履歴]
  * 2021/07/01 1.0.0 リリース
  * 2021/07/02 1.1.0 ActorPictures.jsに合わせて更新
+ * 2021/09/01 1.1.1 MenuStatusPictures.jsとの競合に対処
  *
  * このプラグインは、AltMenuScreenにて描画される顔グラフィックをアクターの立ち絵
  * に変更します。
