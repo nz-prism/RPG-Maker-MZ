@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc This plugin scrolls the windows' back.
  * @author nz_prism
- * @url
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ScrollingWindowBack/js/plugins/ScrollingWindowBack.js
  *
  * @help ScrollingWindowBack.js
  * ver 1.0.0
@@ -41,7 +41,7 @@
  * @target MZ
  * @plugindesc ウィンドウの背景をスクロールさせます。
  * @author nz_prism
- * @url
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ScrollingWindowBack/js/plugins/ScrollingWindowBack.js
  *
  * @help ScrollingWindowBack.js
  * ver 1.0.0
