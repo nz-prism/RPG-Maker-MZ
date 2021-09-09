@@ -18,6 +18,10 @@
  * You can controll the X & Y scroll rates with the plugin parameters.
  * The left bottom portion of Window.png in system folder scrolls.
  * 
+ * A sample picture, Window.png, can be used for a plugin test.
+ * This Window.png can only be used by users who have already been
+ * registered as a certified user.
+ * 
  *
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
@@ -54,6 +58,10 @@
  * このプラグインは、ウィンドウの背景をスクロールさせます。
  * X軸とY軸それぞれにスクロール速度を設定可能です。
  * スクロールするのはsystemフォルダのWindow.pngの左下部分です。
+ * 
+ * サンプルとしてWindow.pngを用意していますので動作確認にご使用ください。
+ * なおこのWindow.pngはRPGツクールMZのユーザー登録がお済みの方のみがご使用いただ
+ * けるという点にご注意ください。
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
