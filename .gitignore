@@ -69,3 +69,14 @@
 /FramelessChoiceList/img/system/*
 !/FramelessChoiceList/img/system/Selection_Active.png
 !/FramelessChoiceList/img/system/Selection_Deactive.png
+/ScrollingWindowBack/*
+!/ScrollingWindowBack/js
+/ScrollingWindowBack/js/*
+!/ScrollingWindowBack/js/plugins/
+/ScrollingWindowBack/js/plugins/*
+!/ScrollingWindowBack/js/plugins/ScrollingWindowBack.js
+!/ScrollingWindowBack/img
+/ScrollingWindowBack/img/*
+!/ScrollingWindowBack/img/system/
+/ScrollingWindowBack/img/system/*
+!/ScrollingWindowBack/img/system/Window.png
