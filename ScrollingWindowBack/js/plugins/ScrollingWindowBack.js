@@ -16,6 +16,8 @@
  *
  * This plugin scrolls the windows' back.
  * You can controll the X & Y scroll rates with the plugin parameters.
+ * The left bottom portion of Window.png in system folder scrolls.
+ * 
  *
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
@@ -51,6 +53,7 @@
  * 
  * このプラグインは、ウィンドウの背景をスクロールさせます。
  * X軸とY軸それぞれにスクロール速度を設定可能です。
+ * スクロールするのはsystemフォルダのWindow.pngの左下部分です。
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
