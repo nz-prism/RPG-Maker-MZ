@@ -261,6 +261,8 @@
         // this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
         // this._skillTypeWindow.setSkillWindow(this._itemWindow);
         this.addWindow(this._itemWindow);
+        this._itemWindow.setActor($gameActors.actor(6));
+        this._itemWindow.setStypeId(1);
     };
 
     const _Scene_Map_prototype_createAllWindows = Scene_Map.prototype.createAllWindows;
