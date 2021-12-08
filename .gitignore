@@ -1,5 +1,6 @@
 /OLD/
 /ActorPictures/*
+!/ActorPictures/Readme.md
 !/ActorPictures/js
 /ActorPictures/js/*
 !/ActorPictures/js/plugins/
@@ -56,12 +57,14 @@
 /FieldAction/js/plugins/*
 !/FieldAction/js/plugins/FieldAction.js
 /MenuStatusPictures/*
+!/MenuStatusPictures/Readme.md
 !/MenuStatusPictures/js
 /MenuStatusPictures/js/*
 !/MenuStatusPictures/js/plugins/
 /MenuStatusPictures/js/plugins/*
 !/MenuStatusPictures/js/plugins/MenuStatusPictures.js
 /FramelessChoiceList/*
+!/FramelessChoiceList/Readme.md
 !/FramelessChoiceList/js
 /FramelessChoiceList/js/*
 !/FramelessChoiceList/js/plugins/
@@ -74,6 +77,7 @@
 !/FramelessChoiceList/img/system/Selection_Active.png
 !/FramelessChoiceList/img/system/Selection_Deactive.png
 /ScrollingWindowBack/*
+!/ScrollingWindowBack/Readme.md
 !/ScrollingWindowBack/js
 /ScrollingWindowBack/js/*
 !/ScrollingWindowBack/js/plugins/
