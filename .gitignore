@@ -38,6 +38,7 @@
 /OptionEx/js/plugins/*
 !/OptionEx/js/plugins/OptionEx.js
 /RandomDungeon/*
+!/RandomDungeon/Readme.md
 !/RandomDungeon/data/
 /RandomDungeon/data/*
 !/RandomDungeon/data/Map*
