@@ -19,6 +19,7 @@
 /CartRide/js/plugins/*
 !/CartRide/js/plugins/CartRide.js
 /CursorApplicationToButtonPicture/*
+!/CursorApplicationToButtonPicture/Readme.md
 !/CursorApplicationToButtonPicture/js
 /CursorApplicationToButtonPicture/js/*
 !/CursorApplicationToButtonPicture/js/plugins/
