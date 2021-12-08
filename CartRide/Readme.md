@@ -3,7 +3,7 @@
 マップに敷いたレール上に配置したトロッコを調べると、自動的にレールに沿って走り出すプラグインです。
 グラフィックもトロッコに乗った状態に変化します。
 
-<blockquote class=”twitter-tweet” data-conversation=”none”><a href=”https://twitter.com/nz_prism/status/1364906984605016064”></a></blockquote>
+[CartRide]https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CartRide/img/readme/20200926_1.png
 
 **使用方法**
 1. RPGツクールMZで新規プロジェクトを作成してください。
