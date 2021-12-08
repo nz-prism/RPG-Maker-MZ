@@ -23,5 +23,5 @@ https://opensource.org/licenses/mit-license.php
 
 ## 使用方法
 通常のプラグインと導入手順は同じです。  
-js/pluginsフォルダにOptionEx.jsをコピーし、プラグイン管理にて有効化してください。  
+**js/plugins**フォルダに**OptionEx.js**をコピーし、プラグイン管理にて有効化してください。  
 その他の詳細はプラグイン説明（プラグインパラメータ）をご覧ください。
