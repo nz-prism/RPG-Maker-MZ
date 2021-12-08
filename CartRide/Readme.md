@@ -7,6 +7,10 @@
 
 ![CartRide](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/20200926_1.png)
 
+## ライセンス
+このプラグインはMITライセンスにてリリースされています。
+https://opensource.org/licenses/mit-license.php
+
 ## 使用方法
 1. RPGツクールMZで新規プロジェクトを作成してください。
 1. **data**フォルダの中身をすべて**1**の**data**フォルダにコピー（既存ファイルと置き換え）してください。
@@ -52,7 +56,3 @@ ver. 2.0.2
   は隊列歩行に合わせたオプションです。詳細はイベント内の注釈をお読みください。
 
 - プラグインコマンドはありません。
-
-## ライセンス
-このプラグインはMITライセンスにてリリースされています。
-https://opensource.org/licenses/mit-license.php
