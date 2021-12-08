@@ -31,4 +31,4 @@ https://opensource.org/licenses/mit-license.php
 1. **RandomDungeon.js**を**1**の**js/plugins**フォルダ内にコピーしてください。
 1. **1**をRPGツクールMZで開き、プラグイン管理を開いてください。
 1. **RandomDungeon**を有効にしてください。また、プラグイン説明文をよくお読みください。
-テストプレイで動作を確認してください。
+1. テストプレイで動作を確認してください。
