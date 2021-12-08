@@ -13,9 +13,6 @@
 /CartRide/data/*
 !/CartRide/data/Map*
 !/CartRide/data/Tilesets.json
-!/CartRide/img/
-/CartRide/img/*
-!/CartRide/img/readme*
 !/CartRide/js
 /CartRide/js/*
 !/CartRide/js/plugins/
