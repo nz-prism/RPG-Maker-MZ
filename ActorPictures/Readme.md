@@ -1,7 +1,6 @@
 # アクター立ち絵管理(ActorPictures)
 
 ## 概要
-
 アクターごとに立ち絵を設定できるようにするプラグインです。標準の立ち絵のほか、ダメージ差分やステート差分も設定できます。また、標準・ダメージ・ステートそれぞれに複数の立ち絵を設定でき、表情や衣装差分に利用できます。
 
 このプラグインを単独で導入しても特に意味はありませんが、**AltMenuScreen立ち絵表示**および**会話時自動立ち絵表示**プラグインのベースプラグインになります。  
@@ -21,7 +20,6 @@ https://opensource.org/licenses/mit-license.php
 # AltMenuScreen立ち絵表示(ActorPictureOnAltMenuScreen)
 
 ## 概要
-
 ロンチプラグイン**AltMenuScreen.js**の表示を変更するプラグインです。顔グラフィックを描画する代わりに、立ち絵を描画します。立ち絵はベースプラグイン**ActorPictures.js**にて設定したものが反映されます。
 
 ![AltMenuScreen](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ActorPictureOnAltMenuScreen1.png)
@@ -41,7 +39,6 @@ https://opensource.org/licenses/mit-license.php
 # 会話時自動立ち絵表示(PictureMessage)
 
 ## 概要
-
 メッセージの名前枠に専用制御文字を入力するだけで、自動的にアクターの立ち絵を表示するプラグインです。マップ・戦闘どちらのイベントにも対応しています。立ち絵は上記**ActorPictures.js**にて設定したものが反映されます。
 
 立ち絵は左・右・中央の３箇所にそれぞれ配置することができます。  
