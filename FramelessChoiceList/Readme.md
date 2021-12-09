@@ -1,4 +1,4 @@
-# 枠なし選択肢表示
+# 枠なし選択肢表示(FramelessChoiceList)
 
 ## 概要
 
