@@ -84,7 +84,7 @@ https://opensource.org/licenses/mit-license.php
 
 ![ShowAnimation](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/PictureMessage9.png)
 
-ピクチャ関連の標準イベントコマンドと同様の各種プラグインコマンドが用意されており、立ち絵の表示状態を制御できます。回転や色調変化のほか、立ち絵を移動させることも可能です。標準のイベント**コマンドピクチャの移動**と同様に座標だけでなく拡大率や透明度も変更できますし、イージングさせることも可能です。
+ピクチャ関連の標準イベントコマンドと同様の各種プラグインコマンドが用意されており、立ち絵の表示状態を制御できます。回転や色調変化のほか、立ち絵を移動させることも可能です。標準のイベントコマンド**ピクチャの移動**と同様に座標だけでなく拡大率や透明度も変更できますし、イージングさせることも可能です。
 
 ![RotationAndTone](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/PictureMessage10.png)
 
