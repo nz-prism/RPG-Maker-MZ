@@ -31,7 +31,6 @@ https://opensource.org/licenses/mit-license.php
 ## 使用方法
 導入方法は通常のプラグインと同様ですが、上記**ActorPictures.js**の導入が前提になります。  
 **js/plugins**フォルダに**ActorPictureOnAltMenuScreen.js**をコピーし、プラグイン管理にて**ActorPictures.js**よりも下に配置して有効化してください。  
-なお同梱の画像２種は選択肢用仮画像です。**img/system**フォルダに入れてください。  
 その他の詳細はプラグイン説明をご覧ください。  
 
 ***
@@ -85,7 +84,7 @@ https://opensource.org/licenses/mit-license.php
 
 ![ShowAnimation](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/PictureMessage9.png)
 
-ピクチャ関連の標準イベントコマンドと同様の各種プラグインコマンドが用意されており、立ち絵の表示状態を制御できます。回転や色調変化のほか、立ち絵を移動させることも可能です。標準のイベントコマンドピクチャの移動と同様に座標だけでなく拡大率や透明度も変更できますし、イージングさせることも可能です。
+ピクチャ関連の標準イベントコマンドと同様の各種プラグインコマンドが用意されており、立ち絵の表示状態を制御できます。回転や色調変化のほか、立ち絵を移動させることも可能です。標準のイベント**コマンドピクチャの移動**と同様に座標だけでなく拡大率や透明度も変更できますし、イージングさせることも可能です。
 
 ![RotationAndTone](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/PictureMessage10.png)
 
@@ -100,5 +99,4 @@ https://opensource.org/licenses/mit-license.php
 ## 使用方法
 導入方法は通常のプラグインと同様ですが、上記**ActorPictures.js**の導入が前提になります。  
 **js/plugins**フォルダに**PictureMessage.js**をコピーし、プラグイン管理にて**ActorPictures.js**よりも下に配置して有効化してください。  
-なお同梱の画像２種は選択肢用仮画像です。**img/system**フォルダに入れてください。  
 その他の詳細はプラグイン説明をご覧ください。
