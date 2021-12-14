@@ -9,10 +9,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 05/01/2021 1.0.0 Released
+ * 12/14/2021 1.0.1 Fixed the conflict with PluginCommonBase.js
  * 
  * This plugin enables to generate a random map when a player
  * moves to a map with "random" attribute.
@@ -128,10 +129,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2021/05/01 1.0.0 リリース
+ * 2021/12/14 1.0.1 PluginCommonBase.jsとの競合を修正
  * 
  * このプラグインを導入すると、ランダム属性を持つマップに移動した際に
  * ダンジョンが自動生成されるようになります。
@@ -475,6 +477,7 @@
             this._data = this.aggregateMapData(ary, size, sw, sh);
             this._width = sw * size;
             this._height = sh * size;
+            this.setupEvents();
             this._events = [];
             let eventId = 1;
             const uniques = new Map;
@@ -517,10 +520,6 @@
                     eventId++;
                 }
             }
-            for (const commonEvent of this.parallelCommonEvents()) {
-                this._commonEvents.push(new Game_CommonEvent(commonEvent.id));
-            }
-            this.refreshTileEvents();
         } else {
             this._random = false;
             this._playerOffsetX = 0;
