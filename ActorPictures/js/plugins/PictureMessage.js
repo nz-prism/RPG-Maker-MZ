@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.1
+ * ver 1.3.2
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -19,6 +19,7 @@
  * 07/10/2021 1.2.0 Added some commands and enabled picture states to be saved
  * 07/12/2021 1.3.0 Enabled an actor picture is shown in battle
  * 07/13/2021 1.3.1 Fixed battle picture issues on TPB
+ * 12/28/2021 1.3.2 Fixed Balloon Icon Position
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -674,7 +675,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.1
+ * ver 1.3.2
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -683,6 +684,7 @@
  * 2021/07/10 1.2.0 多数のプラグインコマンドを追加、立ち絵状態をセーブ可能に
  * 2021/07/12 1.3.0 戦闘中コマンド入力時立ち絵表示機能を追加
  * 2021/07/13 1.3.1 タイムプログレスバトル時の立ち絵表示の不具合を修正
+ * 2021/12/28 1.3.2 フキダシアイコンの位置がおかしかったのを修正
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -1242,7 +1244,7 @@
  * @text フキダシオフセットX
  * @desc 立ち絵のX座標からのオフセット距離です。
  * @type number
- * @default -120
+ * @default 120
  * @min -100000
  * 
  * @arg offsetY
@@ -1254,17 +1256,17 @@
  * 
  * @arg scaleX
  * @text フキダシ幅拡大率
- * @desc フキダシアイコンの幅の拡大率（パーセント）です。
+ * @desc フキダシアイコンの幅の拡大率（パーセント）です。マイナスにすると水平方向に反転します。
  * @type number
  * @default 200
- * @min 10
+ * @min -100000
  * 
  * @arg scaleY
  * @text フキダシ高さ拡大率
- * @desc フキダシアイコンの高さの拡大率（パーセント）です。
+ * @desc フキダシアイコンの高さの拡大率（パーセント）です。マイナスにすると垂直方向に反転します。
  * @type number
  * @default 200
- * @min 10
+ * @min -100000
  * 
  * @command showAnimation
  * @text アニメーションの表示
@@ -1806,11 +1808,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     };
 
     Game_MessagePicture.prototype.balloonX = function() {
-        if (this._scaleX < 0) {
-            return this._x + this._width / 2;
-        } else {
-            return this._x - this._width / 2;
-        }
+        return this._x + this._width / 2;
     };
 
     Game_MessagePicture.prototype.balloonY = function() {
@@ -1827,7 +1825,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         _Sprite_Balloon_prototype_setup.call(this, targetSprite, balloonId);
         this._offsetX = offsetX || 0;
         this._offsetY = offsetY || 0;
-        this.scale.x = scaleX ? (targetSprite.scale.x < 0 ? scaleX : -scaleX) : 1;
+        this.scale.x = scaleX || 1;
         this.scale.y = scaleY || 1;
         this.z = 7;
     };
