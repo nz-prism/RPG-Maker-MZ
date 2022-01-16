@@ -253,32 +253,145 @@
     };
 
 
-    Scene_Map.prototype.createItemWindow = function() {
-        const rect = this.itemWindowRect();
-        this._itemWindow = new Window_SkillList(rect);
-        // this._itemWindow.setHelpWindow(this._helpWindow);
-        // this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
-        // this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
-        // this._skillTypeWindow.setSkillWindow(this._itemWindow);
-        this.addWindow(this._itemWindow);
-        this._itemWindow.setActor($gameActors.actor(6));
-        this._itemWindow.setStypeId(1);
-    };
-
     const _Scene_Map_prototype_createAllWindows = Scene_Map.prototype.createAllWindows;
     Scene_Map.prototype.createAllWindows = function() {
         _Scene_Map_prototype_createAllWindows.call(this);
+        this.createHelpWindow();
+        this.createSkillTypeWindow();
+        this.createStatusWindow();
         this.createItemWindow();
+    };
+
+    Scene_Map.prototype.createItemWindow = function() {
+        const rect = this.itemWindowRect();
+        this._itemWindow = new Window_SkillList(rect);
+        this._itemWindow.setHelpWindow(this._helpWindow);
+        // this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
+        // this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
+        this._skillTypeWindow.setSkillWindow(this._itemWindow);
+        this.addWindow(this._itemWindow);
+        // this._itemWindow.setActor($gameActors.actor(6));
+        // this._itemWindow.setStypeId(1);
     };
 
     Scene_Map.prototype.itemWindowRect = function() {
         const wx = 0;
-        // const wy = this._statusWindow.y + this._statusWindow.height;
-        const wy = 0; // 暫定値
+        const wy = this._statusWindow.y + this._statusWindow.height;
+        // const wy = 0; // 暫定値
         const ww = Graphics.boxWidth;
-        // const wh = this.mainAreaHeight() - this._statusWindow.height;
-        const wh = 300; // 暫定値
+        const wh = this.mainAreaHeight() - this._statusWindow.height;
+        // const wh = 300; // 暫定値
         return new Rectangle(wx, wy, ww, wh);
+    };
+
+    Scene_Map.prototype.createSkillTypeWindow = function() {
+        const rect = this.skillTypeWindowRect();
+        this._skillTypeWindow = new Window_SkillType(rect);
+        this._skillTypeWindow.setHelpWindow(this._helpWindow);
+        // this._skillTypeWindow.setHandler("skill", this.commandSkill.bind(this));
+        // this._skillTypeWindow.setHandler("cancel", this.popScene.bind(this));
+        // this._skillTypeWindow.setHandler("pagedown", this.nextActor.bind(this));
+        // this._skillTypeWindow.setHandler("pageup", this.previousActor.bind(this));
+        this.addWindow(this._skillTypeWindow);
+    };
+    
+    Scene_Map.prototype.skillTypeWindowRect = function() {
+        const ww = this.mainCommandWidth();
+        const wh = this.calcWindowHeight(3, true);
+        const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
+        const wy = this.mainAreaTop();
+        return new Rectangle(wx, wy, ww, wh);
+    };
+    
+    Scene_Map.prototype.createStatusWindow = function() {
+        const rect = this.statusWindowRect();
+        this._statusWindow = new Window_SkillStatus(rect);
+        this.addWindow(this._statusWindow);
+    };
+    
+    Scene_Map.prototype.statusWindowRect = function() {
+        const ww = Graphics.boxWidth - this.mainCommandWidth();
+        const wh = this._skillTypeWindow.height;
+        const wx = this.isRightInputMode() ? 0 : Graphics.boxWidth - ww;
+        const wy = this.mainAreaTop();
+        return new Rectangle(wx, wy, ww, wh);
+    };
+
+    Scene_Map.prototype.createHelpWindow = function() {
+        const rect = this.helpWindowRect();
+        this._helpWindow = new Window_Help(rect);
+        this.addWindow(this._helpWindow);
+    };
+
+    Scene_Map.prototype.helpWindowRect = function() {
+        const wx = 0;
+        const wy = this.helpAreaTop();
+        const ww = Graphics.boxWidth;
+        const wh = this.helpAreaHeight();
+        return new Rectangle(wx, wy, ww, wh);
+    };
+
+    Scene_Map.prototype.helpAreaTop = function() {
+        if (this.isBottomHelpMode()) {
+            return this.mainAreaBottom();
+        } else if (this.isBottomButtonMode()) {
+            return 0;
+        } else {
+            return this.buttonAreaBottom();
+        }
+    };
+    
+    Scene_Map.prototype.helpAreaBottom = function() {
+        return this.helpAreaTop() + this.helpAreaHeight();
+    };
+    
+    Scene_Map.prototype.helpAreaHeight = function() {
+        return this.calcWindowHeight(2, false);
+    };
+    
+    Scene_Map.prototype.mainAreaTop = function() {
+        if (!this.isBottomHelpMode()) {
+            return this.helpAreaBottom();
+        } else if (this.isBottomButtonMode()) {
+            return 0;
+        } else {
+            return this.buttonAreaBottom();
+        }
+    };
+    
+    Scene_Map.prototype.mainAreaBottom = function() {
+        return this.mainAreaTop() + this.mainAreaHeight();
+    };
+    
+    Scene_Map.prototype.mainAreaHeight = function() {
+        return Graphics.boxHeight - this.buttonAreaHeight() - this.helpAreaHeight();
+    };
+
+    Scene_Map.prototype.actor = function() {
+        return this._actor;
+    };
+    
+    Scene_Map.prototype.updateActor = function() {
+        this._actor = $gameParty.menuActor();
+    };
+
+    Scene_Map.prototype.refreshActor = function() {
+        const actor = this.actor();
+        this._skillTypeWindow.setActor(actor);
+        this._statusWindow.setActor(actor);
+        this._itemWindow.setActor(actor);
+    };
+
+    const _Scene_Map_prototype_start = Scene_Map.prototype.start;
+    Scene_Map.prototype.start = function() {
+        _Scene_Map_prototype_start.call(this);
+        this.refreshActor();
+    };
+
+    const _Scene_Map_prototype_create = Scene_Map.prototype.create;
+    Scene_Map.prototype.create = function() {
+        _Scene_Map_prototype_create.call(this);
+        this.updateActor();
     };
 
 })();
