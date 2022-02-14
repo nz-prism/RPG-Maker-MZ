@@ -574,6 +574,9 @@
             ary = ary.concat(obj.normals, obj.states.map(o => o.pictures), obj.damages.map(o => o.pictures));
         }
         ary.flat().filter(name => !!name).forEach(name => this.loadPicture(name));
+        /* For some reason, it doesn't work correctly without the following console.log().
+           Don't delete it!
+        */
         console.log(this._cache);
     };
 
