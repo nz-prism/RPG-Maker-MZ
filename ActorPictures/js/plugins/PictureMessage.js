@@ -580,14 +580,14 @@
  * 
  * @arg offsetX
  * @text Balloon Offset X
- * @desc The offset value from the picture's X axis.
+ * @desc The offset value from the standard X axis.
  * @type number
  * @default 0
  * @min -100000
  * 
  * @arg offsetY
  * @text Balloon Offset Y
- * @desc The offset value from the picture's Y axis.
+ * @desc The offset value from the standard Y axis.
  * @type number
  * @default 0
  * @min -100000
@@ -1244,14 +1244,14 @@
  * 
  * @arg offsetX
  * @text フキダシオフセットX
- * @desc 立ち絵のX座標からのオフセット距離です。
+ * @desc フキダシアイコンの基準X座標からのオフセット距離です。
  * @type number
  * @default 0
  * @min -100000
  * 
  * @arg offsetY
  * @text フキダシオフセットY
- * @desc 立ち絵のY座標からのオフセット距離です。
+ * @desc フキダシアイコンの基準Y座標からのオフセット距離です。
  * @type number
  * @default 0
  * @min -100000
