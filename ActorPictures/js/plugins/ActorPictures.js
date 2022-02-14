@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.3.2
+ * ver 1.3.3
  *
  * [History]
  * 06/20/2021 1.0.0 Released
@@ -19,6 +19,7 @@
  * 07/05/2021 1.3.0 Added animation settings for pictures
  * 07/06/2021 1.3.1 Supported sub-folder improvement of RMMZ 1.3.2
  * 07/10/2021 1.3.2 Added some functions for PictureMessage.js
+ * 02/14/2022 1.3.3 Changed the default value for auto preload to true
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
@@ -89,7 +90,7 @@
  * @param preloadAllPicturesAtEveryScene
  * @text Preload All Pictures Automatically at Every Scene
  * @desc By setting it ON, all the actor pictures will be preloaded automatically at the start of every scene.
- * @default false
+ * @default true
  * @type boolean
  * 
  * 
@@ -257,7 +258,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.3.2
+ * ver 1.3.3
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
@@ -267,6 +268,7 @@
  * 2021/07/05 1.3.0 立ち絵のアニメーション設定を追加
  * 2021/07/06 1.3.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 2021/07/10 1.3.2 PictureMessage.js用に関数を追加
+ * 2022/02/14 1.3.3 自動プリロードのデフォルト値をtrueに変更
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
@@ -331,7 +333,7 @@
  * @param preloadAllPicturesAtEveryScene
  * @text 全ての立ち絵をシーン開始時に自動プリロード
  * @desc オンにすると全ての立ち絵がシーン開始時に自動的にプリロードされるようになります。
- * @default false
+ * @default true
  * @type boolean
  * 
  * 
@@ -572,6 +574,7 @@
             ary = ary.concat(obj.normals, obj.states.map(o => o.pictures), obj.damages.map(o => o.pictures));
         }
         ary.flat().filter(name => !!name).forEach(name => this.loadPicture(name));
+        console.log(this._cache);
     };
 
     ImageManager.centerX = function(pictureName) {

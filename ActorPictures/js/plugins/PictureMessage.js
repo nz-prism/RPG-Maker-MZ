@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.2
+ * ver 1.3.3
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -19,7 +19,8 @@
  * 07/10/2021 1.2.0 Added some commands and enabled picture states to be saved
  * 07/12/2021 1.3.0 Enabled an actor picture is shown in battle
  * 07/13/2021 1.3.1 Fixed battle picture issues on TPB
- * 12/28/2021 1.3.2 Fixed Balloon Icon Position
+ * 12/28/2021 1.3.2 Fixed the balloon icon position
+ * 02/14/2022 1.3.3 Changed the default balloon icon position
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -581,7 +582,7 @@
  * @text Balloon Offset X
  * @desc The offset value from the picture's X axis.
  * @type number
- * @default -120
+ * @default 0
  * @min -100000
  * 
  * @arg offsetY
@@ -675,7 +676,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.2
+ * ver 1.3.3
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -685,6 +686,7 @@
  * 2021/07/12 1.3.0 戦闘中コマンド入力時立ち絵表示機能を追加
  * 2021/07/13 1.3.1 タイムプログレスバトル時の立ち絵表示の不具合を修正
  * 2021/12/28 1.3.2 フキダシアイコンの位置がおかしかったのを修正
+ * 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -1244,7 +1246,7 @@
  * @text フキダシオフセットX
  * @desc 立ち絵のX座標からのオフセット距離です。
  * @type number
- * @default 120
+ * @default 0
  * @min -100000
  * 
  * @arg offsetY
@@ -1807,16 +1809,15 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         return this._y;
     };
 
-    Game_MessagePicture.prototype.balloonX = function() {
-        return this._x + this._width / 2;
+    Game_MessagePicture.prototype.balloonX = function(mirror=false) {
+        return mirror ? (this._x - this._width / 4) : (this._x + this._width / 4);
     };
 
     Game_MessagePicture.prototype.balloonY = function() {
-        if (BOTTOM_Y_ORIGIN) {
-            return this._y - this._height + this._offsetY;
-        } else {
-            return this._y + this._offsetY * 2;
-        }
+        const height = this._height;
+        const offsetY = this._offsetY;
+        const y = BOTTOM_Y_ORIGIN ? this._y - height : this._y + offsetY;
+        return y + (height - this._offsetY) / 7;
     };
 
 
@@ -1833,8 +1834,11 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     const _Sprite_Balloon_prototype_updatePosition = Sprite_Balloon.prototype.updatePosition;
     Sprite_Balloon.prototype.updatePosition = function() {
         if (this._target.balloonX && this._target.balloonY) {
-            this.x = this._target.balloonX();
-            this.x += (this.scale.x < 0) ? -this._offsetX : this._offsetX;
+            if (this.scale.x < 0) {
+                this.x = this._target.balloonX(true) - this._offsetX;
+            } else {
+                this.x = this._target.balloonX(false) + this._offsetX;
+            }
             this.y = this._target.balloonY() + this._offsetY;
         } else {
             _Sprite_Balloon_prototype_updatePosition.call(this);
@@ -1877,8 +1881,8 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         return this.picture().offsetY();
     };
 
-    Sprite_MessagePicture.prototype.balloonX = function() {
-        return this.picture().balloonX();
+    Sprite_MessagePicture.prototype.balloonX = function(mirror=false) {
+        return this.picture().balloonX(mirror);
     };
 
     Sprite_MessagePicture.prototype.balloonY = function() {
