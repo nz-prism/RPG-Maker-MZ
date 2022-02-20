@@ -88,3 +88,10 @@
 !/ScrollingWindowBack/img/system/
 /ScrollingWindowBack/img/system/*
 !/ScrollingWindowBack/img/system/Window.png
+/NovelGameUI/*
+!/NovelGameUI/Readme.md
+!/NovelGameUI/js
+/NovelGameUI/js/*
+!/NovelGameUI/js/plugins/
+/NovelGameUI/js/plugins/*
+!/NovelGameUI/js/plugins/NovelGameUI.js

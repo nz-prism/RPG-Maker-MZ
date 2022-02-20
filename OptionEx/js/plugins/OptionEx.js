@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.1
+ * ver. 1.2.2
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
@@ -18,6 +18,7 @@
  * 04/05/2021 1.1.0 Added Switch A/B Buttons and plugin parameters to disable standard items.
  * 06/22/2021 1.2.0 Added several parameters and make it compatible with sub-folder.
  * 07/06/2021 1.2.1 Supported sub-folder improvement of RMMZ 1.3.2
+ * 02/20/2021 1.2.2 Supported NovelGameUI.js
  * 
  * This plugin extends the option scene.
  * It adds window-cosmetics, dash-speed and fast-message options.
@@ -72,204 +73,275 @@
  * @min 0
  * @max 31
  * 
- * @param hideTouchUIForMobiles
- * @text Hide Touch UI Option for Mobile Devices
- * @desc Specify to hide "Touch UI" option if a player uses a smart phone or a tablet.
- * @default true
- * @type boolean
+ * @param alwaysDash
+ * @text Always Dash
+ * @desc The settings for Always Dash option.
  * 
  * @param useAlwaysDash
  * @text Use Always Dash
  * @desc Specify to enable an option to toggle auto-dash.
+ * @parent alwaysDash
  * @default true
  * @type boolean
+ * 
+ * @param defaultAlwaysDash
+ * @text Default Always Dash
+ * @desc The default value for the always dash option.
+ * @parent alwaysDash
+ * @default false
+ * @type boolean
+ * 
+ * @param commandRemember
+ * @text Command Remember
+ * @desc The settings for Command Remember option.
  * 
  * @param useCommandRemember
  * @text Use Command Remember
  * @desc Specify to enable an option to toggle command remember.
+ * @parent commandRemember
  * @default true
  * @type boolean
+ * 
+ * @param defaultCommandRemember
+ * @text Default Command Remember
+ * @desc The default value for the command remember option.
+ * @parent commandRemember
+ * @default false
+ * @type boolean
+ * 
+ * @param touchUI
+ * @text Touch UI
+ * @desc The settings for Touch UI option.
  * 
  * @param useTouchUI
  * @text Use Touch UI
  * @desc Specify to enable an option to toggle touch UI.
+ * @parent touchUI
  * @default true
  * @type boolean
+ * 
+ * @param hideTouchUIForMobiles
+ * @text Hide Touch UI Option for Mobile Devices
+ * @desc Specify to hide "Touch UI" option if a player uses a smart phone or a tablet.
+ * @parent touchUI
+ * @default true
+ * @type boolean
+ * 
+ * @param defaultTouchUI
+ * @text Default Touch UI
+ * @desc The default value for the touch UI option.
+ * @parent touchUI
+ * @default true
+ * @type boolean
+ * 
+ * @param volumes
+ * @text Volumes
+ * @desc The settings for volume options.
  * 
  * @param useBgmVolume
  * @text Use BGM Volume
  * @desc Specify to enable an option to tune BGM volume.
+ * @parent volumes
  * @default true
  * @type boolean
  * 
  * @param useBgsVolume
  * @text Use BGS Volume
  * @desc Specify to enable an option to tune BGS volume.
+ * @parent volumes
  * @default true
  * @type boolean
  * 
  * @param useMeVolume
  * @text Use ME Volume
  * @desc Specify to enable an option to tune ME volume.
+ * @parent volumes
  * @default true
  * @type boolean
  * 
  * @param useSeVolume
  * @text Use SE Volume
  * @desc Specify to enable an option to tune SE volume.
+ * @parent volumes
  * @default true
  * @type boolean
+ * 
+ * @param defaultVolume
+ * @text Default Volume
+ * @desc Specify the default volume for BGM, BGS, ME and SE.
+ * @parent volumes
+ * @default 75
+ * @type number
+ * @min 0
+ * @max 100
+ * 
+ * @param switchABButtons
+ * @text Switch A/B Buttons
+ * @desc The settings for Switch A/B Buttons option.
  * 
  * @param useSwitchABButtons
  * @text Use Switch A/B Buttons
  * @desc Specify to enable an option to switch A/B buttons.
- * @default true
- * @type boolean
- * 
- * @param useFastMessage
- * @text Use Fast Message
- * @desc Specify to enable an option to show messages immediately.
- * @default true
- * @type boolean
- * 
- * @param useDashSpeed
- * @text Use Dash Speed
- * @desc Specify to enable an option to change the player dash-speed.
- * @default true
- * @type boolean
- *  
- * @param useWindowskin
- * @text Use Windowskin
- * @desc Specify to enable an option to change the windowskin.
- * @default true
- * @type boolean
- * 
- * @param useWindowTone
- * @text Use Window Color
- * @desc Specify to enable options to change the window tone.
- * @default true
- * @type boolean
- * 
- * @param useWindowOpacity
- * @text Use Window Opacity
- * @desc Specify to enable an option to change the window opacity.
+ * @parent switchABButtons
  * @default true
  * @type boolean
  * 
  * @param switchABButtonsName
  * @text Switch A/B Buttons Name
  * @desc Specify the name of an option to switch A/B buttons.
+ * @parent switchABButtons
  * @default Switch A/B Buttons
  * @type string
+ * 
+ * @param defaultSwitchABButtons
+ * @text Default Switch A/B Buttons
+ * @desc The default value for the switch A/B buttons option.
+ * @parent switchABButtons
+ * @default false
+ * @type boolean
+ * 
+ * @param fastMessage
+ * @text Fast Message
+ * @desc The settings for Fast Message option.
+ * 
+ * @param useFastMessage
+ * @text Use Fast Message
+ * @desc Specify to enable an option to show messages immediately.
+ * @parent fastMessage
+ * @default true
+ * @type boolean
  * 
  * @param fastMessageName
  * @text Fast Message Name
  * @desc Specify the name of an option to show messages immediately.
+ * @parent fastMessage
  * @default Fast Message
  * @type string
+ * 
+ * @param defaultFastMessage
+ * @text Default Fast Message
+ * @desc The default value for the fast message option.
+ * @parent fastMessage
+ * @default false
+ * @type boolean
+ * 
+ * @param dashSpeed
+ * @text Dash Speed
+ * @desc The settings for Dash Speed option.
+ * 
+ * @param useDashSpeed
+ * @text Use Dash Speed
+ * @desc Specify to enable an option to change the player dash-speed.
+ * @parent dashSpeed
+ * @default true
+ * @type boolean
  * 
  * @param dashSpeedName
  * @text Dash Speed Name
  * @desc Specify the name of an option to change the player dash-speed.
+ * @parent dashSpeed
  * @default Dash Speed
  * @type string
+ * 
+ * @param defaultDashSpeed
+ * @text Default Dash Speed
+ * @desc Specify the default value for dash-speed (0-2). Note it appears +1 on the screen.
+ * @parent dashSpeed
+ * @default 0
+ * @type number
+ * @min 0
+ * @max 2
+ * 
+ * @param windowskin
+ * @text Windowskin
+ * @desc The settings for Windowskin option.
+ * 
+ * @param useWindowskin
+ * @text Use Windowskin
+ * @desc Specify to enable an option to change the windowskin.
+ * @parent windowskin
+ * @default true
+ * @type boolean
  * 
  * @param windowskinName
  * @text Windowskin Name
  * @desc Specify the name of an option to change the windowskin.
+ * @parent windowskin
  * @default Windowskin
  * @type string
  * 
+ * @param windowskins
+ * @text Windowskins
+ * @desc Add as many windowskin files as you want users to choose.
+ * @parent windowskin
+ * @default ["Window"]
+ * @type file[]
+ * @dir img/system
+ * 
+ * @param windowTone
+ * @text Window Tone
+ * @desc The settings for Window Tone options.
+ * 
+ * @param useWindowTone
+ * @text Use Window Tone
+ * @desc Specify to enable options to change the window tone.
+ * @parent windowTone
+ * @default true
+ * @type boolean
+ * 
  * @param windowToneRedName
- * @text Window Color Red Name
+ * @text Window Tone Red Name
  * @desc Specify the name of an option to change the red value of windows.
+ * @parent windowTone
  * @default Window Color R
  * @type string
  * 
  * @param windowToneGreenName
- * @text Window Color Green Name
+ * @text Window Tone Green Name
  * @desc Specify the name of an option to change the green value of windows.
+ * @parent windowTone
  * @default Window Color G
  * @type string
  * 
  * @param windowToneBlueName
- * @text Window Color Blue Name
+ * @text Window Tone Blue Name
  * @desc Specify the name of an option to change the blue value of windows.
+ * @parent windowTone
  * @default Window Color B
  * @type string
+ * 
+ * @param windowOpacity
+ * @text Window Opacity
+ * @desc The settings for Window Opacity option.
+ * 
+ * @param useWindowOpacity
+ * @text Use Window Opacity
+ * @desc Specify to enable an option to change the window opacity.
+ * @parent windowOpacity
+ * @default true
+ * @type boolean
  * 
  * @param windowOpacityName
  * @text Window Opacity Name
  * @desc Specify the name of an option to change the opacity of windows.
+ * @parent windowOpacity
  * @default Window Opacity
  * @type string
+ * 
+ * @param defaultWindowOpacity
+ * @text Default Window Opacity
+ * @desc The defalt value for the window opacity. You don't have to specify it if your RMMZ version is 1.3.0 or later.
+ * @parent windowOpacity
+ * @default 195
+ * @type number
+ * @min 0
+ * @max 255
  * 
  * @param defaultCommandName
  * @text Default Command Name
  * @desc Specify the name of a command to reset to default.
  * @default Reset to Default
  * @type string
- * 
- * @param defaultVolume
- * @text Default Volume
- * @desc Specify the default volume for BGM, BGS, ME and SE.
- * @default 75
- * @type number
- * @min 0
- * @max 100
- * 
- * @param defaultAlwaysDash
- * @text Default Always Dash
- * @desc The default value for the always dash option.
- * @default false
- * @type boolean
- * 
- * @param defaultCommandRemember
- * @text Default Command Remember
- * @desc The default value for the command remember option.
- * @default false
- * @type boolean
- * 
- * @param defaultTouchUI
- * @text Default Touch UI
- * @desc The default value for the touch UI option.
- * @default true
- * @type boolean
- * 
- * @param defaultSwitchABButtons
- * @text Default Switch A/B Buttons
- * @desc The default value for the switch A/B buttons option.
- * @default false
- * @type boolean
- * 
- * @param defaultFastMessage
- * @text Default Fast Message
- * @desc The default value for the fast message option.
- * @default false
- * @type boolean
- * 
- * @param defaultDashSpeed
- * @text Default Dash Speed
- * @desc Specify the default value for dash-speed (0-2). Note it appears +1 on the screen.
- * @default 0
- * @type number
- * @min 0
- * @max 2
- * 
- * @param defaultWindowOpacity
- * @text Default Window Opacity
- * @desc The defalt value for the window opacity. You don't have to specify it if your RMMZ version is 1.3.0 or later.
- * @default 195
- * @type number
- * @min 0
- * @max 255
- * 
- * @param windowskins
- * @text Windowskins
- * @desc Add as many windowskin files as you want users to choose.
- * @default ["Window"]
- * @type file[]
- * @dir img/system
  * 
  */
 
@@ -280,7 +352,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.1
+ * ver. 1.2.2
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
@@ -289,6 +361,7 @@
  * 2021/04/05 1.1.0 A/Bボタン入れ替え機能、標準項目不使用設定追加
  * 2021/06/22 1.2.0 プラグインパラメータ多数追加、本体バージョン1.3.0以降のサブフォルダへの格納に対応
  * 2021/07/06 1.2.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
+ * 2022/02/20 1.2.2 NovelGameUI.jsに対応
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
  * ウィンドウの外観を変更するオプションのほか、ダッシュ速度を変更するもの、
@@ -345,204 +418,277 @@
  * @min 0
  * @max 31
  * 
- * @param hideTouchUIForMobiles
- * @text タッチデバイスでのタッチUIオプションの非表示
- * @desc タッチUIオプションをスマートフォンやタブレットにて非表示にするかどうかを設定してください。
- * @default true
- * @type boolean
+ * @param alwaysDash
+ * @text 常時ダッシュ
+ * @desc 常時ダッシュオプションに関する設定です。
  * 
  * @param useAlwaysDash
  * @text 常時ダッシュの使用
  * @desc 常時ダッシュオプションを使用するかどうかを設定してください。
+ * @parent alwaysDash
  * @default true
  * @type boolean
+ * 
+ * @param defaultAlwaysDash
+ * @text デフォルト常時ダッシュ
+ * @desc 常時ダッシュのデフォルト値です。
+ * @parent alwaysDash
+ * @default false
+ * @type boolean
+ * 
+ * @param commandRemember
+ * @text コマンド記憶
+ * @desc コマンド記憶オプションに関する設定です。
  * 
  * @param useCommandRemember
  * @text コマンド記憶の使用
  * @desc コマンド記憶オプションを使用するかどうかを設定してください。
+ * @parent commandRemember
  * @default true
  * @type boolean
+ * 
+ * @param defaultCommandRemember
+ * @text デフォルトコマンド記憶
+ * @desc コマンド記憶のデフォルト値です。
+ * @parent commandRemember
+ * @default false
+ * @type boolean
+ * 
+ * @param touchUI
+ * @text タッチUI
+ * @desc タッチUIオプションに関する設定です。
  * 
  * @param useTouchUI
  * @text タッチUIの使用
  * @desc タッチUIオプションを使用するかどうかを設定してください。
+ * @parent touchUI
  * @default true
  * @type boolean
+ * 
+ * @param hideTouchUIForMobiles
+ * @text タッチデバイスでのタッチUIオプションの非表示
+ * @desc タッチUIオプションをスマートフォンやタブレットにて非表示にするかどうかを設定してください。
+ * @parent touchUI
+ * @default true
+ * @type boolean
+ * 
+ * @param defaultTouchUI
+ * @text デフォルトタッチUI
+ * @desc タッチUIのデフォルト値です。
+ * @parent touchUI
+ * @default true
+ * @type boolean
+ * 
+ * @param volumes
+ * @text 音量
+ * @desc 音量オプションに関する設定です。
  * 
  * @param useBgmVolume
  * @text BGM音量の使用
  * @desc BGM音量オプションを使用するかどうかを設定してください。
+ * @parent volumes
  * @default true
  * @type boolean
  * 
  * @param useBgsVolume
  * @text BGS音量の使用
  * @desc BGS音量オプションを使用するかどうかを設定してください。
+ * @parent volumes
  * @default true
  * @type boolean
  * 
  * @param useMeVolume
  * @text ME音量の使用
  * @desc ME音量オプションを使用するかどうかを設定してください。
+ * @parent volumes
  * @default true
  * @type boolean
  * 
  * @param useSeVolume
  * @text SE音量の使用
  * @desc SE音量オプションを使用するかどうかを設定してください。
+ * @parent volumes
  * @default true
  * @type boolean
+ * 
+ * @param defaultVolume
+ * @text デフォルト音量
+ * @desc 音量のデフォルト値です。BGM、BGS、ME、SE全て共通です。
+ * @parent volumes
+ * @default 75
+ * @type number
+ * @min 0
+ * @max 100
+ * 
+ * @param switchABButtons
+ * @text A/Bボタン入れ替え
+ * @desc A/Bボタン入れ替えオプションに関する設定です。
  * 
  * @param useSwitchABButtons
  * @text A/Bボタン入れ替えの使用
  * @desc A/Bボタン入れ替えオプションを使用するかどうかを設定してください。
- * @default true
- * @type boolean
- * 
- * @param useFastMessage
- * @text メッセージ瞬間表示の使用
- * @desc メッセージ瞬間表示オプションを使用するかどうかを設定してください。
- * @default true
- * @type boolean
- * 
- * @param useDashSpeed
- * @text ダッシュ速度の使用
- * @desc ダッシュ速度オプションを使用するかどうかを設定してください。
- * @default true
- * @type boolean
- *  
- * @param useWindowskin
- * @text ウィンドウスキンの使用
- * @desc ウィンドウスキンオプションを使用するかどうかを設定してください。
- * @default true
- * @type boolean
- * 
- * @param useWindowTone
- * @text ウィンドウカラーの使用
- * @desc ウィンドウカラーオプションを使用するかどうかを設定してください。
- * @default true
- * @type boolean
- * 
- * @param useWindowOpacity
- * @text ウィンドウ透明度の使用
- * @desc ウィンドウ透明度オプションを使用するかどうかを設定してください。
+ * @parent switchABButtons
  * @default true
  * @type boolean
  * 
  * @param switchABButtonsName
  * @text A/Bボタン入れ替え名
  * @desc A/Bボタン入れ替えの表示名を設定してください。
+ * @parent switchABButtons
  * @default A/Bボタン入れ替え
  * @type string
+ * 
+ * @param defaultSwitchABButtons
+ * @text デフォルトA/Bボタン入れ替え
+ * @desc A/Bボタン入れ替えのデフォルト値です。
+ * @parent switchABButtons
+ * @default false
+ * @type boolean
+ * 
+ * @param fastMessage
+ * @text メッセージ瞬間表示
+ * @desc メッセージ瞬間表示オプションに関する設定です。
+ * 
+ * @param useFastMessage
+ * @text メッセージ瞬間表示の使用
+ * @desc メッセージ瞬間表示オプションを使用するかどうかを設定してください。
+ * @parent fastMessage
+ * @default true
+ * @type boolean
  * 
  * @param fastMessageName
  * @text メッセージ瞬間表示名
  * @desc メッセージ瞬間表示の表示名を設定してください。
+ * @parent fastMessage
  * @default メッセージ瞬間表示
  * @type string
  * 
+ * @param defaultFastMessage
+ * @text デフォルトメッセージ瞬間表示
+ * @desc メッセージ瞬間表示のデフォルト値です。
+ * @parent fastMessage
+ * @default false
+ * @type boolean
+ * 
+ * @param dashSpeed
+ * @text ダッシュ速度
+ * @desc ダッシュ速度オプションに関する設定です。
+ * 
+ * @param useDashSpeed
+ * @text ダッシュ速度の使用
+ * @desc ダッシュ速度オプションを使用するかどうかを設定してください。
+ * @parent dashSpeed
+ * @default true
+ * @type boolean
+ *  
  * @param dashSpeedName
  * @text ダッシュ速度名
  * @desc ダッシュ速度の表示名を設定してください。
+ * @parent dashSpeed
  * @default ダッシュ速度
  * @type string
+ * 
+ * @param defaultDashSpeed
+ * @text デフォルトダッシュ速度
+ * @desc ダッシュ速度のデフォルト値（0〜2）です。ゲーム内表示では +1 される点にご注意ください。
+ * @parent dashSpeed
+ * @default 0
+ * @type number
+ * @min 0
+ * @max 2
+ * 
+ * @param windowskin
+ * @text ウィンドウスキン
+ * @desc ウィンドウスキンオプションに関する設定です。
+ * 
+ * @param useWindowskin
+ * @text ウィンドウスキンの使用
+ * @desc ウィンドウスキンオプションを使用するかどうかを設定してください。
+ * @parent windowskin
+ * @default true
+ * @type boolean
  * 
  * @param windowskinName
  * @text ウィンドウスキン名
  * @desc ウィンドウスキンの表示名を設定してください。
+ * @parent windowskin
  * @default ウィンドウスキン
  * @type string
+ * 
+ * @param windowskins
+ * @text ウィンドウスキン
+ * @desc オプションで選択可能にするウィンドウスキンを必要なだけ追加してください。一番上のものがデフォルトです。
+ * @parent windowskin
+ * @default ["Window"]
+ * @type file[]
+ * @dir img/system
+ * 
+ * @param windowTone
+ * @text ウィンドウカラー
+ * @desc ウィンドウカラーオプションに関する設定です。
+ * @default true
+ * @type boolean
+ * 
+ * @param useWindowTone
+ * @text ウィンドウカラーの使用
+ * @desc ウィンドウカラーオプションを使用するかどうかを設定してください。
+ * @parent windowTone
+ * @default true
+ * @type boolean
  * 
  * @param windowToneRedName
  * @text ウィンドウカラー（赤）名
  * @desc ウィンドウカラー（赤）の表示名を設定してください。
+ * @parent windowTone
  * @default ウィンドウカラーR
  * @type string
  * 
  * @param windowToneGreenName
  * @text ウィンドウカラー（緑）名
  * @desc ウィンドウカラー（緑）の表示名を設定してください。
+ * @parent windowTone
  * @default ウィンドウカラーG
  * @type string
  * 
  * @param windowToneBlueName
  * @text ウィンドウカラー（青）名
  * @desc ウィンドウカラー（青）の表示名を設定してください。
+ * @parent windowTone
  * @default ウィンドウカラーB
  * @type string
+ * 
+ * @param windowOpacity
+ * @text ウィンドウ不透明度
+ * @desc ウィンドウ不透明度オプションに関する設定です。
+ * 
+ * @param useWindowOpacity
+ * @text ウィンドウ不透明度の使用
+ * @desc ウィンドウ不透明度オプションを使用するかどうかを設定してください。
+ * @parent windowOpacity
+ * @default true
+ * @type boolean
  * 
  * @param windowOpacityName
  * @text ウィンドウ不透明度名
  * @desc ウィンドウ不透明度の表示名を設定してください（高いほど透明でなくなることに注意）。
+ * @parent windowOpacity
  * @default ウィンドウ透明度
  * @type string
+ * 
+ * @param defaultWindowOpacity
+ * @text デフォルトウィンドウ不透明度
+ * @desc ウィンドウ不透明度のデフォルト値です。本体バージョン1.3.0以降の場合設定不要です。
+ * @parent windowOpacity
+ * @default 195
+ * @type number
+ * @min 0
+ * @max 255
  * 
  * @param defaultCommandName
  * @text デフォルトコマンド名
  * @desc 全てをデフォルト値に戻すコマンドの名前を設定してください。
  * @default すべてデフォルトに戻す
  * @type string
- * 
- * @param defaultVolume
- * @text デフォルト音量
- * @desc 音量のデフォルト値です。BGM、BGS、ME、SE全て共通です。
- * @default 75
- * @type number
- * @min 0
- * @max 100
- * 
- * @param defaultAlwaysDash
- * @text デフォルト常時ダッシュ
- * @desc 常時ダッシュのデフォルト値です。
- * @default false
- * @type boolean
- * 
- * @param defaultCommandRemember
- * @text デフォルトコマンド記憶
- * @desc コマンド記憶のデフォルト値です。
- * @default false
- * @type boolean
- * 
- * @param defaultTouchUI
- * @text デフォルトタッチUI
- * @desc タッチUIのデフォルト値です。
- * @default true
- * @type boolean
- * 
- * @param defaultSwitchABButtons
- * @text デフォルトA/Bボタン入れ替え
- * @desc A/Bボタン入れ替えのデフォルト値です。
- * @default false
- * @type boolean
- * 
- * @param defaultFastMessage
- * @text デフォルトメッセージ瞬間表示
- * @desc メッセージ瞬間表示のデフォルト値です。
- * @default false
- * @type boolean
- * 
- * @param defaultDashSpeed
- * @text デフォルトダッシュ速度
- * @desc ダッシュ速度のデフォルト値（0〜2）です。ゲーム内表示では +1 される点にご注意ください。
- * @default 0
- * @type number
- * @min 0
- * @max 2
- * 
- * @param defaultWindowOpacity
- * @text デフォルトウィンドウ不透明度
- * @desc ウィンドウ不透明度のデフォルト値です。本体バージョン1.3.0以降の場合設定不要です。
- * @default 195
- * @type number
- * @min 0
- * @max 255
- * 
- * @param windowskins
- * @text ウィンドウスキン
- * @desc オプションで選択可能にするウィンドウスキンを必要なだけ追加してください。一番上のものがデフォルトです。
- * @default ["Window"]
- * @type file[]
- * @dir img/system
  * 
  */
 
@@ -863,13 +1009,25 @@
     };
 
     Window_Options.prototype.addGeneralOptions = function() {
+        this.addBooleanOptions();
+        this.addNumericOptions();
+        this.addGaugeOptions();
+    };
+
+    Window_Options.prototype.addBooleanOptions = function() {
         if (USE_ALWAYS_DASH) this.addCommand(TextManager.alwaysDash, "alwaysDash");
         if (USE_COMMAND_REMEMBER) this.addCommand(TextManager.commandRemember, "commandRemember");
         if (ConfigManager.useTouchUI()) this.addCommand(TextManager.touchUI, "touchUI");
         if (USE_SWITCH_AB_BUTTONS) this.addCommand(SWITCH_AB_BUTTONS_NAME, "switchABButtons");
         if (USE_FAST_MESSAGE) this.addCommand(FAST_MESSAGE_NAME, "fastMessage");
+    };
+
+    Window_Options.prototype.addNumericOptions = function() {
         if (USE_DASH_SPEED) this.addCommand(DASH_SPEED_NAME, "dashSpeed");
         if (ConfigManager.useWindowskin()) this.addCommand(WINDOWSKIN_NAME, "windowskin");
+    };
+
+    Window_Options.prototype.addGaugeOptions = function() {
         if (USE_WINDOW_TONE) {
             this.addCommand(WINDOW_TONE_RED_NAME, "windowToneRed");
             this.addCommand(WINDOW_TONE_GREEN_NAME, "windowToneGreen");
