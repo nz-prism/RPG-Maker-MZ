@@ -6,6 +6,7 @@
  * @target MZ
  * @plugindesc Provides a novel-game like interface.
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/NovelGameUI/js/plugins/NovelGameUI.js
  * @base OptionEx
  * @orderAfter OptionEx
  *
@@ -16,8 +17,11 @@
  * 02/20/2022 1.0.0 Released
  * 
  * This plugin provides a novel-game like interface usable when an event is
- * running on a map. It requires OptionEx.js ver. 1.2.2 or later. Insert this
- * plugin under OptionEx.
+ * running on a map.
+ * 
+ * It requires OptionEx.js ver. 1.2.2 or later. Insert this plugin under
+ * OptionEx.
+ * 
  * It provides 6 functionalities;
  * 
  * 1. Options
@@ -29,6 +33,7 @@
  * 
  * You can select which functionality to use for the game. For example, you
  * can set it up to use only Log.
+ * 
  * Each functionality corresponds to a button shown on the screen. Those
  * buttons appear only when the message window is shown. By tapping or clicking
  * the button, the corresponding functionality will be invoked. Also, you can
@@ -51,16 +56,20 @@
  * You can set pictures to each of the buttons. 2 patterns, selected and
  * unselected buttons, can be set.
  * 
+ * 
  * 1. Options
  * The option scene will be invoked.
+ * 
  * 
  * 2. Save
  * The save scene will be invoked even if an event is running. Note if save
  * access is disabled, the save scene won't be called and the buzzer SE will be
  * played.
  * 
+ * 
  * 3. Load
  * The load scene will be invoked even if an event is running.
+ * 
  * 
  * 4. Log
  * A back log scene will be invoked. If the plugin parameter "Use Log" is set
@@ -72,11 +81,14 @@
  * loading. Delete logs by using the plugin command "Delete Logs", for the logs
  * are not autmatically deleted. Even though logs can be stored unlimitedly,
  * periodical delete is recommended to save save files' volume.
+ * 
  * By using the plugin command "Disable Logging", texts will not be stored
  * thereafter. By using the plugin command "Enable Logging", it restores the
  * default behavior and texts will be stored again.
+ * 
  * You can control whether the text being shown will be appear on the log scene
  * by setting the plugin parameter "Exclude Text Being Shown".
+ * 
  * 
  * 5. Skip
  * Event commands at a range can be skipped. To use this functionality, you
@@ -122,15 +134,18 @@
  * 
  * In this case, the commands can't be skipped since A and B aren't sequential
  * digits.
+ * 
  * By default, players can skip only if the event contents have already been
  * seen. It regards them as "already seen" if the ending point label has been
  * passed. Since it uses the label names, some event commands can be skipped
  * unintentionally if there are duplicate label names. I recommend you to take
  * notes for used label names not to use them again!
+ * 
  * If the plugin parameter "Make Master Save File" is set true (true by
  * default), it creates a new save file "master.rmmzsave", which stores passed
  * label names. To share passed flags, it will be loaded whichever save slot is
  * loaded, or a new game is started.
+ * 
  * As mentioned above, players can skip only seen events by deafult. However,
  * if the option item "Only Seen Events Skippable" is set OFF, they can skip
  * even unseen events. By setting the plugin parameter "Use Only Seen Events
@@ -138,15 +153,18 @@
  * option scene. If you wouldn't like players to skip unseen events, set the
  * parameter false in order not to add the command. Plus, set the plugin
  * parameter "Default Only Seen Events Skippable" true (true by default).
+ * 
  * If an event command being running is unskippable, the "Disabled" button
  * pictures will be shown while "Enabled" picture will appear if it's
  * skippable. They visually help players to see if it's skippable.
+ * 
  * 
  * 6. Auto
  * If this functionality is invoked, the message window will move forward
  * automatically. It will not pause at the end of text and the control
  * character "\!" but wait for a specified frames. You can specify the frames
  * by the plugin parameter "Pause Frames".
+ * 
  * If Auto is on, the "On" button picture will be shown while "Off" picture
  * will appear if auto is off. They visually help players to see if auto is
  * toggled.
@@ -767,6 +785,7 @@
  * @target MZ
  * @plugindesc ノベルゲーム風インターフェースを提供します。
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/NovelGameUI/js/plugins/NovelGameUI.js
  * @base OptionEx
  * @orderAfter OptionEx
  *
@@ -777,9 +796,12 @@
  * 2022/02/20 1.0.0 リリース
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
- * フェースを提供します。本プラグインは「オプション拡張（OptionEx.js）」プラ
- * グインのバージョン1.2.2（以降）の導入が前提となります。OptionExよりも後に
- * 配置してください。以下の６種類の機能が利用できます。
+ * フェースを提供します。
+ * 
+ * 本プラグインは「オプション拡張（OptionEx.js）」プラグインのバージョン1.2.2
+ * （以降）の導入が前提となります。OptionExよりも後に配置してください。
+ * 
+ * 以下の６種類の機能が利用できます。
  * 
  * 1. オプション
  * 2. セーブ
@@ -788,20 +810,21 @@
  * 5. スキップ
  * 6. オート
  * 
- * 上記機能はいずれも使用しないことを個別に選択できます。例えばログ機能だけを使
- * 用する、といったことも可能です。
- * いずれの機能もそれを呼び出すためのボタンを画面上に表示することができます。な
- * おこれらのボタンが表示されるのはメッセージイベント表示時のみです。ボタンを
- * タップやクリックすることで、対応する上記機能が実行されます。また、各機能には
- * キーボードやゲームパッドのキーを割り当てることが可能であり、それらを押下する
- * ことでも対応機能を実行できます。
+ * 上記機能はいずれも使用するかどうかを個別に選択できます。例えばログ機能だけを
+ * 使用する、といったことも可能です。
+ * 
+ * いずれの機能もそれを呼び出すためのボタンを画面上に表示することができます。こ
+ * れらのボタンが表示されるのはメッセージイベント表示時のみであるという点にご注
+ * 意ください。ボタンをタップやクリックすることで、対応する上記機能が実行されま
+ * す。また、各機能にはキーボードやゲームパッドのキーを割り当てることが可能であ
+ * り、それらを押下することでも対応機能を実行できます。
  * なお本プラグインを導入すると、MZデフォルトでは何も機能が割り当てられていない
  * ボタンであるゲームパッドのLT・RTボタン（XBoxコントローラーにおける名称）に
  * それぞれ機能が割り当てられます。LTボタンにはtabキーが、RTボタンにはcontrol
- * キーが割り当てられます。そのためX・Y・LB・RB・LT・RTの６つのボタンにそれぞ
- * れ割り当てることが可能です。実際のキー割り当てにはプラグインパラメータを使用
- * します。
- * なおMZデフォルトではメッセージ表示時、決定ボタンだけでなくキャンセルボタンで
+ * キーが割り当てられます。それらを含めX・Y・LB・RB・LT・RTの６つのボタンにそ
+ * れぞれ割り当てることが可能です。実際のキー割り当てにはプラグインパラメータを
+ * 使用します。
+ * MZデフォルトではメッセージ表示時、決定ボタンだけでなくキャンセルボタンで
  * もメッセージ送りができますが、本プラグインを導入するとキャンセルボタンでは
  * メッセージ送りができなくなります。あらかじめご了承ください。
  * 
@@ -810,21 +833,24 @@
  * プラグインコマンド「制御ボタンの有効化」を使用することで再びボタンが表示さ
  * れ、対応キーに反応するようになります。
  * 
- * 各ボタンには専用の画像を設定することができます。選択時（マウスオーバーされて
- * いる）と未選択時とで別々の画像を設定することができます。
+ * 各ボタンには専用の画像を設定することができます。選択（マウスオーバーされてい
+ * る）時と未選択時とで別々の画像を設定することができます。
  * 
  * 
  * 1. オプション
  * オプション画面を呼び出すことができます。
+ * 
  * 
  * 2. セーブ
  * セーブ画面を呼び出すことができます。イベントの実行中であってもセーブ可能で
  * す。なおイベントによってセーブが禁止されている場合、セーブ不可になります。
  * その状態でこのボタンを押すとブザー音が演奏されます。
  * 
+ * 
  * 3. ロード
  * ロード画面を呼び出すことができます。イベントの実行中であってもロード可能で
  * す。
+ * 
  * 
  * 4. ログ
  * バックログ画面を呼び出すことができます。ログを有効にすると「文章の表示」お
@@ -837,27 +863,30 @@
  * ンコマンド「ログの消去」を適切なタイミングで実行して消去してください。保存
  * できるログの量に制限はありませんが、あまりにも溜まりすぎるとセーブデータ容
  * 量が肥大化します。
+ * 
  * プラグインコマンド「ログ保存の無効化」を使用すると、以降のイベントにてログ
  * が保存されなくなります。プラグインコマンド「ログ保存の有効化」を使用するこ
  * とで元に戻り、ログが再び保存されるようになります。
+ * 
  * いま表示されているメッセージもログに含めるかどうかは、プラグインパラメータ
  * 「表示中メッセージをログから除外」によって設定できます。
+ * 
  * 
  * 5. スキップ
  * ある一定範囲のイベントコマンドの実行をスキップすることができます。この機能
  * を使用するには、イベントにイベントコマンド「ラベル」を設定する必要がありま
  * す。ラベルには本来どんな名前でもつけることができますが、この機能を利用する
- * ためにはラベル名を必ず一意の半角数字にする必要があります。設定するには、ま
- * ずスキップの開始地点となる場所に半角数字の名前を持つラベルを設定します（例
- * えば「1」）。その下にスキップ対象となるイベント（文章表示など）を任意の数
- * だけ設定します。その下に、スキップ終了地点を表すラベルを配置します。このラ
- * ベルの名前は、必ず始点ラベル名 +1 にする必要があります（上記例では「2」に
- * します）。この始点・終点ラベルに挟まれたイベントコマンド群を「ラベルサンド
- * イッチ」と呼称します。ラベルサンドイッチはプレイヤーによってスキップされる
- * 可能性のあるイベントですので、ゲームの進行に必須のイベント（スイッチのオン
- * オフなど）を配置すべきではありません。なおあるイベントにラベルサンドイッチ
- * が2回登場し、それらの間にゲーム進行に必須のイベントを配置したいとします。例
- * えば以下のような内容です。
+ * ためにはラベル名を一意の半角数字にする必要があります。設定するには、まずス
+ * キップの開始地点となる場所に半角数字の名前を持つラベルを設定します（例えば
+ * 「1」）。その下にスキップ対象となるイベント（文章表示など）を任意の数だけ
+ * 設定します。その下に、スキップ終了地点を表すラベルを配置します。このラベル
+ * の名前は、必ず始点ラベル名 +1 にする必要があります（上記例では「2」にしま
+ * す）。この始点・終点ラベルに挟まれたイベントコマンド群を「ラベルサンドイッ
+ * チ」と呼称します。ラベルサンドイッチはプレイヤーによってスキップされる可能
+ * 性のあるイベントですので、ゲームの進行に必須のイベント（スイッチの操作な
+ * ど）を配置すべきではありません。あるイベントにラベルサンドイッチが2回登場
+ * し、それらの間にゲーム進行に必須のイベントを配置したいとします。例えば以下
+ * のような内容です。
  * 
  *   ラベル:1
  *   文章:リード, Actor1(0), ウィンドウ, 下
@@ -873,7 +902,7 @@
  * 
  * 最初のラベルサンドイッチをA、次のサンドイッチをBとします。Aの終点であるラベ
  * ル名は「2」ですが、Bの始点は「3」です。これらの名前は連番なので、間にある文
- * 章表示とスイッチ操作がスキップされてしまうことがありえます。これを防ぐために
+ * 章表示とスイッチ操作はスキップされてしまう可能性があります。これを防ぐために
  * は、ラベルサンドイッチBのラベル名を以下のようにしてください。
  * 
  *   ラベル:1
@@ -890,18 +919,21 @@
  * 
  * この場合、AとBは連番でないのでそれらの間のイベントコマンドはスキップ不可にす
  * ることができます。
+ * 
  * デフォルトではスキップ可能なのは既読イベントのみです。あるラベルサンドイッチ
  * が「既読」であるかどうかは、そのサンドイッチの終点ラベルを一度でも通過したこ
  * とがあるかどうかによって判定されます。通過済みラベル名はセーブデータに保存さ
  * れます。通過済みであるかどうかはラベル名によって判定されるので、ラベル名が重
- * 複してしまうと未読なのに既読とみなされてしまうことが起こりえます。そのため一
- * 度使用したラベル名はメモを取るなどして、ゲーム全体を通して2回以上使うことが
- * ないようにしてください。
+ * 複すると未読なのに既読とみなされてしまいます。そのため一度使用したラベル名は
+ * メモを取るなどして、ゲーム全体を通して2回以上使うことがないようにしてくださ
+ * い。
+ * 
  * プラグインパラメータ「マスターセーブファイルの作成」をオンにすると（デフォル
  * トはオンです）、既読フラグを格納する「master.rmmzsave」というセーブファイ
  * ルが新たに作成されるようになります。これはどのセーブスロットをロードしたとし
  * ても、あるいはニューゲームから始めたとしても、ゲーム開始時に読み込まれます。
- * つまり既読フラグをセーブデータをまたいで持ち越せるということです。
+ * つまり既読フラグをセーブデータをまたいで持ち越すことが可能になります。
+ * 
  * 上記のように通常は既読イベントしかスキップできませんが、「既読のみスキップ可
  * 能」というオプションをオフにすると未読イベントもスキップできるようになりま
  * す。このオプションはプラグインパラメータ「既読のみスキップ可能の使用」をオン
@@ -910,15 +942,18 @@
  * い。またプラグインパラメータ「デフォルト既読のみスキップ可能」をオンにしてく
  * ださい（デフォルトはオンです）。このように設定することでゲーム中に設定が変更
  * されなくなり、既読しかスキップできない状態に固定できます。
+ * 
  * いま実行されているイベントが未読であるなどによりスキップできない場合、ボタン
  * 画像が「スキップ不可」として設定したものになります。スキップ可能である場合は
  * 「スキップ可」として設定した画像が表示されます。これにより、スキップ可能かど
  * うかを視覚的に表現できます。
  * 
+ * 
  * 6. オート
  * メッセージ送りが自動的に行われるようになります。メッセージの最後や制御文字
  * 「\!」による入力待ちが行われなくなり、代わりにウェイトします。ウェイトする時
  * 間はプラグインパラメータ「ポーズフレーム数」により指定できます。
+ * 
  * オートがオンになっている場合、「オン」として設定した画像が表示されます。オフ
  * の場合は「オフ」として設定した画像が表示されます。これにより、オートのオンオ
  * フを視覚的に表現できます。
