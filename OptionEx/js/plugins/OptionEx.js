@@ -18,7 +18,7 @@
  * 04/05/2021 1.1.0 Added Switch A/B Buttons and plugin parameters to disable standard items.
  * 06/22/2021 1.2.0 Added several parameters and make it compatible with sub-folder.
  * 07/06/2021 1.2.1 Supported sub-folder improvement of RMMZ 1.3.2
- * 02/20/2021 1.2.2 Supported NovelGameUI.js
+ * 02/20/2022 1.2.2 Supported NovelGameUI.js
  * 
  * This plugin extends the option scene.
  * It adds window-cosmetics, dash-speed and fast-message options.
