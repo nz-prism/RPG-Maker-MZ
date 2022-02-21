@@ -11,10 +11,11 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
+ * 02/21/2022 1.0.1 Fixed an error in the battle.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -75,7 +76,7 @@
  * A back log scene will be invoked. If the plugin parameter "Use Log" is set
  * true, the texts shown by the event commands "Show Text" and "Show Scrolling
  * Text" will be stored. The log scene will show all the stored texts. Also, by
- * setting the plugin parameter "Add Log Command", the log scene can be involed
+ * setting the plugin parameter "Add Log Command", the log scene can be invoked
  * from the menu, which enables players to see the log even after events finish
  * running. Since the stored texts are to be saved, they can be seen even after
  * loading. Delete logs by using the plugin command "Delete Logs", for the logs
@@ -790,10 +791,11 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
+ * 2022/02/21 1.0.1 戦闘に入るとエラーになる問題を修正
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -1833,7 +1835,7 @@
     };
 
     Game_System.prototype.areControlButtonsEnabled = function() {
-        return this._controlButtonsEnabled && $gameMessage.isBusy();
+        return this._controlButtonsEnabled && !$gameParty.inBattle() && $gameMessage.isBusy();
     };
 
     Game_System.prototype.passedLabelIndexes = function() {
@@ -1895,7 +1897,7 @@
     };
 
     Game_Message.prototype.isAutoMode = function() {
-        return this._autoMode;
+        return this._autoMode && !$gameParty.inBattle();
     };
 
 
@@ -2238,6 +2240,12 @@
     };
     
 
+    const _Window_Message_prototype_initialize = Window_Message.prototype.initialize;
+    Window_Message.prototype.initialize = function(rect) {
+        this._controlButtons = [];
+        _Window_Message_prototype_initialize.call(this, rect);
+    };
+
     Window_Message.prototype.setControlButtons = function(buttons) {
         this._controlButtons = buttons;
     };
@@ -2381,7 +2389,6 @@
     Sprite_ControlButton.prototype.initialize = function(buttonType) {
         Sprite_Clickable.prototype.initialize.call(this);
         this._buttonType = buttonType;
-        this._clickHandler = null;
         this.setupFrame();
     };
     
