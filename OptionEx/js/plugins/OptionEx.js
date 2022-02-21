@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.2
+ * ver. 1.2.3
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
@@ -19,6 +19,7 @@
  * 06/22/2021 1.2.0 Added several parameters and make it compatible with sub-folder.
  * 07/06/2021 1.2.1 Supported sub-folder improvement of RMMZ 1.3.2
  * 02/20/2022 1.2.2 Supported NovelGameUI.js
+ * 02/21/2022 1.2.3 Improved conflicts against other option-providing plugins.
  * 
  * This plugin extends the option scene.
  * It adds window-cosmetics, dash-speed and fast-message options.
@@ -46,7 +47,7 @@
  * @desc Specify the height for the individual option items.
  * @default 28
  * @type number
- * @min 24
+ * @min 8
  * @max 64
  * 
  * @param fontSize
@@ -54,7 +55,7 @@
  * @desc Specify the font size for the option window.
  * @default 23
  * @type number
- * @min 18
+ * @min 8
  * @max 48
  * 
  * @param defaultCommandOffset
@@ -182,6 +183,13 @@
  * @param useSwitchABButtons
  * @text Use Switch A/B Buttons
  * @desc Specify to enable an option to switch A/B buttons.
+ * @parent switchABButtons
+ * @default true
+ * @type boolean
+ * 
+ * @param hideSwitchABButtonsIfGamepadUnconnected
+ * @text Hide Switch A/B Buttons if Gamepad Unconnected
+ * @desc Specify to hide an option to switch A/B buttons if gamepad is unconnected.
  * @parent switchABButtons
  * @default true
  * @type boolean
@@ -352,7 +360,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.2
+ * ver. 1.2.3
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
@@ -362,6 +370,7 @@
  * 2021/06/22 1.2.0 プラグインパラメータ多数追加、本体バージョン1.3.0以降のサブフォルダへの格納に対応
  * 2021/07/06 1.2.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 2022/02/20 1.2.2 NovelGameUI.jsに対応
+ * 2022/02/21 1.2.3 オプション系他プラグインとの競合回避を強化
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
  * ウィンドウの外観を変更するオプションのほか、ダッシュ速度を変更するもの、
@@ -391,7 +400,7 @@
  * @desc オプション項目の高さを設定してください。
  * @default 28
  * @type number
- * @min 24
+ * @min 8
  * @max 64
  * 
  * @param fontSize
@@ -399,7 +408,7 @@
  * @desc オプション画面のフォントサイズを設定してください。
  * @default 23
  * @type number
- * @min 18
+ * @min 8
  * @max 48
  * 
  * @param defaultCommandOffset
@@ -527,6 +536,13 @@
  * @param useSwitchABButtons
  * @text A/Bボタン入れ替えの使用
  * @desc A/Bボタン入れ替えオプションを使用するかどうかを設定してください。
+ * @parent switchABButtons
+ * @default true
+ * @type boolean
+ * 
+ * @param hideSwitchABButtonsIfGamepadUnconnected
+ * @text ゲームパッド未接続時ABボタン入れ替えオプションの非表示
+ * @desc ゲームパッド未接続時、ABボタン入れ替えオプションを非表示にするかどうかを設定してください。
  * @parent switchABButtons
  * @default true
  * @type boolean
@@ -705,6 +721,7 @@
     const TITLE_COLOR = Number(pluginParams.titleColor);
 
     const HIDE_TOUCH_UI_FOR_MOBILES = pluginParams.hideTouchUIForMobiles === "true";
+    const HIDE_SWITCH_AB_BUTTONS_IF_GAMEPAD_UNCONNECTED = pluginParams.hideSwitchABButtonsIfGamepadUnconnected === "true";
 
     const WINDOWSKINS = JSON.parse(pluginParams.windowskins);
 
@@ -816,10 +833,23 @@
         return USE_TOUCH_UI && (!HIDE_TOUCH_UI_FOR_MOBILES || !Utils.isMobileDevice())
     };
 
+    ConfigManager.useSwitchABButtons = function() {
+        return USE_SWITCH_AB_BUTTONS && (!HIDE_SWITCH_AB_BUTTONS_IF_GAMEPAD_UNCONNECTED || Input.isAnyGamepadConnected());
+    };
+
     ConfigManager.useWindowskin = function() {
         return WINDOWSKINS.length > 1;
     };
 
+
+    const defaultGamepadMapper = {...Input.gamepadMapper};
+    const switchedGamepadMapper = {...Input.gamepadMapper};
+    defaultGamepadMapper[0] = "ok";
+    defaultGamepadMapper[1] = "cancel";
+    switchedGamepadMapper[0] = "cancel";
+    switchedGamepadMapper[1] = "ok";
+    Input.defaultGamepadMapper = defaultGamepadMapper;
+    Input.switchedGamepadMapper = switchedGamepadMapper;
 
     Object.defineProperty(Input, "gamepadMapper", {
         get: function() {
@@ -830,31 +860,13 @@
         },
     });
 
-    Input.defaultGamepadMapper = {
-        0: "ok", // A
-        1: "cancel", // B
-        2: "shift", // X
-        3: "menu", // Y
-        4: "pageup", // LB
-        5: "pagedown", // RB
-        12: "up", // D-pad up
-        13: "down", // D-pad down
-        14: "left", // D-pad left
-        15: "right" // D-pad right
+    Input.isAnyGamepadConnected = function() {
+        if (navigator.getGamepads) {
+            const gamepads = navigator.getGamepads();
+            if (gamepads) return Object.values(gamepads).some(gamepad => gamepad && gamepad.connected);
+        }
     };
 
-    Input.switchedGamepadMapper = {
-        0: "cancel", // A
-        1: "ok", // B
-        2: "shift", // X
-        3: "menu", // Y
-        4: "pageup", // LB
-        5: "pagedown", // RB
-        12: "up", // D-pad up
-        13: "down", // D-pad down
-        14: "left", // D-pad left
-        15: "right" // D-pad right
-    };
 
 
     const _Game_System_prototype_windowTone = Game_System.prototype.windowTone;
@@ -902,16 +914,17 @@
         return Window_Options.prototype.fittingHeight(numLines);
     };
 
+    const _Scene_Options_prototype_maxCommands = Scene_Options.prototype.maxCommands;
     Scene_Options.prototype.maxCommands = function() {
-        let result = 1;
-        if (USE_ALWAYS_DASH) result++;
-        if (USE_COMMAND_REMEMBER) result++;
-        if (ConfigManager.useTouchUI()) result++;
-        if (USE_BGM_VOLUME) result++;
-        if (USE_BGS_VOLUME) result++;
-        if (USE_ME_VOLUME) result++;
-        if (USE_SE_VOLUME) result++;
-        if (USE_SWITCH_AB_BUTTONS) result++;
+        let result = _Scene_Options_prototype_maxCommands.call(this) + 1;
+        if (!USE_ALWAYS_DASH) result--;
+        if (!USE_COMMAND_REMEMBER) result--;
+        if (!ConfigManager.useTouchUI()) result--;
+        if (!USE_BGM_VOLUME) result--;
+        if (!USE_BGS_VOLUME) result--;
+        if (!USE_ME_VOLUME) result--;
+        if (!USE_SE_VOLUME) result--;
+        if (ConfigManager.useSwitchABButtons()) result++;
         if (USE_FAST_MESSAGE) result++;
         if (USE_DASH_SPEED) result++;
         if (ConfigManager.useWindowskin()) result++;
@@ -921,7 +934,8 @@
     };
 
     Scene_Options.prototype.maxVisibleCommands = function() {
-        return 16;
+        const height = Graphics.boxHeight - (DEFAULT_COMMAND_OFFSET + $gameSystem.windowPadding() * 2);
+        return Math.floor(height / Window_Options.prototype.itemHeight());
     };
 
     Scene_Options.prototype.needsPageButtons = function() {
@@ -1018,7 +1032,7 @@
         if (USE_ALWAYS_DASH) this.addCommand(TextManager.alwaysDash, "alwaysDash");
         if (USE_COMMAND_REMEMBER) this.addCommand(TextManager.commandRemember, "commandRemember");
         if (ConfigManager.useTouchUI()) this.addCommand(TextManager.touchUI, "touchUI");
-        if (USE_SWITCH_AB_BUTTONS) this.addCommand(SWITCH_AB_BUTTONS_NAME, "switchABButtons");
+        if (ConfigManager.useSwitchABButtons()) this.addCommand(SWITCH_AB_BUTTONS_NAME, "switchABButtons");
         if (USE_FAST_MESSAGE) this.addCommand(FAST_MESSAGE_NAME, "fastMessage");
     };
 
@@ -1059,24 +1073,21 @@
         this.contents.gradientFillRect(x, y, fillW, 8, color1, color2);
     };
 
+    const _Window_Options_prototype_statusText = Window_Options.prototype.statusText;
     Window_Options.prototype.statusText = function(index) {
         const symbol = this.commandSymbol(index);
         const value = this.getConfigValue(symbol);
-        if (this.isVolumeSymbol(symbol)) {
-            return this.volumeStatusText(value);
-        } else {
-            switch (symbol) {
-                case "dashSpeed":
-                case "windowskin":
-                    return this.numericStatusText(value, true);
-                case "windowToneRed":
-                case "windowToneGreen":
-                case "windowToneBlue":
-                case "windowOpacity":
-                    return this.numericStatusText(value, false);
-                default:
-                    return this.booleanStatusText(value);        
-            }
+        switch (symbol) {
+            case "dashSpeed":
+            case "windowskin":
+                return this.numericStatusText(value, true);
+            case "windowToneRed":
+            case "windowToneGreen":
+            case "windowToneBlue":
+            case "windowOpacity":
+                return this.numericStatusText(value, false);
+            default:
+                return _Window_Options_prototype_statusText.call(this, index);
         }
     };
 
@@ -1120,7 +1131,7 @@
     };
 
     Window_Options.prototype.isGaugeSymbol = function(symbol) {
-        return this.isVolumeSymbol(symbol) || (symbol.includes("window") && symbol !== "windowskin");
+        return symbol === "windowOpacity" || this.isVolumeSymbol(symbol) || this.isToneSymbol(symbol);
     };
 
     Window_Options.prototype.isToneSymbol = function(symbol) {
@@ -1129,6 +1140,10 @@
 
     Window_Options.prototype.isBooleanSymbol = function(symbol) {
         return ["alwaysDash", "commandRemember", "touchUI", "switchABButtons", "fastMessage"].includes(symbol);
+    };
+
+    Window_Options.prototype.isNumericSymbol = function(symbol) {
+        return ["dashSpeed", "windowskin"].includes(symbol);
     };
 
     Window_Options.prototype.isDefaultSymbol = function(symbol) {
@@ -1289,6 +1304,7 @@
         if (TouchInput.isPressed() && TouchInput.isMoved()) this.touchMove();
     };
 
+    const _Window_Options_prototype_processOk = Window_Options.prototype.processOk;
     Window_Options.prototype.processOk = function() {
         const index = this.index();
         const symbol = this.commandSymbol(index);
@@ -1300,57 +1316,69 @@
             this.updateTone();
             this.updateBackOpacity();
             this.refresh();
-        } else if (this.isBooleanSymbol(symbol)) {
-            this.changeValue(symbol, !this.getConfigValue(symbol));
-        } else {
+        } else if (this.isGaugeSymbol(symbol) || this.isNumericSymbol(symbol)) {
             this.changeNumberBySymbol(symbol, true, false, true);
+        } else {
+            _Window_Options_prototype_processOk.call(this);
         }
     };
     
+    const _Window_Options_prototype_cursorRight = Window_Options.prototype.cursorRight;
     Window_Options.prototype.cursorRight = function(wrap) {
         const index = this.index();
         const symbol = this.commandSymbol(index);
         if (!this.isDefaultSymbol(symbol)) {
             if (this.isBooleanSymbol(symbol)) {
                 this.changeValue(symbol, true);
-            } else {
+            } else if (this.isGaugeSymbol(symbol) || this.isNumericSymbol(symbol)) {
                 this.changeNumberBySymbol(symbol, true, false, wrap);
+            } else {
+                _Window_Options_prototype_cursorRight.call(this);
             }
         }
     };
     
+    const _Window_Options_prototype_cursorLeft = Window_Options.prototype.cursorLeft;
     Window_Options.prototype.cursorLeft = function(wrap) {
         const index = this.index();
         const symbol = this.commandSymbol(index);
         if (!this.isDefaultSymbol(symbol)) {
             if (this.isBooleanSymbol(symbol)) {
                 this.changeValue(symbol, false);
-            } else {
+            } else if (this.isGaugeSymbol(symbol) || this.isNumericSymbol(symbol)) {
                 this.changeNumberBySymbol(symbol, false, false, wrap);
+            } else {
+                _Window_Options_prototype_cursorLeft.call(this);
             }
         }
     };
 
+    const _Window_Options_prototype_cursorPagedown = Window_Options.prototype.cursorPagedown;
     Window_Options.prototype.cursorPagedown = function() {
         const index = this.index();
         const symbol = this.commandSymbol(index);
         if (!this.isDefaultSymbol(symbol)) {
             if (this.isBooleanSymbol(symbol)) {
                 this.changeValue(symbol, true);
-            } else {
+            } else if (this.isGaugeSymbol(symbol) || this.isNumericSymbol(symbol)) {
                 this.changeNumberBySymbol(symbol, true, true, false);
+            } else {
+                _Window_Options_prototype_cursorPagedown.call(this);
             }
         }
     };
     
+    const _Window_Options_prototype_cursorPageup = Window_Options.prototype.cursorPageup;
     Window_Options.prototype.cursorPageup = function() {
         const index = this.index();
         const symbol = this.commandSymbol(index);
         if (!this.isDefaultSymbol(symbol)) {
             if (this.isBooleanSymbol(symbol)) {
                 this.changeValue(symbol, false);
-            } else {
+            } else if (this.isGaugeSymbol(symbol) || this.isNumericSymbol(symbol)) {
                 this.changeNumberBySymbol(symbol, false, true, false);
+            } else {
+                _Window_Options_prototype_cursorPageup.call(this);
             }
         }
     };
