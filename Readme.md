@@ -13,6 +13,7 @@ https://opensource.org/licenses/mit-license.php
 - [ボタンピクチャカーソル表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/CursorApplicationToButtonPicture)
 - [枠なし選択肢表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/FramelessChoiceList)
 - [メニューステータスピクチャ表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/MenuStatusPictures)
+- [ノベルゲームUI](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/NovelGameUI)
 - [オプション拡張](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/OptionEx)
 - [ランダムダンジョン](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/RandomDungeon)
 - [ウィンドウ背景スクロール](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ScrollingWindowBack)
