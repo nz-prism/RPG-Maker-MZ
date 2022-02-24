@@ -9,31 +9,95 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.3
+ * ver. 1.3.0
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
- * 03/03/2021 1.0.1 Corrected default tone glitches and calibrated the window height.
+ * 03/03/2021 1.0.1 Corrected default tone glitches and calibrated the window
+ *                  height.
  * 03/05/2021 1.0.2 Fixed bugs when dash speed or fast message is unused.
- * 04/05/2021 1.1.0 Added Switch A/B Buttons and plugin parameters to disable standard items.
- * 06/22/2021 1.2.0 Added several parameters and make it compatible with sub-folder.
+ * 04/05/2021 1.1.0 Added Switch A/B Buttons and plugin parameters to disable
+ *                  standard items.
+ * 06/22/2021 1.2.0 Added several parameters and make it compatible with sub-
+ *                  folder.
  * 07/06/2021 1.2.1 Supported sub-folder improvement of RMMZ 1.3.2
  * 02/20/2022 1.2.2 Supported NovelGameUI.js
  * 02/21/2022 1.2.3 Improved conflicts against other option-providing plugins.
+ * 02/24/2022 1.3.0 Added a plugin parameter to lower the window under the
+ *                  buttons and rewrote this description.
  * 
  * This plugin extends the option scene.
- * It adds window-cosmetics, dash-speed and fast-message options.
- * It also enables to show gauges for volume/tone options.
- * Pageup/Pagedown button (can also be push by UI buttons) is supported
- * to change values quickly.
- * Mouse-drag and swipe inputs can be used for the gauges.
- * Each option item can be unused by setting the plugin parameters.
+ * The functionalities include not only changing the option window cosmetics
+ * and placing gauges for some options, such as Volumes, but also adding new
+ * option items;
+ * 
+ * 1. Switch A/B Buttons
+ * 2. Fast Message
+ * 3. Dash Speed
+ * 4. Windowskins
+ * 5. Window Color
+ * 6. Window Opacity
+ * 
+ * It also adds a button to reset all the option values to default.
+ * For numeric and gauge options, players can use pageup/pagedown buttons
+ * (touch UI buttons available) to change the values greatly. For gauges,
+ * players can drag/swipe to change the vaulues.
+ * You can choose whether to enable each of option items.
+ * 
+ * There are several plugin parameters as to dimensions/location of the
+ * option window. If option items don't fit within the window due to too many
+ * items, try changing the values of them. "Option Item Height" is the height
+ * of each item. By lowering the value, you can increase the number of visible
+ * items. If the texts of the items exceed the rectangles, lower "Font Size",
+ * too. "Default Command Offset" is a distance between the downmost item and
+ * the Reset to Default button. By setting "Place Option Window Under Buttons"
+ * true, the window will be placed under the touch UI button area. If so, the
+ * window height will get smaller. Then, try lowering the parameters above to
+ * make all the items visible.
+ * 
+ * If the plugin parameter "Hide Touch UI Option for Mobile Devices" is set
+ * true (true by default), the "Touch UI" option will not appear on
+ * tablets/smartphones. It prevents a problem that if players unintentionally
+ * set the option OFF, the menu button disappears and 2-finger tap is required
+ * to invoke menu, which is not famous for players.
+ * 
+ * 1. Switch A/B Buttons
+ * If ON, the OK/Cancel buttons of a gamepad will be swapped. If the plugin
+ * parameter "Hide Switch A/B Buttons if Gamepad Unconnected" is set true
+ * (true by default), this option will not appear when no gamepad is connected.
+ * 
+ * 2. Fast Message
+ * If ON, texts appear instantly on the message window.
+ * 
+ * 3. Dash Speed
+ * 3 speeds can be selected. "1" is the same speed as MZ default.
+ * 
+ * 4. Windowskin
+ * Provides alternative windowskins. To use this option item, add window image
+ * files (originally "Window.png" but whatever file name is acceptable) to the
+ * img/system folder. Then, add them to the plugin parameter "Windowskin
+ * Images". If the parameter has only an image file, this option item does not
+ * appear.
+ * 
+ * 5. Window Color
+ * Changes the tone for the windows. Gauges are placed and players can
+ * drag/swipe the gauge.
+ * 
+ * 6. Window Opacity
+ * Changes the opacity for the windows. Gauges are placed and players can
+ * drag/swipe the gauge.
  * 
  * 
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
  *
  *
+ * @param placeWindowUnderButtonArea
+ * @text Place Option Window Under Buttons
+ * @desc Specify whether the option window is placed under the UI buttons.
+ * @default false
+ * @type boolean
+ * 
  * @param windowWidth
  * @text Option Window Width
  * @desc Specify the width for the option window.
@@ -279,7 +343,7 @@
  * @type string
  * 
  * @param windowskins
- * @text Windowskins
+ * @text Windowskin Images
  * @desc Add as many windowskin files as you want users to choose.
  * @parent windowskin
  * @default ["Window"]
@@ -287,32 +351,32 @@
  * @dir img/system
  * 
  * @param windowTone
- * @text Window Tone
- * @desc The settings for Window Tone options.
+ * @text Window Color
+ * @desc The settings for Window Color options.
  * 
  * @param useWindowTone
- * @text Use Window Tone
+ * @text Use Window Color
  * @desc Specify to enable options to change the window tone.
  * @parent windowTone
  * @default true
  * @type boolean
  * 
  * @param windowToneRedName
- * @text Window Tone Red Name
+ * @text Window Color Red Name
  * @desc Specify the name of an option to change the red value of windows.
  * @parent windowTone
  * @default Window Color R
  * @type string
  * 
  * @param windowToneGreenName
- * @text Window Tone Green Name
+ * @text Window Color Green Name
  * @desc Specify the name of an option to change the green value of windows.
  * @parent windowTone
  * @default Window Color G
  * @type string
  * 
  * @param windowToneBlueName
- * @text Window Tone Blue Name
+ * @text Window Color Blue Name
  * @desc Specify the name of an option to change the blue value of windows.
  * @parent windowTone
  * @default Window Color B
@@ -360,33 +424,94 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.2.3
+ * ver. 1.3.0
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
  * 2021/03/03 1.0.1 Wカラーデフォルト値に関するバグ修正、ウィンドウ高さの微調整
  * 2021/03/05 1.0.2 ダッシュ速度やメッセージ瞬間表示が不使用の場合のバグを修正
  * 2021/04/05 1.1.0 A/Bボタン入れ替え機能、標準項目不使用設定追加
- * 2021/06/22 1.2.0 プラグインパラメータ多数追加、本体バージョン1.3.0以降のサブフォルダへの格納に対応
+ * 2021/06/22 1.2.0 プラグインパラメータ多数追加、本体バージョン1.3.0以降のサブ
+ *                  フォルダへの格納に対応
  * 2021/07/06 1.2.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 2022/02/20 1.2.2 NovelGameUI.jsに対応
  * 2022/02/21 1.2.3 オプション系他プラグインとの競合回避を強化
+ * 2022/02/24 1.3.0 ボタンよりも下にウィンドウを配置するプラグインパラメータを
+ *                  追加、説明文追記
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
- * ウィンドウの外観を変更するオプションのほか、ダッシュ速度を変更するもの、
- * メッセージを瞬間的に表示するオプションも追加されます。
- * また、音量・ウィンドウカラーオプションにはゲージが表示されるようになります。
- * Pageup・Pagedownボタンで大きく値を変更できます（タッチUI用ボタンも
- * 用意されています）。
- * ゲージ系項目では、マウスでドラッグ、あるいはスワイプ操作でも値を
- * 操作できます。
- * なお、追加オプションは個別に使用するかどうかを設定できます。
+ * オプション画面の外観の変更や音量等のオプションに対するゲージの描画だけでな
+ * く、以下のオプション項目の追加機能もあります。
+ * 
+ * 1. A/Bボタン入れ替え
+ * 2. メッセージ瞬間表示
+ * 3. ダッシュ速度
+ * 4. ウィンドウスキン
+ * 5. ウィンドウカラー
+ * 6. ウィンドウ不透明度
+ * 
+ * すべてのオプション項目の値をデフォルト値に戻すボタンも追加されます。
+ * 数値・ゲージ系項目ではPageup・Pagedownボタンで大きく値を変更できます（タッチ
+ * UI用ボタンも用意されています）。またゲージ系項目では、マウスでドラッグ、ある
+ * いはスワイプ操作でも値を操作できます。
+ * すべてのオプション項目は使用するかどうかを個別に設定できます。
+ * 
+ * ウィンドウの大きさや配置に関するプラグインパラメータが多数用意されています。
+ * 数が多すぎる等の理由でウィンドウ内に項目が収まらない場合、これらのパラメータ
+ * を調整してみてください。「オプション項目高さ」は項目ごとの高さです。この値を
+ * 小さくすることにより、ウィンドウ内に描画される項目の数を増やすことができま
+ * す。この値を下げたことにより文字がはみ出してしまう場合、「フォントサイズ」の
+ * 値も下げてください。「デフォルトコマンドオフセット」はデフォルト値に戻すボ
+ * タンを一番下のオプションから下に離す距離です。「オプションウィンドウをボタン
+ * より下に配置」はタッチUI用のキャンセルボタン等のボタンが描画される領域よりも
+ * ウィンドウの位置を下げるかどうかのオプションです。これをオンにするとウィンド
+ * ウ高さがその分小さくなるので、上記パラメータの値を下げて調整してください。
+ * 
+ * プラグインパラメータ「タッチデバイスでのタッチUIオプションの非表示」をオンに
+ * すると（デフォルトはオンです）、タブレットやスマートフォンなどのデバイスでの
+ * 実行時「タッチUI」オプションが表示されなくなります。これは誤ってこのオプショ
+ * ンをオフにしてしまうと、二本指タップでしかメニューが表示できなくなってしまう
+ * ことを防ぐための機能です。
+ * 
+ * 1. A/Bボタン入れ替え
+ * オンにするとゲームパッドの決定ボタンとキャンセルボタンの割り当てが入れ替わり
+ * ます。プラグインパラメータ「ゲームパッド未接続時ABボタン入れ替えオプションの
+ * 非表示」をオンにすると（デフォルトはオンです）ゲームパッド未接続時、このオプ
+ * ション項目が表示されなくなります。
+ * 
+ * 2. メッセージ瞬間表示
+ * オンにするとメッセージが瞬間的に表示されるようになります。
+ * 
+ * 3. ダッシュ速度
+ * ダッシュ時の速度を３段階から選択できます。「1」がツクールデフォルトと同じ速
+ * 度です。
+ * 
+ * 4. ウィンドウスキン
+ * 別のウィンドウスキンに変更することができるオプションです。使用するにはまず
+ * img/systemフォルダにウィンドウ画像（Window.png）を追加してください（ファイル
+ * 名は任意）。続いてファイルプラグインパラメータ「ウィンドウスキン画像」にそれ
+ * らの画像を追加してください。なおこのオプションは上記パラメータに2つ以上の画
+ * 像ファイルが追加されていない場合表示されません。
+ * 
+ * 5. ウィンドウカラー
+ * ウィンドウの色調を変更するためのオプションです。ゲージが表示され、ドラッグや
+ * スワイプでゲージ操作が可能です。
+ * 
+ * 6. ウィンドウ不透明度
+ * ウィンドウの不透明度を変更するためのオプションです。ゲージが表示され、ドラッ
+ * グやスワイプでゲージ操作が可能です。
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
  * https://opensource.org/licenses/mit-license.php
  *
  *
+ * @param placeWindowUnderButtonArea
+ * @text オプションウィンドウをボタンより下に配置
+ * @desc UIボタン類よりも下にオプションウィンドウを配置するかどうかを設定してください。
+ * @default false
+ * @type boolean
+ * 
  * @param windowWidth
  * @text オプションウィンドウ幅
  * @desc オプションウィンドウの幅を設定してください。
@@ -632,7 +757,7 @@
  * @type string
  * 
  * @param windowskins
- * @text ウィンドウスキン
+ * @text ウィンドウスキン画像
  * @desc オプションで選択可能にするウィンドウスキンを必要なだけ追加してください。一番上のものがデフォルトです。
  * @parent windowskin
  * @default ["Window"]
@@ -714,6 +839,7 @@
 
     const pluginParams = PluginManager.parameters(PLUGIN_NAME);
     
+    const PLACE_WINDOW_UNDER_BUTTON_AREA = pluginParams.placeWindowUnderButtonArea === "true";
     const WINDOW_WIDTH = Number(pluginParams.windowWidth);
     const ITEM_HEIGHT = Number(pluginParams.itemHeight);
     const FONT_SIZE = Number(pluginParams.fontSize);
@@ -906,7 +1032,7 @@
         const ww = WINDOW_WIDTH;
         const wh = this.calcWindowHeight(n) + DEFAULT_COMMAND_OFFSET;
         const wx = (Graphics.boxWidth - ww) / 2;
-        const wy = (Graphics.boxHeight - wh) / 2;
+        const wy = PLACE_WINDOW_UNDER_BUTTON_AREA ? this.mainAreaTop() : (Graphics.boxHeight - wh) / 2;
         return new Rectangle(wx, wy, ww, wh);
     };
 
@@ -934,7 +1060,8 @@
     };
 
     Scene_Options.prototype.maxVisibleCommands = function() {
-        const height = Graphics.boxHeight - (DEFAULT_COMMAND_OFFSET + $gameSystem.windowPadding() * 2);
+        let height = Graphics.boxHeight - (DEFAULT_COMMAND_OFFSET + $gameSystem.windowPadding() * 2);
+        if (PLACE_WINDOW_UNDER_BUTTON_AREA) height -= (this.buttonAreaHeight() + 4);
         return Math.floor(height / Window_Options.prototype.itemHeight());
     };
 
@@ -1016,6 +1143,35 @@
 
     Window_Options.prototype.lineHeight = function() {
         return ITEM_HEIGHT;
+    };
+
+    Window_Options.prototype.overallHeight = function() {
+        return Window_Selectable.prototype.overallHeight.call(this) + DEFAULT_COMMAND_OFFSET;
+    };
+
+    Window_Options.prototype.ensureCursorVisible = function(smooth) {
+        if (this._cursorAll) {
+            this.scrollTo(0, 0);
+        } else if (this.innerHeight > 0 && this.row() >= 0) {
+            const defaultOffset = this.isDefaultSymbol(this.currentSymbol()) ? DEFAULT_COMMAND_OFFSET : 0;
+            const scrollY = this.scrollY();
+            const itemTop = this.row() * this.itemHeight() + defaultOffset;
+            const itemBottom = itemTop + this.itemHeight() + defaultOffset;
+            const scrollMin = itemBottom - this.innerHeight;
+            if (scrollY > itemTop) {
+                if (smooth) {
+                    this.smoothScrollTo(0, itemTop);
+                } else {
+                    this.scrollTo(0, itemTop);
+                }
+            } else if (scrollY < scrollMin) {
+                if (smooth) {
+                    this.smoothScrollTo(0, scrollMin);
+                } else {
+                    this.scrollTo(0, scrollMin);
+                }
+            }
+        }
     };
 
     Window_Options.prototype.gaugeValueWidth = function() {
