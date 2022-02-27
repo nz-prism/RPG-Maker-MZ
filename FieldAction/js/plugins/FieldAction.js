@@ -266,8 +266,8 @@
         const rect = this.itemWindowRect();
         this._itemWindow = new Window_SkillList(rect);
         this._itemWindow.setHelpWindow(this._helpWindow);
-        // this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
-        // this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
+        this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
+        this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
         this._skillTypeWindow.setSkillWindow(this._itemWindow);
         this.addWindow(this._itemWindow);
         // this._itemWindow.setActor($gameActors.actor(6));
@@ -288,10 +288,10 @@
         const rect = this.skillTypeWindowRect();
         this._skillTypeWindow = new Window_SkillType(rect);
         this._skillTypeWindow.setHelpWindow(this._helpWindow);
-        // this._skillTypeWindow.setHandler("skill", this.commandSkill.bind(this));
+        this._skillTypeWindow.setHandler("skill", this.commandSkill.bind(this));
         // this._skillTypeWindow.setHandler("cancel", this.popScene.bind(this));
-        // this._skillTypeWindow.setHandler("pagedown", this.nextActor.bind(this));
-        // this._skillTypeWindow.setHandler("pageup", this.previousActor.bind(this));
+        this._skillTypeWindow.setHandler("pagedown", this.nextActor.bind(this));
+        this._skillTypeWindow.setHandler("pageup", this.previousActor.bind(this));
         this.addWindow(this._skillTypeWindow);
     };
     
@@ -392,6 +392,82 @@
     Scene_Map.prototype.create = function() {
         _Scene_Map_prototype_create.call(this);
         this.updateActor();
+    };
+
+    Scene_Map.prototype.commandSkill = function() {
+        this._itemWindow.activate();
+        this._itemWindow.selectLast();
+    };
+
+    Scene_Map.prototype.nextActor = function() {
+        $gameParty.makeMenuActorNext();
+        this.updateActor();
+        this.onActorChange();
+    };
+    
+    Scene_Map.prototype.previousActor = function() {
+        $gameParty.makeMenuActorPrevious();
+        this.updateActor();
+        this.onActorChange();
+    };
+    
+    Scene_Map.prototype.onActorChange = function() {
+        SoundManager.playCursor();
+    };
+
+    Scene_Map.prototype.onItemOk = function() {
+        this.actor().setLastMenuSkill(this.item());
+        this.determineItem();
+    };
+    
+    Scene_Map.prototype.onItemCancel = function() {
+        this._itemWindow.deselect();
+        this._skillTypeWindow.activate();
+    };
+
+    Scene_Map.prototype.determineItem = function() {
+        const action = new Game_Action(this.user());
+        const item = this.item();
+        action.setItemObject(item);
+        this.useItem();
+        this.activateItemWindow();
+    };
+    
+    Scene_Map.prototype.useItem = function() {
+        this.playSeForItem();
+        this.user().useItem(this.item());
+        this.applyItem();
+        this.checkCommonEvent();
+        this.checkGameover();
+    };
+    
+    Scene_Map.prototype.activateItemWindow = function() {
+        this._itemWindow.refresh();
+        this._itemWindow.activate();
+    };
+
+    Scene_Map.prototype.playSeForItem = function() {
+        SoundManager.playUseSkill();
+    };
+
+    Scene_Map.prototype.user = function() {
+        return this.actor();
+    };
+
+    Scene_Map.prototype.item = function() {
+        return this._itemWindow.item();
+    };
+
+    Scene_Map.prototype.applyItem = function() {
+        const action = new Game_Action(this.user());
+        action.setItemObject(this.item());
+        action.applyGlobal();
+    };
+
+    Scene_Map.prototype.checkCommonEvent = function() {
+        if ($gameTemp.isCommonEventReserved()) {
+            SceneManager.goto(Scene_Map);
+        }
     };
 
 })();
