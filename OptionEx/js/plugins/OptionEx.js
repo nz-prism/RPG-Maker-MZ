@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.3.0
+ * ver. 1.3.1
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
@@ -25,6 +25,7 @@
  * 02/21/2022 1.2.3 Improved conflicts against other option-providing plugins.
  * 02/24/2022 1.3.0 Added a plugin parameter to lower the window under the
  *                  buttons and rewrote this description.
+ * 03/03/2022 1.3.1 Fixed to reflect the default values for a new game.
  * 
  * This plugin extends the option scene.
  * The functionalities include not only changing the option window cosmetics
@@ -424,7 +425,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.3.0
+ * ver. 1.3.1
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
@@ -438,6 +439,7 @@
  * 2022/02/21 1.2.3 オプション系他プラグインとの競合回避を強化
  * 2022/02/24 1.3.0 ボタンよりも下にウィンドウを配置するプラグインパラメータを
  *                  追加、説明文追記
+ * 2022/03/03 1.3.1 ニューゲームにデフォルト値を反映するように修正
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
  * オプション画面の外観の変更や音量等のオプションに対するゲージの描画だけでな
@@ -894,6 +896,20 @@
     ConfigManager.windowToneGreen = 0;
     ConfigManager.windowToneBlue = 0;
     ConfigManager.windowOpacity = 195;
+
+    ConfigManager.load = function() {
+        StorageManager.loadObject("config")
+            .then(config => this.applyData(config || {}))
+            .catch(() => {
+                this.applyData({});
+                return 0;
+            })
+            .then(() => {
+                this._isLoaded = true;
+                return 0;
+            })
+            .catch(() => 0);
+    };
 
     const _ConfigManager_makeData = ConfigManager.makeData;
     ConfigManager.makeData = function() {
