@@ -95,3 +95,10 @@
 !/NovelGameUI/js/plugins/
 /NovelGameUI/js/plugins/*
 !/NovelGameUI/js/plugins/NovelGameUI.js
+/ClickAnimation/*
+!/ClickAnimation/Readme.md
+!/ClickAnimation/js
+/ClickAnimation/js/*
+!/ClickAnimation/js/plugins/
+/ClickAnimation/js/plugins/*
+!/ClickAnimation/js/plugins/ClickAnimation.js

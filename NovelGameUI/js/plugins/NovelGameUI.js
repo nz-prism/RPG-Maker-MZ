@@ -11,11 +11,12 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
  * 02/21/2022 1.0.1 Fixed an error in the battle.
+ * 03/12/2022 1.0.2 Fixed minor issues and supported ClickAnimation.js
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -791,11 +792,12 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
  * 2022/02/21 1.0.1 戦闘に入るとエラーになる問題を修正
+ * 2022/03/12 1.0.2 微バグの修正およびClickAnimation.jsに対応
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -1808,6 +1810,18 @@
         this._logSceneRequested = false;
     };
 
+    Game_Temp.prototype.requestToggleAuto = function() {
+        this._toggleAutoRequested = true;
+    };
+
+    Game_Temp.prototype.isToggleAutoRequested = function() {
+        return this._toggleAutoRequested;
+    };
+
+    Game_Temp.prototype.clearToggleAutoRequest = function() {
+        this._toggleAutoRequested = false;
+    };
+
     Game_Temp.prototype.setSkippableLabelIndex = function(index) {
         this._skippableLabelIndex = index;
     };
@@ -1963,7 +1977,7 @@
             }
         }
         if (USE_AUTO && Input.isTriggered(AUTO_KEY)) {
-            $gameMessage.toggleAutoMode();
+            $gameTemp.requestToggleAuto();
             SoundManager.playOk();
             return true;
         }
@@ -2230,6 +2244,9 @@
         } else if ($gameTemp.isLogSceneRequested()) {
             $gameTemp.clearLogSceneRequest();
             SceneManager.push(Scene_BackLog);
+        } else if ($gameTemp.isToggleAutoRequested()) {
+            $gameTemp.clearToggleAutoRequest();
+            $gameMessage.toggleAutoMode();
         }
     };
 
@@ -2311,40 +2328,12 @@
         this._textState = null;
     };
 
+    const _Window_Message_prototype_processEscapeCharacter = Window_Message.prototype.processEscapeCharacter;
     Window_Message.prototype.processEscapeCharacter = function(code, textState) {
-        switch (code) {
-            case "$":
-                this._goldWindow.open();
-                break;
-            case ".":
-                this.startWait(15);
-                break;
-            case "|":
-                this.startWait(60);
-                break;
-            case "!":
-                if ($gameMessage.isAutoMode()) {
-                    this.startWait(AUTO_PAUSE_FRAMES);
-                } else {
-                    this.startPause();
-                }
-                break;
-            case ">":
-                this._lineShowFast = true;
-                break;
-            case "<":
-                this._lineShowFast = false;
-                break;
-            case "^":
-                this._pauseSkip = true;
-                break;
-            default:
-                Window_Base.prototype.processEscapeCharacter.call(
-                    this,
-                    code,
-                    textState
-                );
-                break;
+        if (code === "!" && $gameMessage.isAutoMode()) {
+            this.startWait(AUTO_PAUSE_FRAMES);
+        } else {
+            _Window_Message_prototype_processEscapeCharacter.call(this, code, textState);
         }
     };
 
@@ -2444,6 +2433,7 @@
     };
     
     Sprite_ControlButton.prototype.onClick = function() {
+        Sprite_Clickable.prototype.onClick.call(this);
         Input.virtualClick(this._buttonType);
     };
 
