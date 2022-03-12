@@ -10,6 +10,7 @@ https://opensource.org/licenses/mit-license.php
 ## 一覧
 - [アクター立ち絵管理・AltMenuScreen立ち絵表示・会話時自動立ち絵表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ActorPictures)
 - [トロッコ搭乗](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/CartRide)
+- [クリックアニメーション](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ClickAnimation)
 - [ボタンピクチャカーソル表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/CursorApplicationToButtonPicture)
 - [枠なし選択肢表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/FramelessChoiceList)
 - [メニューステータスピクチャ表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/MenuStatusPictures)
