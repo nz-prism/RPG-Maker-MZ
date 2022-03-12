@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Plays an animation when clicking windows/buttons.
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ClickAnimation/js/plugins/ClickAnimation.js
  * @orderAfter ButtonPicture
  * @orderAfter OptionEx
  *
@@ -58,7 +58,7 @@
  * @target MZ
  * @plugindesc ウィンドウやボタンのクリック時にアニメを再生します。
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ClickAnimation/js/plugins/ClickAnimation.js
  * @orderAfter ButtonPicture
  * @orderAfter OptionEx
  *
@@ -278,9 +278,30 @@
         this._offsetY = offsetY;
     };
     
-    const _Sprite_AnimationMV_prototype_updatePosition = Sprite_AnimationMV.prototype.updatePosition;
     Sprite_AnimationMV.prototype.updatePosition = function() {
-        _Sprite_AnimationMV_prototype_updatePosition.call(this);
+        const target = this._targets[0];
+        const parent = target.parent;
+        const grandparent = parent ? parent.parent : null;
+        const cursorTarget = (grandparent instanceof Window);
+        if (!cursorTarget && this._animation.position === 3) {
+            this.x = this.parent.width / 2;
+            this.y = this.parent.height / 2;
+        } else if (this._targets.length > 0) {
+            this.x = target.x;
+            this.y = target.y;
+            if (cursorTarget) {
+                this.x += grandparent.x;
+                this.y += grandparent.y;
+            } else if (this.parent === grandparent) {
+                this.x += parent.x;
+                this.y += parent.y;
+            }
+            if (this._animation.position === 0) {
+                this.y -= target.height;
+            } else if (this._animation.position === 1) {
+                this.y -= target.height / 2;
+            }
+        }
         this.x += this._offsetX;
         this.y += this._offsetY;
     };
