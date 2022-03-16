@@ -11,12 +11,13 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.0.2
+ * ver. 1.1.0
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
  * 02/21/2022 1.0.1 Fixed an error in the battle.
  * 03/12/2022 1.0.2 Fixed minor issues and supported ClickAnimation.js
+ * 03/16/2022 1.1.0 Added Hide UI functionality.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -24,7 +25,7 @@
  * It requires OptionEx.js ver. 1.2.2 or later. Insert this plugin under
  * OptionEx.
  * 
- * It provides 6 functionalities;
+ * It provides 7 functionalities;
  * 
  * 1. Options
  * 2. Save
@@ -32,6 +33,7 @@
  * 4. Log
  * 5. Skip
  * 6. Auto
+ * 7. Hide UI
  * 
  * You can select which functionality to use for the game. For example, you
  * can set it up to use only Log.
@@ -41,11 +43,11 @@
  * the button, the corresponding functionality will be invoked. Also, you can
  * assign keys of a keyboard and buttons of a gamepad to the functionalities
  * to be used to invoke them by pressing.
- * If this plugin is enabled, players can use LT/RT buttons (as in XBox
+ * If this plugin is enabled, players can use LT/RT/Menu buttons (as in XBox
  * controller) of a gamepad, which are basically disabled by MZ default. LT
- * button is used as tab key while RT as control key. Therefore, you can assign
- * the functionalities to the 6 buttons; X, Y, LB, RB, LT, RT by using the
- * plugin parameters.
+ * button is used as tab key, RT as control key and Menu as alt key. Therefore,
+ * you can assign the functionalities to the 7 buttons; X, Y, LB, RB, LT, RT,
+ * and Menu by using the plugin parameters.
  * Note when a message window is shown, players can usually proceed the message
  * by pressing either OK or Cancel button. However, if this plugin is enabled,
  * only OK button can be used for it. Thank you for your understanding!
@@ -172,6 +174,13 @@
  * toggled.
  * 
  * 
+ * 7. Hide UI
+ * If this functionality is invoked, the UI components, such as windows or
+ * control buttons, will be invisible and the message stops. If players
+ * left/right-click or press OK/Cancel button, the UI components will be shown
+ * and the message continues again.
+ * 
+ * 
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
  * 
@@ -211,6 +220,8 @@
  * @value tab
  * @option control key/RT button
  * @value control
+ * @option alt key/Menu button
+ * @value alt
  * 
  * @param optionsButtonImages
  * @text Button Images
@@ -290,6 +301,8 @@
  * @value tab
  * @option control key/RT button
  * @value control
+ * @option alt key/Menu button
+ * @value alt
  * 
  * @param saveButtonImages
  * @text Button Images
@@ -369,6 +382,8 @@
  * @value tab
  * @option control key/RT button
  * @value control
+ * @option alt key/Menu button
+ * @value alt
  * 
  * @param loadButtonImages
  * @text Button Images
@@ -448,6 +463,8 @@
  * @value tab
  * @option control key/RT button
  * @value control
+ * @option alt key/Menu button
+ * @value alt
  * 
  * @param excludeCurrentMessage
  * @text Exclude Text Being Shown
@@ -563,6 +580,8 @@
  * @value tab
  * @option control key/RT button
  * @value control
+ * @option alt key/Menu button
+ * @value alt
  * 
  * @param makeMasterInfo
  * @text Make Master Save File
@@ -689,6 +708,8 @@
  * @value tab
  * @option control key/RT button
  * @value control
+ * @option alt key/Menu button
+ * @value alt
  * 
  * @param autoPauseFrames
  * @text Pause Frames
@@ -760,6 +781,86 @@
  * @option Center
  * @value 0.5
  * 
+ * @param hideUi
+ * @text Hide UI
+ * @desc The settings for Hide UI.
+ * 
+ * @param useHideUi
+ * @text Use Hide UI
+ * @desc If true, Hide UI functionality can be used.
+ * @parent hideUi
+ * @type boolean
+ * @default true
+ * 
+ * @param hideUiKey
+ * @text Hide UI Key
+ * @desc a key of a keyboard and a button of a gamepad assigned to Hide UI.
+ * @parent hideUi
+ * @default alt
+ * @type select
+ * @option shift key/X button
+ * @value shift
+ * @option X key/Y button
+ * @value menu
+ * @option pageup key/LB button
+ * @value pageup
+ * @option pagedown key/RB button
+ * @value pagedown
+ * @option tab key/LT button
+ * @value tab
+ * @option control key/RT button
+ * @value control
+ * @option alt key/Menu button
+ * @value alt
+ * 
+ * @param hideUiButtonImages
+ * @text Button Images
+ * @desc The image settings for Hide UI button.
+ * @parent hideUi
+ * 
+ * @param hideUiButtonUnselectedImageName
+ * @text Hide UI Button Unselected Image
+ * @desc The image for unselected Hide UI button.
+ * @parent hideUiButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param hideUiButtonSelectedImageName
+ * @text Hide UI Button Selected Image
+ * @desc The image for selected Hide UI button.
+ * @parent hideUiButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param hideUiButtonCoordinates
+ * @text Button Coordinates
+ * @desc The coordinate settings for Hide UI button.
+ * @parent hideUi
+ * 
+ * @param hideUiButtonX
+ * @text Option Button X
+ * @desc The X coordinate for Hide UI Button.
+ * @parent hideUiButtonCoordinates
+ * @type number
+ * @default 172
+ * 
+ * @param hideUiButtonY
+ * @text Option Button Y
+ * @desc The Y coordinate for Hide UI Button.
+ * @parent hideUiButtonCoordinates
+ * @type number
+ * @default 556
+ * 
+ * @param hideUiButtonOrigin
+ * @text Hide UI Button Origin
+ * @desc The origin for Hide UI button.
+ * @parent hideUiButtonCoordinates
+ * @default 0.5
+ * @type select
+ * @option Upper Left
+ * @value 0
+ * @option Center
+ * @value 0.5
  * 
  * @command enableControlButtons
  * @text Enable Control Buttons
@@ -792,12 +893,13 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.0.2
+ * ver. 1.1.0
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
  * 2022/02/21 1.0.1 戦闘に入るとエラーになる問題を修正
  * 2022/03/12 1.0.2 微バグの修正およびClickAnimation.jsに対応
+ * 2022/03/16 1.1.0 UI非表示機能を追加
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -805,7 +907,7 @@
  * 本プラグインは「オプション拡張（OptionEx.js）」プラグインのバージョン1.2.2
  * （以降）の導入が前提となります。OptionExよりも後に配置してください。
  * 
- * 以下の６種類の機能が利用できます。
+ * 以下の７種類の機能が利用できます。
  * 
  * 1. オプション
  * 2. セーブ
@@ -813,6 +915,7 @@
  * 4. ログ
  * 5. スキップ
  * 6. オート
+ * 7. UI非表示
  * 
  * 上記機能はいずれも使用するかどうかを個別に選択できます。例えばログ機能だけを
  * 使用する、といったことも可能です。
@@ -823,11 +926,11 @@
  * す。また、各機能にはキーボードやゲームパッドのキーを割り当てることが可能であ
  * り、それらを押下することでも対応機能を実行できます。
  * なお本プラグインを導入すると、MZデフォルトでは何も機能が割り当てられていない
- * ボタンであるゲームパッドのLT・RTボタン（XBoxコントローラーにおける名称）に
- * それぞれ機能が割り当てられます。LTボタンにはtabキーが、RTボタンにはcontrol
- * キーが割り当てられます。それらを含めX・Y・LB・RB・LT・RTの６つのボタンにそ
- * れぞれ割り当てることが可能です。実際のキー割り当てにはプラグインパラメータを
- * 使用します。
+ * ボタンであるゲームパッドのLT・RT・メニューボタン（XBoxコントローラーにおけ
+ * る名称）にそれぞれ機能が割り当てられます。LTボタンにはtabキーが、RTボタンに
+ * はcontrolキーが、メニューボタンにはaltキーが割り当てられます。それらを含め
+ * X・Y・LB・RB・LT・RT・メニューの7つのボタンにそれぞれ割り当てることが可能で
+ * す。実際のキー割り当てにはプラグインパラメータを使用します。
  * MZデフォルトではメッセージ表示時、決定ボタンだけでなくキャンセルボタンで
  * もメッセージ送りができますが、本プラグインを導入するとキャンセルボタンでは
  * メッセージ送りができなくなります。あらかじめご了承ください。
@@ -963,6 +1066,12 @@
  * フを視覚的に表現できます。
  * 
  * 
+ * 7. UI非表示
+ * ウィンドウや制御ボタンといったUI要素が非表示になり、メッセージは一時停止しま
+ * す。タップや左/右クリック、決定ボタンやキャンセルボタンの押下により元に戻り
+ * ます。
+ * 
+ * 
  * このプラグインはMITライセンスにてリリースされています。
  * https://opensource.org/licenses/mit-license.php
  * 
@@ -1002,6 +1111,8 @@
  * @value tab
  * @option controlキー/RTボタン
  * @value control
+ * @option altキー/メニューボタン
+ * @value alt
  * 
  * @param optionsButtonImages
  * @text ボタン画像
@@ -1081,6 +1192,8 @@
  * @value tab
  * @option controlキー/RTボタン
  * @value control
+ * @option altキー/メニューボタン
+ * @value alt
  * 
  * @param saveButtonImages
  * @text ボタン画像
@@ -1160,6 +1273,8 @@
  * @value tab
  * @option controlキー/RTボタン
  * @value control
+ * @option altキー/メニューボタン
+ * @value alt
  * 
  * @param loadButtonImages
  * @text ボタン画像
@@ -1239,6 +1354,8 @@
  * @value tab
  * @option controlキー/RTボタン
  * @value control
+ * @option altキー/メニューボタン
+ * @value alt
  * 
  * @param excludeCurrentMessage
  * @text 表示中メッセージをログから除外
@@ -1354,6 +1471,8 @@
  * @value tab
  * @option controlキー/RTボタン
  * @value control
+ * @option altキー/メニューボタン
+ * @value alt
  * 
  * @param makeMasterInfo
  * @text マスターセーブファイルの作成
@@ -1480,6 +1599,8 @@
  * @value tab
  * @option controlキー/RTボタン
  * @value control
+ * @option altキー/メニューボタン
+ * @value alt
  * 
  * @param autoPauseFrames
  * @text ポーズフレーム数
@@ -1544,6 +1665,87 @@
  * @text オートボタン原点
  * @desc オートボタンの原点です。
  * @parent autoButtonCoordinates
+ * @default 0.5
+ * @type select
+ * @option 左上
+ * @value 0
+ * @option 中央
+ * @value 0.5
+ * 
+ * @param hideUi
+ * @text UI非表示
+ * @desc UI非表示に関する設定です。
+ * 
+ * @param useHideUi
+ * @text UI非表示有効化
+ * @desc オンにするとUI非表示が使用可能になります。
+ * @parent hideUi
+ * @type boolean
+ * @default true
+ * 
+ * @param hideUiKey
+ * @text UI非表示キー
+ * @desc UI非表示に割り当てるキーボード/ゲームパッドのキー/ボタンです。
+ * @parent hideUi
+ * @default alt
+ * @type select
+ * @option shiftキー/Xボタン
+ * @value shift
+ * @option Xキー/Yボタン
+ * @value menu
+ * @option pageupキー/LBボタン
+ * @value pageup
+ * @option pagedownキー/RBボタン
+ * @value pagedown
+ * @option tabキー/LTボタン
+ * @value tab
+ * @option controlキー/RTボタン
+ * @value control
+ * @option altキー/メニューボタン
+ * @value alt
+ * 
+ * @param hideUiButtonImages
+ * @text ボタン画像
+ * @desc UI非表示ボタンの画像に関する設定です。
+ * @parent hideUi
+ * 
+ * @param hideUiButtonUnselectedImageName
+ * @text UI非表示ボタン未選択画像
+ * @desc 未選択状態のUI非表示ボタンの画像です。
+ * @parent hideUiButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param hideUiButtonSelectedImageName
+ * @text UI非表示ボタン選択画像
+ * @desc 選択状態のUI非表示ボタンの画像です。
+ * @parent hideUiButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param hideUiButtonCoordinates
+ * @text ボタン座標
+ * @desc UI非表示ボタンの座標に関する設定です。
+ * @parent hideUi
+ * 
+ * @param hideUiButtonX
+ * @text UI非表示ボタンX座標
+ * @desc UI非表示ボタンのX座標です。
+ * @parent hideUiButtonCoordinates
+ * @type number
+ * @default 172
+ * 
+ * @param hideUiButtonY
+ * @text UI非表示ボタンY座標
+ * @desc UI非表示ボタンのY座標です。
+ * @parent hideUiButtonCoordinates
+ * @type number
+ * @default 556
+ * 
+ * @param hideUiButtonOrigin
+ * @text UI非表示ボタン原点
+ * @desc UI非表示ボタンの原点です。
+ * @parent hideUiButtonCoordinates
  * @default 0.5
  * @type select
  * @option 左上
@@ -1647,6 +1849,14 @@
     const AUTO_BUTTON_Y = Number(pluginParams.autoButtonY);
     const AUTO_BUTTON_ORIGIN = Number(pluginParams.autoButtonOrigin);
 
+    const USE_HIDE_UI = pluginParams.useHideUi === "true";
+    const HIDE_UI_KEY = pluginParams.hideUiKey;
+    const HIDE_UI_BUTTON_UNSELECTED_IMAGE_NAME = pluginParams.hideUiButtonUnselectedImageName;
+    const HIDE_UI_BUTTON_SELECTED_IMAGE_NAME = pluginParams.hideUiButtonSelectedImageName;
+    const HIDE_UI_BUTTON_X = Number(pluginParams.hideUiButtonX);
+    const HIDE_UI_BUTTON_Y = Number(pluginParams.hideUiButtonY);
+    const HIDE_UI_BUTTON_ORIGIN = Number(pluginParams.hideUiButtonOrigin);
+
     const LOG_FOOTER = "\\C[0]\\FS[%1]";
 
 
@@ -1736,11 +1946,13 @@
         if (info) $gameSystem.intersectPassedLabelIndexes(info.passedLabelIndexes);
     };
 
-
+    Input.keyMapper[18] = "alt";
     Input.defaultGamepadMapper[6] = "tab";
     Input.defaultGamepadMapper[7] = "control";
+    Input.defaultGamepadMapper[9] = "alt";
     Input.switchedGamepadMapper[6] = "tab";
     Input.switchedGamepadMapper[7] = "control";
+    Input.switchedGamepadMapper[9] = "alt";
 
 
 
@@ -1820,6 +2032,18 @@
 
     Game_Temp.prototype.clearToggleAutoRequest = function() {
         this._toggleAutoRequested = false;
+    };
+
+    Game_Temp.prototype.requestToggleHideUi = function() {
+        this._toggleHideUiRequested = true;
+    };
+
+    Game_Temp.prototype.isToggleHideUiRequested = function() {
+        return this._toggleHideUiRequested;
+    };
+
+    Game_Temp.prototype.clearToggleHideUiRequest = function() {
+        this._toggleHideUiRequested = false;
     };
 
     Game_Temp.prototype.setSkippableLabelIndex = function(index) {
@@ -1904,6 +2128,7 @@
     Game_Message.prototype.initialize = function() {
         _Game_Message_prototype_initialize.call(this);
         this._autoMode = false;
+        this._hideUiMode = false;
     };
 
     Game_Message.prototype.toggleAutoMode = function() {
@@ -1914,11 +2139,19 @@
         return this._autoMode && !$gameParty.inBattle();
     };
 
+    Game_Message.prototype.toggleHideUiMode = function() {
+        this._hideUiMode = !this._hideUiMode;
+    };
+
+    Game_Message.prototype.isHideUiMode = function() {
+        return this._hideUiMode && !$gameParty.inBattle();
+    };
+
 
     Game_Interpreter.prototype.update = function() {
         while (this.isRunning()) {
             const isDescendant = !this._childInterpreter;
-            if (isDescendant && $gameSystem.areControlButtonsEnabled() && this.updateInput()) break;
+            if (isDescendant && !$gameMessage.isHideUiMode() && $gameSystem.areControlButtonsEnabled() && this.updateInput()) break;
             if (this.updateChild() || this.updateWait()) break;
             if (SceneManager.isSceneChanging()) break;
             if (this.executeCommand()) {
@@ -1978,6 +2211,11 @@
         }
         if (USE_AUTO && Input.isTriggered(AUTO_KEY)) {
             $gameTemp.requestToggleAuto();
+            SoundManager.playOk();
+            return true;
+        }
+        if (USE_HIDE_UI && Input.isTriggered(HIDE_UI_KEY)) {
+            $gameTemp.requestToggleHideUi();
             SoundManager.playOk();
             return true;
         }
@@ -2126,6 +2364,10 @@
             ImageManager.loadSystem(AUTO_BUTTON_UNSELECTED_ON_IMAGE_NAME);
             ImageManager.loadSystem(AUTO_BUTTON_SELECTED_ON_IMAGE_NAME);
         }
+        if (USE_HIDE_UI) {
+            ImageManager.loadSystem(HIDE_UI_BUTTON_UNSELECTED_IMAGE_NAME);
+            ImageManager.loadSystem(HIDE_UI_BUTTON_SELECTED_IMAGE_NAME);
+        }
     };
 
     const _Scene_Boot_prototype_loadPlayerData = Scene_Boot.prototype.loadPlayerData;
@@ -2156,6 +2398,7 @@
         if (USE_LOG) buttons.push(this.createLogButton());
         if (USE_SKIP) buttons.push(this.createSkipButton());
         if (USE_AUTO) buttons.push(this.createAutoButton());
+        if (USE_HIDE_UI) buttons.push(this.createHideUiButton());
         this._messageWindow.setControlButtons(buttons);
     };
 
@@ -2225,6 +2468,45 @@
         return button;
     };
 
+    Scene_Map.prototype.createHideUiButton = function() {
+        const button = new Sprite_ControlButton(HIDE_UI_KEY);
+        button.x = HIDE_UI_BUTTON_X;
+        button.y = HIDE_UI_BUTTON_Y;
+        button.anchor.x = HIDE_UI_BUTTON_ORIGIN;
+        button.anchor.y = HIDE_UI_BUTTON_ORIGIN;
+        button.visible = false;
+        this.addWindow(button);
+        return button;
+    };
+
+    const _Scene_Map_prototype_update = Scene_Map.prototype.update;
+    Scene_Map.prototype.update = function() {
+        this.updateInput();
+        _Scene_Map_prototype_update.call(this);
+        this.updateWindowLayer();
+    };
+
+    Scene_Map.prototype.updateInput = function() {
+        if ($gameMessage.isHideUiMode()) {
+            if (
+                Input.isTriggered("ok") || Input.isTriggered("cancel") || Input.isTriggered("alt") ||
+                TouchInput.isClicked() || TouchInput.isCancelled()
+            ) {
+                $gameTemp.requestToggleHideUi();
+                SoundManager.playOk();
+            }
+        }
+    };
+
+    Scene_Map.prototype.updateWindowLayer = function() {
+        const windowLayer = this._windowLayer;
+        if ($gameMessage.isHideUiMode()) {
+            if (windowLayer.visible) windowLayer.visible = false;
+        } else {
+            if (!windowLayer.visible) windowLayer.visible = true;
+        }
+    };
+
     const _Scene_Map_prototype_updateMainMultiply = Scene_Map.prototype.updateMainMultiply;
     Scene_Map.prototype.updateMainMultiply = function() {
         _Scene_Map_prototype_updateMainMultiply.call(this);
@@ -2247,6 +2529,9 @@
         } else if ($gameTemp.isToggleAutoRequested()) {
             $gameTemp.clearToggleAutoRequest();
             $gameMessage.toggleAutoMode();
+        } else if ($gameTemp.isToggleHideUiRequested()) {
+            $gameTemp.clearToggleHideUiRequest();
+            $gameMessage.toggleHideUiMode();
         }
     };
 
@@ -2288,28 +2573,30 @@
     };
 
     Window_Message.prototype.update = function() {
-        this.checkToNotClose();
-        this.updateControlButtons();
-        Window_Base.prototype.update.call(this);
-        this.synchronizeNameBox();
-        while (!this.isOpening() && !this.isClosing()) {
-            if (this.updateWait()) {
-                if (this._waitForTerminate && this._waitCount === 0) {
-                    this._waitForTerminate = false;
-                    this.terminateMessage();
+        if (!$gameMessage.isHideUiMode()) {
+            this.checkToNotClose();
+            this.updateControlButtons();
+            Window_Base.prototype.update.call(this);
+            this.synchronizeNameBox();
+            while (!this.isOpening() && !this.isClosing()) {
+                if (this.updateWait()) {
+                    if (this._waitForTerminate && this._waitCount === 0) {
+                        this._waitForTerminate = false;
+                        this.terminateMessage();
+                    }
+                    return;
+                } else if (this.updateLoading()) {
+                    return;
+                } else if (this.updateInput()) {
+                    return;
+                } else if (this.updateMessage()) {
+                    return;
+                } else if (this.canStart()) {
+                    this.startMessage();
+                } else {
+                    this.startInput();
+                    return;
                 }
-                return;
-            } else if (this.updateLoading()) {
-                return;
-            } else if (this.updateInput()) {
-                return;
-            } else if (this.updateMessage()) {
-                return;
-            } else if (this.canStart()) {
-                this.startMessage();
-            } else {
-                this.startInput();
-                return;
             }
         }
     };
@@ -2417,6 +2704,8 @@
                 } else {
                     return this._hovered ? AUTO_BUTTON_SELECTED_OFF_IMAGE_NAME : AUTO_BUTTON_UNSELECTED_OFF_IMAGE_NAME;
                 }
+            case HIDE_UI_KEY:
+                return this._hovered ? HIDE_UI_BUTTON_SELECTED_IMAGE_NAME : HIDE_UI_BUTTON_UNSELECTED_IMAGE_NAME;
         }
     };
 
