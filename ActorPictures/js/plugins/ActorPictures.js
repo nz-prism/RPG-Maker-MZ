@@ -9,61 +9,57 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.3.3
+ * ver 1.3.4
  *
  * [History]
  * 06/20/2021 1.0.0 Released
- * 06/23/2021 1.1.0 Fixed the State Picture priority and preloading functionality
+ * 06/23/2021 1.1.0 Fixed the State Picture priority and preloading
+ *                  functionality
  * 07/01/2021 1.1.1 Added arguments for drawActorPicture function
  * 07/02/2021 1.2.0 Added a plugin parameter which calibrates picture positions
  * 07/05/2021 1.3.0 Added animation settings for pictures
  * 07/06/2021 1.3.1 Supported sub-folder improvement of RMMZ 1.3.2
  * 07/10/2021 1.3.2 Added some functions for PictureMessage.js
  * 02/14/2022 1.3.3 Changed the default value for auto preload to true
+ * 03/19/2022 1.3.4 Fixed an issue Picture Animation Settings didn't reflect
+ *                  the default parameters
  * 
  * This plugin manages pictures for actors.
  * You can set normal, stated and damaged pictures for each actor.
- * Stated pictures are shown when an actor is affected by a
- * specific state.
- * Damaged pictures are shown when the HP percentage of an actor is
- * at a specific rate or less.
- * Normal pictures are shown if none of the stated/damaged pictures
- * can be applied.
+ * Stated pictures are shown when an actor is affected by a specific state.
+ * Damaged pictures are shown when the HP percentage of an actor is at a
+ * specific rate or less.
+ * Normal pictures are shown if none of the stated/damaged pictures can be
+ * applied.
  * The priority is Stated > Damaged > Normal.
  * 
- * You can set multiple pictures for each of normal, stated and
- * damaged pictures in order to use as costumes or facial
- * expressions.
- * By setting Picture Index with a plugin command "Set Picture
- * Index", a corresponding picture out of the pictures is shown.
- * Picture Index is used in common with Normal, Stated and Damaged
- * pictures.
+ * You can set multiple pictures for each of normal, stated and damaged
+ * pictures in order to use as costumes or facial expressions.
+ * By setting Picture Index with a plugin command "Set Picture Index", a
+ * corresponding picture out of the pictures is shown.
+ * Picture Index is used in common with Normal, Stated and Damaged pictures.
  * 
- * Some pictures don't locate their face at the horizontal center
- * or locate them lower because of upper accessories, such as
- * hats. If those are misaligned, use a plugin parameter
- * "Picture Calibrations" to calibrate the alignment for each
- * picture.
+ * Some pictures don't locate their face at the horizontal center or locate
+ * them lower because of upper accessories, such as hats. If those are
+ * misaligned, use a plugin parameter "Picture Calibrations" to calibrate the
+ * alignment for each picture.
  * 
- * Actor pictures are sometimes not shown for the first time
- * they are displayed. In that case, preloading them may solve
- * the issue.
- * There are 2 ways to preload pictures; automatic method using
- * a plugin parameter and manual method using a plugin command.
- * If an plugin parameter "Preload All Pictures Automatically
- * at Every Scene" is set true, all the actor pictures will be
- * preloaded automatically at the start of every scene.
- * If there are so many pictures that the performance gets low,
- * set it false.
- * In this case, use a plugin command "Preload Pictures" to
- * preload actor pictures manually.
+ * Actor pictures are sometimes not shown for the first time they are
+ * displayed. In that case, preloading them may solve the issue.
+ * There are 2 ways to preload pictures; automatic method using a plugin
+ * parameter and manual method using a plugin command.
+ * If an plugin parameter "Preload All Pictures Automatically at Every Scene"
+ * is set true, all the actor pictures will be preloaded automatically at the
+ * start of every scene.
+ * If there are so many pictures that the performance gets low, set it false.
+ * In this case, use a plugin command "Preload Pictures" to preload actor
+ * pictures manually.
  * 
- * You can also configure animation settings for pictures. If you
- * want to animate a picture, create a image with as many patterns
- * aligned horizontally as you like. Specify that number of
- * patterns into a plugin parameter "Animation Patterns". Animation
- * frames can be calibrated with plugin parameters. Configure them
- * seeing actual animations in the game.
+ * You can also configure animation settings for pictures. If you want to
+ * animate a picture, create a image with as many patterns aligned horizontally
+ * as you like. Specify that number of patterns into a plugin parameter
+ * "Animation Patterns". Animation frames can be calibrated with plugin
+ * parameters. Configure them seeing actual animations in the game.
  * 
  * 
  * This plugin is released under MIT license.
@@ -211,7 +207,7 @@
  * 
  */
 
-/*~struct~animation:ja
+/*~struct~animation:
  *
  * @param pictureName
  * @text Picture Name
@@ -258,7 +254,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictures.js
  *
  * @help ActorPictures.js
- * ver 1.3.3
+ * ver 1.3.4
  *
  * [バージョン履歴]
  * 2021/06/20 1.0.0 リリース
@@ -269,6 +265,8 @@
  * 2021/07/06 1.3.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 2021/07/10 1.3.2 PictureMessage.js用に関数を追加
  * 2022/02/14 1.3.3 自動プリロードのデフォルト値をtrueに変更
+ * 2022/03/19 1.3.4 英語版にてPicture Animation Settingsのデフォルト値が反映さ
+ *                  れていなかった問題を修正
  * 
  * このプラグインは、アクターの立ち絵を管理します。
  * 立ち絵はアクターごとに標準、ステート差分、ダメージ差分を設定できます。
