@@ -23,6 +23,17 @@
  * This plugin has no plugin parameters or plugin commands. All you have to set
  * is the encounter weight of troops as usual.
  * 
+ * Note if an encounter weight decreases, the probability to encounter the
+ * troop changes. For example, you set 10 for Goblin troop while 5 for Gnome.
+ * If a player has defeated Goblin troops 5 times at the same map and never
+ * defeated Gnomes, the weights of both troops are 5. In this case, the player
+ * will encounter both Goblin and Gnome troops for exactly the same
+ * probability.
+ * 
+ * 
+ * This plugin is released under MIT license.
+ * https://opensource.org/licenses/mit-license.php
+ * 
  */
 
 /*:ja
@@ -37,13 +48,24 @@
  * [バージョン履歴]
  * 2022/03/20 1.0.0 リリース
  * 
- * このプラグインを導入すると、戦闘に勝利するごとにその敵グループのエンカウント設
- * 定の「重み」が1減少するようになります。重みが0になった敵グループは、そのマップ
- * では出現しなくなります。マップを切り替えると重みは元に戻ります。
+ * このプラグインを導入すると、戦闘に勝利するごとにその敵グループのエンカウント
+ * 設定の「重み」が1減少するようになります。重みが0になった敵グループは、その
+ * マップでは出現しなくなります。マップを切り替えると重みは元に戻ります。
  * 
  * 本プラグインにはプラグインパラメータもプラグインコマンドもありません。エンカ
  * ウント設定の「重み」を通常の手順同様に設定するだけで機能します。
+ * 
+ * 重みが変動することにより、出現率も変化するという点にご注意ください。
+ * たとえばゴブリングループの「重み」が10で、ノームグループが5だとします。この
+ * 場合通常は、ゴブリンはノームの2倍出現しやすいはずです。ですがたとえばプレイ
+ * ヤーが同じマップでゴブリンを5回倒し、ノームは一度も倒していないとします。こ
+ * の場合、ゴブリンもノームも重みは同じ5になっているので、出現率は等しくなりま
+ * す。
  *
+ * 
+ * このプラグインはMITライセンスにてリリースされています。
+ * https://opensource.org/licenses/mit-license.php
+ * 
  */
 
 (() => {
