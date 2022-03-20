@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Decreases encounter weights on battle end.
  * @author nz_prism
- * @url
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/DynamicEncounterWeight/js/plugins/DynamicEncounterWeight.js
  *
  * @help DynamicEncounterWeight.js
  *
@@ -40,7 +40,7 @@
  * @target MZ
  * @plugindesc 戦闘に勝利するとエンカウントの重みを1減らします。
  * @author nz_prism
- * @url
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/DynamicEncounterWeight/js/plugins/DynamicEncounterWeight.js
  *
  * @help DynamicEncounterWeight.js
  * ver. 1.0.0
