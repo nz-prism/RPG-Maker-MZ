@@ -10,10 +10,12 @@
  *
  * @help DynamicEncounterWeight.js
  *
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 03/20/2022 1.0.0 Released
+ * 03/20/2022 1.0.1 Fixed an issue that an event battle decreases the previous
+ *                  troop's encounter weight.
  * 
  * This plugin automatically decreases the encounter weight when a player wins
  * the battle against the troop. If an encounter weight is 0, the party will
@@ -43,10 +45,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/DynamicEncounterWeight/js/plugins/DynamicEncounterWeight.js
  *
  * @help DynamicEncounterWeight.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2022/03/20 1.0.0 リリース
+ * 2022/03/20 1.0.1 イベント戦闘により直前のトループの重みが減少してしまう不具
+ *                  合を修正
  * 
  * このプラグインを導入すると、戦闘に勝利するごとにその敵グループのエンカウント
  * 設定の「重み」が1減少するようになります。重みが0になった敵グループは、その
@@ -74,8 +78,14 @@
 
     const _BattleManager_processVictory = BattleManager.processVictory;
     BattleManager.processVictory = function() {
-        _BattleManager_processVictory.call(this);
         $gameMap.decrementEncounterWeight();
+        _BattleManager_processVictory.call(this);
+    };
+
+    const _BattleManager_endBattle = BattleManager.endBattle;
+    BattleManager.endBattle = function(result) {
+        _BattleManager_endBattle.call(this, result);
+        $gameMap.setEncounterId(-1);
     };
 
 
@@ -105,7 +115,7 @@
     const _Game_Map_prototype_initialize = Game_Map.prototype.initialize;
     Game_Map.prototype.initialize = function() {
         _Game_Map_prototype_initialize.call(this);
-        this._encoutnerId = -1;
+        this._encounterId = -1;
         this._encounterList = [];
     };
     
@@ -125,12 +135,12 @@
         return this._encounterList;
     };
 
-    Game_Map.prototype.setEncounterId = function(encoutnerId) {
-        this._encoutnerId = encoutnerId;
+    Game_Map.prototype.setEncounterId = function(encounterId) {
+        this._encounterId = encounterId;
     };
 
     Game_Map.prototype.decrementEncounterWeight = function() {
-        const encounter = this._encounterList[this._encoutnerId];
+        const encounter = this._encounterList[this._encounterId];
         if (encounter) encounter.weight--;
     };
     
