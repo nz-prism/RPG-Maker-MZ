@@ -102,3 +102,10 @@
 !/ClickAnimation/js/plugins/
 /ClickAnimation/js/plugins/*
 !/ClickAnimation/js/plugins/ClickAnimation.js
+/DynamicEncounterWeight/*
+!/DynamicEncounterWeight/Readme.md
+!/DynamicEncounterWeight/js
+/DynamicEncounterWeight/js/*
+!/DynamicEncounterWeight/js/plugins/
+/DynamicEncounterWeight/js/plugins/*
+!/DynamicEncounterWeight/js/plugins/DynamicEncounterWeight.js
