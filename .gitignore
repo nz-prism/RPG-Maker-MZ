@@ -42,6 +42,7 @@
 !/RandomDungeon/Readme.md
 !/RandomDungeon/data/
 /RandomDungeon/data/*
+!/RandomDungeon/data/System.json
 !/RandomDungeon/data/Map*
 !/RandomDungeon/js
 /RandomDungeon/js/*
