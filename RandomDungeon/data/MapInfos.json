@@ -1,8 +1,8 @@
 [
 null,
-{"id":1,"expanded":true,"name":"ノーマル","order":1,"parentId":0,"scrollX":411.55555555555554,"scrollY":320.8888888888889},
+{"id":1,"expanded":true,"name":"ノーマル","order":1,"parentId":0,"scrollX":928,"scrollY":605.5},
 {"id":2,"expanded":true,"name":"ランダム","order":3,"parentId":0,"scrollX":411.55555555555554,"scrollY":320.8888888888889},
-{"id":3,"expanded":false,"name":"普通の町","order":2,"parentId":1,"scrollX":1457.25,"scrollY":978},
+null,
 {"id":4,"expanded":true,"name":"ベース1","order":4,"parentId":2,"scrollX":1445.25,"scrollY":942},
 {"id":5,"expanded":false,"name":"ボイド","order":5,"parentId":4,"scrollX":0,"scrollY":0},
 {"id":6,"expanded":false,"name":"ピース1","order":6,"parentId":4,"scrollX":0,"scrollY":0},
@@ -36,5 +36,6 @@ null,
 {"id":34,"expanded":true,"name":"ピース12","order":34,"parentId":20,"scrollX":0,"scrollY":0},
 {"id":35,"expanded":true,"name":"ピース13","order":35,"parentId":20,"scrollX":0,"scrollY":0},
 {"id":36,"expanded":true,"name":"ピース14","order":36,"parentId":20,"scrollX":0,"scrollY":0},
-{"id":37,"expanded":true,"name":"ピース15","order":37,"parentId":20,"scrollX":0,"scrollY":0}
+{"id":37,"expanded":true,"name":"ピース15","order":37,"parentId":20,"scrollX":0,"scrollY":0},
+{"id":38,"expanded":false,"name":"初期マップ","order":2,"parentId":1,"scrollX":928,"scrollY":605.5}
 ]

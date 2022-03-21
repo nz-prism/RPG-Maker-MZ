@@ -9,60 +9,76 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.0.3
+ * ver. 1.1.0
  * 
  * [History]
  * 05/01/2021 1.0.0 Released
  * 12/14/2021 1.0.1 Fixed the conflict with PluginCommonBase.js
  * 12/15/2021 1.0.2 Fixed a tile event error
  * 01/25/2022 1.0.3 Fixed an issue that unique events weren't chosen correctly
+ * 03/21/2022 1.1.0 Added a functionality to embed a variable value in the map
+ *                  display names.
  * 
  * This plugin enables to generate a random map when a player
  * moves to a map with "random" attribute.
  * It provides a functionality to make an event appear randomly.
  * It also provides a functionality to make an event appear exclusively.
+ * A value of the variable can be embedded in the map display names.
  * 
  * This plugin has no plugin-command.
  * 
  * ■ How to Use
  *   ● Map Settings
- *     1. Enter <random> to a note of a map which you want to make a random map.
- *     2. Enter <size:n> to the note. "n" specifies the horizontal and vertical size of
- *        the random map.
- *        For example, if <size:5>, the 5 pieces horizontally, 5 pcs vertically, 25 pcs in total.
- *     3. Uner the random map, create a "Void" map and "Piece" maps as many as you need.
+ *     1. Enter <random> to a note of a map which you want to make a random
+ *        map.
+ *     2. Enter <size:n> to the note. "n" specifies the horizontal and vertical
+ *        size of the random map.
+ *        For example, if <size:5>, the 5 pieces horizontally, 5 pcs
+ *        vertically, 25 pcs in total.
+ *     3. Uner the random map, create a "Void" map and "Piece" maps as many as
+ *        you need.
  *        You can drag and drop a map under a different map on the editor.
- *        "Void" represents a void section of a random map and a player can't walk into/from it.
+ *        "Void" represents a void section of a random map and a player can't
+ *        walk into/from it.
  *        It will be used to make up spaces which no pieces were placed.
  *        "Piece" represents a part of a random map and has at least one route.
- *        The total combination number of 4 directions is 15, so you have to create at least
- *        15 pieces each of which has a unique route pattern.
- *        The parent map is called "Base". A Base must be placed on a random map.
- *        If you make a player transfer into a random map from another map, you have to
- *        specify the Base.
- *        All the map settings, such as background, BGM or encounter, refers to those of Base.
- *        Therefore, you don't have to specify the settings for Voids and Pieces.
+ *        The total combination number of 4 directions is 15, so you have to
+ *        create at least 15 pieces each of which has a unique route pattern.
+ *        The parent map is called "Base". A Base must be placed on a random
+ *        map.
+ *        If you make a player transfer into a random map from another map, you
+ *        have to specify the Base.
+ *        All the map settings, such as background, BGM or encounter, refers to
+ *        those of Base.
+ *        Therefore, you don't have to specify the settings for Voids and
+ *        Pieces.
  *     4. Enter <routes> to notes of Base and all the Pieces.
  *        It represents routes the map has.
  *        Enter directions in accordance with the map geometry.
- *        For example, if a map has rightward and downward routes, specify <routes: right, down>.
+ *        For example, if a map has rightward and downward routes, specify
+ *        <routes: right, down>.
  *        Split the directions by comma (,).
- *        You can input directions with various formats. See "Note Formats" below.
+ *        You can input directions with various formats. See "Note Formats"
+ *        below.
  *     5. Place events. See "Event Settings" below.
  *        You can set events on Base, Pieces and Void of a random map as usual.
- *        All the events on the maps which compose the random map will be placed.
- *        That means all the events on Base will be placed while the events on a Piece
- *        which was not chosen won't.
- *        You can use "random" and "unique" attributes for an event on a random map,
- *        both of which affect event appearance.
+ *        All the events on the maps which compose the random map will be
+ *        placed.
+ *        That means all the events on Base will be placed while the events on
+ *        a Piece which was not chosen won't.
+ *        You can use "random" and "unique" attributes for an event on a random
+ *        map, both of which affect event appearance.
  *        These attributes are not used for non-random maps.
  *        An event with "random" attribute appears on a basis of percentage.
- *        If the are multiple events with "unique" attribute on Base, Pieces and Void,
- *        only one of them appears, chosen randomly.
+ *        If the are multiple events with "unique" attribute on Base, Pieces
+ *        and Void, only one of them appears, chosen randomly.
  *        An event can have both "random" and "unique" attributes.
- *        Whether or not an event has "random" or "unique" attribute, when a player transfers
- *        into another map, all the self-switches of all the events on the random map will be
- *        turned off.
+ *        Whether or not an event has "random" or "unique" attribute, when a
+ *        player transfers into another map, all the self-switches of all the
+ *        events on the random map will be turned off.
+ *     6. (optional) Change the map display name. If it has "%1", these
+ *        characters will be replaced with the value of the variable whose ID
+ *        is specified by the plugin parameter "Map Name Variable ID".
  * 
  *   ● Event Settings
  *     ・random attribute
@@ -75,8 +91,8 @@
  *       "n" represents a unique ID.
  *       For example, if you want to make one of stairs appear on a map,
  *       which will be chosen randomly, enter <unique:1> to all the stairs.
- *       If you want to make another exclusive group, enter <unique:2>, <unique:3>,
- *       and so on.
+ *       If you want to make another exclusive group, enter <unique:2>,
+ *       <unique:3>, and so on.
  * 
  * ■ Map Limitation
  *   There are limitations for maps used for a random map.
@@ -85,16 +101,18 @@
  *       ・Make at least one route. Number and combination has no limits.
  *     ● Piece
  *       ・The tileset must be the same as Base.
- *       ・All the combinations of the route directins (15 patterns. See Sample)
- *         must exist.
+ *       ・All the combinations of the route directins (15 patterns. See
+ *         Sample) must exist.
  *         Multiple Pieces with a route pattern can exist.
  *         For example, if there are 2 maps with downward and rightward routes,
  *         the probability of being chosen will be doubled compared to patterns
  *         with which only one map exists.
  *       ・The map width of all the Pieces must be the same as that of Base.
  *       ・The map height of all the Pieces must be the same as that of Base.
- *       ・The X coodinate of upward and downward routes must be coincident, including Base.
- *       ・The Y coodinate of rightward and leftward routes must be coincident, including Base.
+ *       ・The X coodinate of upward and downward routes must be coincident,
+ *         including Base.
+ *       ・The Y coodinate of rightward and leftward routes must be coincident,
+ *         including Base.
  *     ● Void
  *       ・The tileset must be the same as Base.
  *       ・A void must exist for a random map.
@@ -122,6 +140,12 @@
  * https://opensource.org/licenses/mit-license.php
  *
  * 
+ * @param mapNameVariableId
+ * @text Map Name Variable ID
+ * @desc The variable ID whose value is embedded in the map display names.
+ * @type variable
+ * @default 1
+ * 
  */
 
 /*:ja
@@ -131,18 +155,22 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.0.3
+ * ver. 1.1.0
  * 
  * [バージョン履歴]
  * 2021/05/01 1.0.0 リリース
  * 2021/12/14 1.0.1 PluginCommonBase.jsとの競合を修正
  * 2021/12/15 1.0.2 タイルイベントの不具合を修正
  * 2022/01/25 1.0.3 uniqueイベントが適切に抽選されない問題を修正
+ * 2022/03/21 1.1.0 マップ表示名にプラグインパラメータで指定した変数の値を埋め
+ *                  込む機能を追加
  * 
  * このプラグインを導入すると、ランダム属性を持つマップに移動した際に
  * ダンジョンが自動生成されるようになります。
  * イベントのランダム出現機能があり、宝箱などに利用できます。
  * イベントの排他出現機能もあり、階段などに利用できます。
+ * マップの表示名に変数を埋め込むことのできる機能が用意されており、階層などの表
+ * 示に利用することができます。
  * 
  * プラグインコマンドはありません。
  * 
@@ -150,17 +178,23 @@
  *   ● マップ設定
  *     1. ランダムマップにしたいマップのメモに<random>と入力。
  *     2. 同メモに<size:n>と入力。nは縦と横にピースを配置する数です（最低3）。
- *        例えば<size:5>と入力すると縦5ピース、横5ピースの計25ピースが配置されます。
- *     3. ランダムマップの下位に「ボイド」マップを一つ、「ピース」マップを任意の数作成してください。
- *        マップはドラッグ&ドロップすることで別のマップの下位に配置できるので、それを利用してください。
+ *        例えば<size:5>と入力すると縦5ピース、横5ピースの計25ピースが配置され
+ *        ます。
+ *     3. ランダムマップの下位に「ボイド」マップを一つ、「ピース」マップを任意
+ *        の数作成してください。
+ *        マップはドラッグ&ドロップすることで別のマップの下位に配置できるので、
+ *        それを利用してください。
  *        「ボイド」とはランダムマップの空白部を表し、移動不可区域です。
  *        ピースを配置できなかった部分を埋めるために使用されます。
  *        「ピース」とはランダムマップの部品であり、最低1方向の通路を持ちます。
- *        上下左右の全ての通路の組み合わせは15通りであり、それぞれ最低一つ用意します。
+ *        上下左右の全ての通路の組み合わせは15通りであり、それぞれ最低一つ用意
+ *        します。
  *        なおランダムマップ本体は「ベース」と呼称します。
  *        ベースは必ず一つ配置されます。
- *        あるマップからイベントでランダムマップに移動させる場合、ベースを指定してください。
- *        ランダムマップの背景やBGM、敵出現歩数などあらゆる設定はベースのものが参照されます。
+ *        あるマップからイベントでランダムマップに移動させる場合、ベースを指定
+ *        してください。
+ *        ランダムマップの背景やBGM、敵出現歩数などあらゆる設定はベースのものが
+ *        参照されます。
  *        そのためボイドやピースには設定不要です。
  *     4. ベースと全てのピースのメモに<routes:>と入力。
  *        これはそのマップの持つ通路の方向を表します。
@@ -169,47 +203,62 @@
  *        方向はカンマ（,）で区切ってください。
  *        方向はさまざまな記述が可能です。下記「書式」を参照してください。
  *     5. 下記「イベント設定」を参考にイベントを配置してください。
- *        ランダムマップにはベース、ピース、ボイドのいずれにも通常どおりイベントを設置できます。
- *        一つのランダムマップには、使用されている全てのマップのイベントが配置されます。
- *        つまりベースのイベントは全て配置されますし、選ばれなかったピースのイベントは配置されません。
- *        ランダムマップでは、random属性とunique属性という専用の設定が用意されており、出現に関わります。
+ *        ランダムマップにはベース、ピース、ボイドのいずれにも通常どおりイベン
+ *        トを設置できます。
+ *        一つのランダムマップには、使用されている全てのマップのイベントが配置
+ *        されます。
+ *        つまりベースのイベントは全て配置されますし、選ばれなかったピースのイ
+ *        ベントは配置されません。
+ *        ランダムマップでは、random属性とunique属性という専用の設定が用意され
+ *        ており、出現に関わります。
  *        これらの属性は非ランダムマップでは使用されません。
  *        random属性が設定されているイベントは確率で出現します。
- *        unique属性が設定されているイベントは、ランダムマップのベース・ボイド・ピースに配置されている
- *        同じunique IDを持つイベントのうちいずれか一つだけがランダムに選択されて出現します。
+ *        unique属性が設定されているイベントは、ランダムマップのベース・ボイ
+ *        ド・ピースに配置されている同じunique IDを持つイベントのうちいずれか
+ *        一つだけがランダムに選択されて出現します。
  *        つまりそのうちの一つは必ず出現します。
- *        random属性とunique属性は併用が可能であり、同じunique IDのイベントのうちいずれか一つが
- *        確率で出現する、という挙動にもできます。
- *        なおrandom属性やunique属性が設定されているかに関わらず、ランダムマップから別のマップに移動すると
- *        ランダムマップに配置されていた全てのイベントの全てのセルフスイッチが自動的にオフになります。
- *        この挙動により、同じマップにひたすら移動し続けても何度でも宝箱が開けられます。
- *        反対に、一回しか開けられない宝箱にしたい場合はゲームスイッチを使用してください。
- *        ゲームスイッチはランダムマップによって自動的にリセットされることはありません。
+ *        random属性とunique属性は併用が可能であり、同じunique IDのイベントのう
+ *        ちいずれか一つが確率で出現する、という挙動にもできます。
+ *        なおrandom属性やunique属性が設定されているかに関わらず、ランダムマッ
+ *        プから別のマップに移動するとランダムマップに配置されていた全てのイ
+ *        ベントの全てのセルフスイッチが自動的にオフになります。
+ *        この挙動により、同じマップにひたすら移動し続けても何度でも宝箱が開け
+ *        られます。
+ *        反対に、一回しか開けられない宝箱にしたい場合はゲームスイッチを使用し
+ *        てください。
+ *        ゲームスイッチはランダムマップによって自動的にリセットされることはあ
+ *        りません。
+ *     6. （任意）マップの表示名を設定してください。表示名の「%1」はプラグイン
+ *        パラメータ「マップ表示名変数ID」で指定したIDの変数の値に置き換えられ
+ *        ます。
  * 
  *   ● イベント設定
  *     ・random属性
  *       ランダムに出現させたいイベントのメモに<random:n>と入力。
  *       nは出現確率を表します。
- *       例えば70%の確率で出現させたいイベントには<random:70>と入力してください。
+ *       例えば70%の確率で出現させたいイベントには<random:70>と入力してくださ
+ *       い。
  *     ・unique属性
  *       排他的に出現させたいイベントのメモに<unique:n>と入力。
  *       nはunique IDを表します。
- *       例えばランダムマップのどこかに階段をランダムで一つだけ出現させたい場合、
- *       全ての階段に<unique:1>と設定してください。
+ *       例えばランダムマップのどこかに階段をランダムで一つだけ出現させたい場
+ *       合、全ての階段に<unique:1>と設定してください。
  *       階段とは別グループの排他出現イベントを設置したい場合、
  *       <unique:2>, <unique:3>...と設定してください。
  * 
  * ■ マップの制限
- *   ランダムダンジョンとして使用するマップには、以下のような設定の制限があります。
+ *   ランダムダンジョンとして使用するマップには、以下のような設定の制限がありま
+ *   す。
  *   なお名前には制限がありませんので、自由につけることができます。
  *     ● ベース
  *       ・通路を最低一つ配置すること。数や組み合わせに制限はありません。
  *     ● ピース
  *       ・タイルセットがベースと同一であること。
- *       ・上下左右の通路のあらゆる組み合わせ（15通り。サンプル参照）を最低一つずつ用意すること。
+ *       ・上下左右の通路のあらゆる組み合わせ（15通り。サンプル参照）を最低一つ
+ *         ずつ用意すること。
  *       　同じ通路パターンのマップを複数用意することもできます。
- *       　例えば下と右に通路を持つマップを2つ用意した場合、1つしかない通路パターンと比べて
- *       　抽選確率が2倍になります。
+ *       　例えば下と右に通路を持つマップを2つ用意した場合、1つしかない通路パ
+ *         ターンと比べて抽選確率が2倍になります。
  *       ・全てのピースのマップ幅がベースのマップ幅と一致していること。
  *       ・全てのピースのマップ高さがベースのマップ高さと一致していること。
  *       ・上と下の通路のX座標が全て一致していること（ベースとも合わせる）。
@@ -219,8 +268,8 @@
  *       ・一つのランダムマップにつき必ず一つのボイドを用意すること。
  *       ・マップ幅がベースのマップ幅と一致していること。
  *       ・マップ高さがベースのマップ高さと一致していること。
- *       ・タイルの配置に制限はありませんが、サンプルのようにタイルA3上部タイルで塗りつぶすと
- *       　自然な印象になります。
+ *       ・タイルの配置に制限はありませんが、サンプルのようにタイルA3上部タイル
+ *         で塗りつぶすと自然な印象になります。
  * 
  * ■ 書式（メタタグ）
  *   ● マップ
@@ -243,10 +292,20 @@
  * https://opensource.org/licenses/mit-license.php
  *
  * 
+ * @param mapNameVariableId
+ * @text マップ表示名変数ID
+ * @desc マップ表示名に値が埋め込まれる変数のIDです。
+ * @type variable
+ * @default 1
+ * 
  */
 
 (() => {
-    'use steict';
+    'use strict';
+    const PLUGIN_NAME = "RandomDungeon";
+    const pluginParams = PluginManager.parameters(PLUGIN_NAME);
+
+    const MAP_NAME_VARIABLE_ID = Number(pluginParams.mapNameVariableId);
 
 
     DataManager.loadDataFileSynchronously = function(name, src) {
@@ -323,6 +382,11 @@
         return result;
     };
 
+
+    const _Game_Map_prototype_displayName = Game_Map.prototype.displayName;
+    Game_Map.prototype.displayName = function() {
+        return _Game_Map_prototype_displayName.call(this).format($gameVariables.value(MAP_NAME_VARIABLE_ID));
+    };
 
     Game_Map.prototype.isRandom = function() {
         return this._random;
