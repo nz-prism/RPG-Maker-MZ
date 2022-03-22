@@ -11,13 +11,14 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.1.0
+ * ver. 1.1.1
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
  * 02/21/2022 1.0.1 Fixed an error in the battle.
  * 03/12/2022 1.0.2 Fixed minor issues and supported ClickAnimation.js
  * 03/16/2022 1.1.0 Added Hide UI functionality.
+ * 03/22/2022 1.1.1 Fixed conflicts against other plugins.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -93,19 +94,23 @@
  * You can control whether the text being shown will be appear on the log scene
  * by setting the plugin parameter "Exclude Text Being Shown".
  * 
+ * If no logs are stored, the log scene can't be invoked and a buzzer SE will
+ * be played. The log command on the menu is also disabled. Note if "Exclude
+ * Text Being Shown" is true, this will happen when the first message is shown.
+ * 
  * 
  * 5. Skip
  * Event commands at a range can be skipped. To use this functionality, you
  * have to set an event command "Label". To use labels for it, the label names
- * must be unique digits. First, set a label event with a digit name as a
- * starting point, such as "1". You can set any event commands, like Show Text,
- * to be skipped under it. Under them, set a label event as an ending pont with
- * a name of the digit for the starting point + 1, such as "2". I call the
- * event commands between the starting and ending points "Label Sandwich".
- * Since label sandwiches can be skipped by players, you shouldn't set event
- * commands required for the game flow, such as Control Switches. If an event
- * has 2 label sandwiches and you want to set event commands required for the
- * game flow between the sandwiches;
+ * must be unique digits. First, set a label event with an integer name greater
+ * than 0 as a starting point, such as "1". You can set any event commands,
+ * like Show Text, to be skipped under it. Under them, set a label event as an
+ * ending pont with a name of an integer for the starting point + 1, such as
+ * "2". I call the event commands between the starting and ending points "Label
+ * Sandwich". Since label sandwiches can be skipped by players, you shouldn't
+ * set event commands required for the game flow, such as Control Switches. If
+ * an event has 2 label sandwiches and you want to set event commands required
+ * for the game flow between the sandwiches;
  * 
  *   Label:1
  *   Text:Reid, Actor1(0), Window, Bottom
@@ -893,13 +898,14 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.1.0
+ * ver. 1.1.1
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
  * 2022/02/21 1.0.1 戦闘に入るとエラーになる問題を修正
  * 2022/03/12 1.0.2 微バグの修正およびClickAnimation.jsに対応
  * 2022/03/16 1.1.0 UI非表示機能を追加
+ * 2022/03/22 1.1.1 他のプラグインとの競合対策を強化
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -978,22 +984,27 @@
  * いま表示されているメッセージもログに含めるかどうかは、プラグインパラメータ
  * 「表示中メッセージをログから除外」によって設定できます。
  * 
+ * ログが一つも保存されていない状態では、ログボタンを押してもログ画面が開かれ
+ * ず、ブザー音が演奏されます。また、メニューのバックログコマンドもグレーアウ
+ * トされます。「表示中メッセージをログから除外」がオンの場合、初回メッセージ
+ * 表示中はこのような状態になるという点にご注意ください。
+ * 
  * 
  * 5. スキップ
  * ある一定範囲のイベントコマンドの実行をスキップすることができます。この機能
  * を使用するには、イベントにイベントコマンド「ラベル」を設定する必要がありま
  * す。ラベルには本来どんな名前でもつけることができますが、この機能を利用する
- * ためにはラベル名を一意の半角数字にする必要があります。設定するには、まずス
- * キップの開始地点となる場所に半角数字の名前を持つラベルを設定します（例えば
- * 「1」）。その下にスキップ対象となるイベント（文章表示など）を任意の数だけ
- * 設定します。その下に、スキップ終了地点を表すラベルを配置します。このラベル
- * の名前は、必ず始点ラベル名 +1 にする必要があります（上記例では「2」にしま
- * す）。この始点・終点ラベルに挟まれたイベントコマンド群を「ラベルサンドイッ
- * チ」と呼称します。ラベルサンドイッチはプレイヤーによってスキップされる可能
- * 性のあるイベントですので、ゲームの進行に必須のイベント（スイッチの操作な
- * ど）を配置すべきではありません。あるイベントにラベルサンドイッチが2回登場
- * し、それらの間にゲーム進行に必須のイベントを配置したいとします。例えば以下
- * のような内容です。
+ * ためにはラベル名を1以上の整数を表す、一意の半角数字にする必要があります。
+ * 設定するには、まずスキップの開始地点となる場所に半角数字の名前を持つラベル
+ * を設定します（例えば「1」）。その下にスキップ対象となるイベント（文章表示
+ * など）を任意の数だけ設定します。その下に、スキップ終了地点を表すラベルを配
+ * 置します。このラベルの名前は、必ず始点ラベル名 +1 にする必要があります
+ * （上記例では「2」にします）。この始点・終点ラベルに挟まれたイベントコマンド
+ * 群を「ラベルサンドイッチ」と呼称します。ラベルサンドイッチはプレイヤーによっ
+ * てスキップされる可能性のあるイベントですので、ゲームの進行に必須のイベント
+ * （スイッチの操作など）を配置すべきではありません。あるイベントにラベルサンド
+ * イッチが2回登場し、それらの間にゲーム進行に必須のイベントを配置したいとしま
+ * す。例えば以下のような内容です。
  * 
  *   ラベル:1
  *   文章:リード, Actor1(0), ウィンドウ, 下
@@ -1909,16 +1920,13 @@
         if (USE_SKIP && MAKE_MASTER_INFO) this.applyMasterInfo();
     };
 
+    const _DataManager_saveGame = DataManager.saveGame;
     DataManager.saveGame = function(savefileId) {
-        const contents = this.makeSaveContents();
-        const saveName = this.makeSavename(savefileId);
-        return StorageManager.saveObject(saveName, contents).then(() => {
-            this._globalInfo[savefileId] = this.makeSavefileInfo();
+        return _DataManager_saveGame.call(this, savefileId).then(() => {
             if (USE_SKIP && MAKE_MASTER_INFO) {
                 this._masterInfo = this.makeMasterInfo();
                 this.saveMasterInfo();
             }
-            this.saveGlobalInfo();
             return 0;
         });
     };
@@ -2147,6 +2155,16 @@
         return this._hideUiMode && !$gameParty.inBattle();
     };
 
+    Game_Message.prototype.textsForBackLog = function() {
+        const logs = [];
+        const logFooter = LOG_FOOTER.format($gameSystem.mainFontSize());
+        const speakerName = this._speakerName;
+        if (speakerName) logs.push(LOG_SPEAKER_NAME_HEADER + speakerName + logFooter);
+        this._texts.forEach(text => logs.push(speakerName ? text.padStart(text.length + LOG_MESSAGE_PADS) : text));
+        logs.push(logFooter);
+        return logs;
+    };
+
 
     Game_Interpreter.prototype.update = function() {
         while (this.isRunning()) {
@@ -2267,59 +2285,26 @@
         return USE_LOG && !this._skipLogging && $gameSystem.isLoggingEnabled();
     };
 
+    const _Game_Interpreter_prototype_command101 = Game_Interpreter.prototype.command101;
     Game_Interpreter.prototype.command101 = function(params) {
-        if ($gameMessage.isBusy()) return false;
-        const logs = [];
-        const logFooter = LOG_FOOTER.format($gameSystem.mainFontSize());
-        $gameMessage.setFaceImage(params[0], params[1]);
-        $gameMessage.setBackground(params[2]);
-        $gameMessage.setPositionType(params[3]);
-        $gameMessage.setSpeakerName(params[4]);
-        const speakerName = $gameMessage.speakerName();
-        if (speakerName) logs.push(LOG_SPEAKER_NAME_HEADER + speakerName + logFooter);
-        while (this.nextEventCode() === 401) {
-            // Text data
-            this._index++;
-            const text = this.currentCommand().parameters[0];
-            $gameMessage.add(text);
-            logs.push(speakerName ? text.padStart(text.length + LOG_MESSAGE_PADS) : text);
+        if (_Game_Interpreter_prototype_command101.call(this, params)) {
+            if (this.isLoggingEnabled()) $gameSystem.addBackLogs($gameMessage.textsForBackLog());
+            this._skipLogging = false;
+            return true;
+        } else {
+            return false;
         }
-        switch (this.nextEventCode()) {
-            case 102: // Show Choices
-                this._index++;
-                this.setupChoices(this.currentCommand().parameters);
-                break;
-            case 103: // Input Number
-                this._index++;
-                this.setupNumInput(this.currentCommand().parameters);
-                break;
-            case 104: // Select Item
-                this._index++;
-                this.setupItemChoice(this.currentCommand().parameters);
-                break;
-        }
-        this.setWaitMode("message");
-        logs.push(logFooter);
-        if (this.isLoggingEnabled()) $gameSystem.addBackLogs(logs);
-        this._skipLogging = false;
-        return true;
     };
 
+    const _Game_Interpreter_prototype_command105 = Game_Interpreter.prototype.command105;
     Game_Interpreter.prototype.command105 = function(params) {
-        if ($gameMessage.isBusy()) return false;
-        const logs = [];
-        $gameMessage.setScroll(params[0], params[1]);
-        while (this.nextEventCode() === 405) {
-            this._index++;
-            const text = this.currentCommand().parameters[0];
-            $gameMessage.add(text);
-            logs.push(text);
+        if (_Game_Interpreter_prototype_command105.call(this, params)) {
+            if (this.isLoggingEnabled()) $gameSystem.addBackLogs($gameMessage.textsForBackLog());
+            this._skipLogging = false;
+            return true;
+        } else {
+            return false;
         }
-        this.setWaitMode("message");
-        logs.push(LOG_FOOTER.format($gameSystem.mainFontSize()));
-        if (this.isLoggingEnabled()) $gameSystem.addBackLogs(logs);
-        this._skipLogging = false;
-        return true;
     };
 
     const _Game_Interpreter_prototype_command118 = Game_Interpreter.prototype.command118;
@@ -2801,7 +2786,6 @@
         Window_Selectable.prototype.initialize.call(this, rect);
         this.clearText();
         this.setBackgroundType(1);
-        this.open();
     };
 
     Window_BackLog.prototype.clearScrollStatus = function() {
