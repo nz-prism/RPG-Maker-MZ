@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.3
+ * ver 1.3.4
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -21,6 +21,7 @@
  * 07/13/2021 1.3.1 Fixed battle picture issues on TPB
  * 12/28/2021 1.3.2 Fixed the balloon icon position
  * 02/14/2022 1.3.3 Changed the default balloon icon position
+ * 03/22/2022 1.3.4 Fixed a minor issue
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -676,7 +677,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.3
+ * ver 1.3.4
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -687,6 +688,7 @@
  * 2021/07/13 1.3.1 タイムプログレスバトル時の立ち絵表示の不具合を修正
  * 2021/12/28 1.3.2 フキダシアイコンの位置がおかしかったのを修正
  * 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
+ * 2022/03/22 1.3.4 微バグを修正
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -1563,7 +1565,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         let actorId;
         let position = -1;
         if (ary) {
-            actorId = ary[1];
+            actorId = Number(ary[1]);
             switch (ary[2].toLowerCase()) {
                 case "l":
                 case "left":
@@ -1582,12 +1584,16 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         }
         if (actorId && position >= 0) {
             const actor = $gameActors.actor(actorId);
-            if (this._faceName) {
-                actor.setPictureIndex(this._faceIndex);
-                this._faceName = "";
+            let name = "";
+            if (actor) {
+                if (this._faceName) {
+                    actor.setPictureIndex(this._faceIndex);
+                    this._faceName = "";
+                }
+                $gameScreen.setSpeaker(position, actorId);
+                name = actor.name();
             }
-            $gameScreen.setSpeaker(position, actorId);
-            this._speakerName = speakerName.replace(reg, actor.name());
+            this._speakerName = speakerName.replace(reg, name);
         } else {
             _Game_Message_prototype_setSpeakerName.call(this, speakerName);
         }
