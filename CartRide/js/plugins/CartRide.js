@@ -215,12 +215,13 @@
     };
 
     Game_Character.prototype.moveAlong = function() {
-        const oldX = this.x
-        const oldY = this.y
-        const ary = [2,4,6,8].filter(d => d !== this.direction() && (10-d) !== this.direction());
+        const x1 = this.x
+        const y1 = this.y
+        const d1 = this._direction;
+        const ary = [2,4,6,8].filter(d2 => d2 !== d1 && (10-d2) !== d1);
         this.moveForward();
-        if (this.x === oldX && this.y === oldY) this.moveStraight(ary[0]);
-        if (this.x === oldX && this.y === oldY) this.moveStraight(ary[1]);
+        if (this.x === x1 && this.y === y1) this.moveStraight(ary[0]);
+        if (this.x === x1 && this.y === y1) this.moveStraight(ary[1]);
     };
 
     Game_Character.prototype.jumpForward = function() {
@@ -245,7 +246,7 @@
         return Game_CharacterBase.prototype.isMapPassable.call(this, x, y, d);
     };
 
-    
+
     const _Sprite_Character_updateOther = Sprite_Character.prototype.updateOther;
     Sprite_Character.prototype.updateOther = function() {
         _Sprite_Character_updateOther.call(this);
