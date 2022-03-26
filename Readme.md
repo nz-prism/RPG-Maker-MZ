@@ -15,6 +15,7 @@ https://opensource.org/licenses/mit-license.php
 - [動的エンカウント重み変動](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/DynamicEncounterWeight)
 - [枠なし選択肢表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/FramelessChoiceList)
 - [メニューステータスピクチャ表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/MenuStatusPictures)
+- [ミニマップ](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/Minimap)
 - [ノベルゲームUI](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/NovelGameUI)
 - [オプション拡張](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/OptionEx)
 - [ランダムダンジョン](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/RandomDungeon)
