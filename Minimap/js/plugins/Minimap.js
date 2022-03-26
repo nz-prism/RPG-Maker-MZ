@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Draws a mini-map on the map scene.
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
  * ver. 1.0.0
@@ -130,7 +130,7 @@
  * @target MZ
  * @plugindesc マップ画面に小マップを描画します。
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
  * ver. 1.0.0
