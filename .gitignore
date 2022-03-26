@@ -110,3 +110,10 @@
 !/DynamicEncounterWeight/js/plugins/
 /DynamicEncounterWeight/js/plugins/*
 !/DynamicEncounterWeight/js/plugins/DynamicEncounterWeight.js
+/Minimap/*
+!/Minimap/Readme.md
+!/Minimap/js
+/Minimap/js/*
+!/Minimap/js/plugins/
+/Minimap/js/plugins/*
+!/Minimap/js/plugins/Minimap.js
