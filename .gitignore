@@ -117,3 +117,10 @@
 !/Minimap/js/plugins/
 /Minimap/js/plugins/*
 !/Minimap/js/plugins/Minimap.js
+/ShopTradein/*
+!/ShopTradein/Readme.md
+!/ShopTradein/js
+/ShopTradein/js/*
+!/ShopTradein/js/plugins/
+/ShopTradein/js/plugins/*
+!/ShopTradein/js/plugins/ShopTradein.js
