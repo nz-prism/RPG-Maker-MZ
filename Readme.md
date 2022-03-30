@@ -20,3 +20,4 @@ https://opensource.org/licenses/mit-license.php
 - [オプション拡張](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/OptionEx)
 - [ランダムダンジョン](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/RandomDungeon)
 - [ウィンドウ背景スクロール](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ScrollingWindowBack)
+- [ショップ下取り](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ShopTradein)
