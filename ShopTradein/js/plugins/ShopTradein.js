@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Enables to directly equip the purchased equipment items.
  * @author nz_prism
- * @url
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
  * ver. 1.0.0
@@ -96,7 +96,7 @@
  * @target MZ
  * @plugindesc ショップ画面にてその場で直接装備させることを可能にします。
  * @author nz_prism
- * @url
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
  * ver. 1.0.0
