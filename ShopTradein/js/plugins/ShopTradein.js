@@ -9,10 +9,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 03/30/2022 1.0.0 Released
+ * 03/31/2022 1.0.1 Fixed the tradein message X
  * 
  * This plugin enables players to directly equip an actor with the purchased
  * equipment on the shop scene. It also enables to tradein the old equipment.
@@ -99,10 +100,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2022/03/30 1.0.0 リリース
+ * 2022/03/31 1.0.1 下取りメッセージX座標を修正
  * 
  * このプラグインはショップ画面にて、購入した装備品をその場で直接装備したり装備
  * していたアイテムを下取りに出したりすることを可能にします。
@@ -396,31 +398,36 @@
         }
     };
 
-    Window_ShopStatus.prototype.isPartyIndex = function(index) {
-        index = index ?? this.index();
+    Window_ShopStatus.prototype.isPartyIndex = function() {
+        return this.isPartyIndexAt(this.index());
+    };
+
+    Window_ShopStatus.prototype.isPartyIndexAt = function(index) {
         return index === 0;
     };
 
-    Window_ShopStatus.prototype.isActorIndex = function(index) {
-        index = index ?? this.index();
-        return index > 0 && !this.itemAt(index);
+    Window_ShopStatus.prototype.isItemIndex = function() {
+        return this.isItemIndexAt(this.index());
     };
 
-    Window_ShopStatus.prototype.isItemIndex = function(index) {
-        index = index ?? this.index();
+    Window_ShopStatus.prototype.isItemIndexAt = function(index) {
         return index > 0 && !!this.itemAt(index);
+    };
+
+    Window_ShopStatus.prototype.isActorIndexAt = function(index) {
+        return index > 0 && !this.itemAt(index);
     };
 
     const _Window_ShopStatus_prototype_select = Window_ShopStatus.prototype.select;
     Window_ShopStatus.prototype.select = function(index) {
         const decrement = this._index > index;
-        while (this.isActorIndex(index)) index += decrement ? -1 : 1;
+        while (this.isActorIndexAt(index)) index += decrement ? -1 : 1;
         _Window_ShopStatus_prototype_select.call(this, index);
     };
 
     const _Window_ShopStatus_prototype_refreshCursor = Window_ShopStatus.prototype.refreshCursor;
     Window_ShopStatus.prototype.refreshCursor = function() {
-        if (this.isActorIndex(this.index())) {
+        if (this.isActorIndexAt(this.index())) {
             this.setCursorRect(0, 0, 0, 0);
         } else {
             _Window_ShopStatus_prototype_refreshCursor.call(this);
@@ -428,9 +435,9 @@
     };
 
     Window_ShopStatus.prototype.isEnabled = function(index) {
-        if (this.isPartyIndex(index)) {
+        if (this.isPartyIndexAt(index)) {
             return true;
-        } else if (this.isItemIndex(index)) {
+        } else if (this.isItemIndexAt(index)) {
             const actor = this.actorAt(index);
             if (actor) return actor.isEquipChangeOk(this.slotIdAt(index)) && actor.canEquip(this._item);
         }
@@ -448,9 +455,9 @@
         const width = rect.width;
         const actor = this.actorAt(index);
         const item = this.itemAt(index);
-        if (this.isPartyIndex(index)) {
+        if (this.isPartyIndexAt(index)) {
             this.drawPossession(rect.x, rect.y);
-        } else if (item && this.isItemIndex(index)) {
+        } else if (item && this.isItemIndexAt(index)) {
             this.changePaintOpacity(this.isEnabled(index));
             this.changeTextColor(ColorManager.systemColor());
             this.drawText(this.actorSlotName(actor, this.slotIdAt(index)), x, y, width);
@@ -459,7 +466,7 @@
                 this.drawItemName(obj, x + STATUS_ITEM_OFFSET_X, y, width - STATUS_ITEM_OFFSET_X);
                 this.drawActorParamChange(x, y, actor, obj);
             }
-        } else if (actor && this.isActorIndex(index)) {
+        } else if (actor && this.isActorIndexAt(index)) {
             this.changePaintOpacity(true);
             this.changeTextColor(ColorManager.normalColor());
             this.drawText(actor.name(), x, y, width)
@@ -479,7 +486,7 @@
 
     const _Window_ShopStatus_prototype_drawItemBackground = Window_ShopStatus.prototype.drawItemBackground;
     Window_ShopStatus.prototype.drawItemBackground = function(index) {
-        if (!this.isActorIndex(index)) _Window_ShopStatus_prototype_drawItemBackground.call(this, index);
+        if (!this.isActorIndexAt(index)) _Window_ShopStatus_prototype_drawItemBackground.call(this, index);
     };
 
     Window_ShopStatus.prototype.update = function() {
@@ -535,13 +542,14 @@
     Window_ShopTradein.prototype.refresh = function() {
         Window_HorzCommand.prototype.refresh.call(this);
         if (this._item) {
+            const x = this.itemPadding();
             const width = this.innerWidth;
             const lh = this.lineHeight();
             this.resetFontSettings();
             this.changePaintOpacity(true);
-            this.drawText(TRADEIN_QUESTION, 0, 0, width)
-            this.drawItemName(this._item, 0, lh, width);
-            this.drawCurrencyValue(this._price, this.currencyUnit(), 0, lh, width);
+            this.drawText(TRADEIN_QUESTION, x, 0, width)
+            this.drawItemName(this._item, x, lh, width);
+            this.drawCurrencyValue(this._price, this.currencyUnit(), x, lh, width);
         }
     };
 
