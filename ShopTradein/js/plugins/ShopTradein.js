@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.1.0
+ * ver. 1.1.1
  * 
  * [History]
  * 03/30/2022 1.0.0 Released
@@ -18,6 +18,7 @@
  *                  Added a plugin parameter "Tradein Wait Count" to wait
  *                  before the tradein window appears
  *                  Added a sign "±" before 0 for equipment parameter changes
+ * 04/01/2022 1.1.1 Fixed some SE issues
  * 
  * This plugin enables players to directly equip an actor with the purchased
  * equipment on the shop scene. It also enables to tradein the old equipment.
@@ -111,7 +112,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.1.0
+ * ver. 1.1.1
  * 
  * [バージョン履歴]
  * 2022/03/30 1.0.0 リリース
@@ -120,6 +121,7 @@
  *                  下取りウィンドウ表示前にウェイトするフレーム数を指定する新
  *                  プラグインパラメータ「下取りウェイトフレーム数」を追加
  *                  装備パラメータ増減値が0の場合「±」符号を追加
+ * 2022/04/01 1.1.1 SE関連不具合を修正
  * 
  * このプラグインはショップ画面にて、購入した装備品をその場で直接装備したり装備
  * していたアイテムを下取りに出したりすることを可能にします。
@@ -360,7 +362,7 @@
 
     Scene_Shop.prototype.onTradeinCancel = function() {
         const tradeinWindow = this._tradeinWindow;
-        SoundManager.playOk();
+        SoundManager.playCancel();
         tradeinWindow.close();
         tradeinWindow.deactivate();
         this.activateBuyWindow();
@@ -604,6 +606,10 @@
             if (this._waitCount >= TRADEIN_WAIT_COUNT) this.openness += 32;
             if (this.isOpen()) this._opening = false;
         }
+    };
+
+    Window_ShopTradein.prototype.playOkSound = function() {
+        //
     };
     
 })();
