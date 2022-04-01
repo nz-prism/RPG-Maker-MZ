@@ -36,7 +36,7 @@ https://opensource.org/licenses/mit-license.php
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.1.1](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js)
+[1.1.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js)
 
 ### バージョン履歴
 - 2021/07/01 1.0.0 リリース
