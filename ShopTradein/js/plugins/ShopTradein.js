@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.1.1
+ * ver. 1.1.2
  * 
  * [History]
  * 03/30/2022 1.0.0 Released
@@ -19,6 +19,7 @@
  *                  before the tradein window appears
  *                  Added a sign "±" before 0 for equipment parameter changes
  * 04/01/2022 1.1.1 Fixed some SE issues
+ * 04/01/2022 1.1.2 Fixed cursor flickering on actor names
  * 
  * This plugin enables players to directly equip an actor with the purchased
  * equipment on the shop scene. It also enables to tradein the old equipment.
@@ -112,7 +113,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.1.1
+ * ver. 1.1.2
  * 
  * [バージョン履歴]
  * 2022/03/30 1.0.0 リリース
@@ -122,6 +123,7 @@
  *                  プラグインパラメータ「下取りウェイトフレーム数」を追加
  *                  装備パラメータ増減値が0の場合「±」符号を追加
  * 2022/04/01 1.1.1 SE関連不具合を修正
+ * 2022/04/01 1.1.2 アクター名マウスオーバー時のカーソルちらつきを修正
  * 
  * このプラグインはショップ画面にて、購入した装備品をその場で直接装備したり装備
  * していたアイテムを下取りに出したりすることを可能にします。
@@ -445,15 +447,45 @@
         return index > 0 && !!this.itemAt(index);
     };
 
+    Window_ShopStatus.prototype.isActorIndex = function() {
+        return this.isActorIndexAt(this.index());
+    };
+
     Window_ShopStatus.prototype.isActorIndexAt = function(index) {
         return index > 0 && !this.itemAt(index);
     };
 
-    const _Window_ShopStatus_prototype_select = Window_ShopStatus.prototype.select;
-    Window_ShopStatus.prototype.select = function(index) {
+    Window_ShopStatus.prototype.skipActorIndex = function(index) {
         const decrement = this._index > index;
         while (this.isActorIndexAt(index)) index += decrement ? -1 : 1;
-        _Window_ShopStatus_prototype_select.call(this, index);
+        return index;
+    };
+
+    const _Window_ShopStatus_prototype_smoothSelect = Window_ShopStatus.prototype.smoothSelect;
+    Window_ShopStatus.prototype.smoothSelect = function(index) {
+        _Window_ShopStatus_prototype_smoothSelect.call(this, this.skipActorIndex(index));
+    };
+
+    Window_ShopStatus.prototype.cursorPagedown = function() {
+        const index = this.index();
+        const maxItems = this.maxItems();
+        if (this.topRow() + this.maxPageRows() < this.maxRows()) {
+            this.smoothScrollDown(this.maxPageRows());
+            this.select(this.skipActorIndex(Math.min(index + this.maxPageItems(), maxItems - 1)));
+        }
+    };
+    
+    Window_ShopStatus.prototype.cursorPageup = function() {
+        const index = this.index();
+        if (this.topRow() > 0) {
+            this.smoothScrollUp(this.maxPageRows());
+            this.select(this.skipActorIndex(Math.max(index - this.maxPageItems(), 0)));
+        }
+    };
+
+    const _Window_ShopStatus_prototype_playBuzzerSound = Window_ShopStatus.prototype.playBuzzerSound;
+    Window_ShopStatus.prototype.playBuzzerSound = function() {
+        if (!this.isActorIndex()) _Window_ShopStatus_prototype_playBuzzerSound.call(this);
     };
 
     const _Window_ShopStatus_prototype_refreshCursor = Window_ShopStatus.prototype.refreshCursor;
@@ -581,7 +613,7 @@
         Window_HorzCommand.prototype.refresh.call(this);
         if (this._item) {
             const x = this.itemPadding();
-            const width = this.innerWidth;
+            const width = this.innerWidth - x;
             const lh = this.lineHeight();
             this.resetFontSettings();
             this.changePaintOpacity(true);
