@@ -46,7 +46,7 @@ https://opensource.org/licenses/mit-license.php
 ## 概要
 ロンチプラグイン**AltMenuScreen.js**の表示を変更するプラグインです。顔グラフィックを描画する代わりに、立ち絵を描画します。立ち絵はベースプラグイン**ActorPictures.js**にて設定したものが反映されます。
 
-![AltMenuScreen](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js)
+![AltMenuScreen](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ActorPictureOnAltMenuScreen1.png)
 
 ## ライセンス
 このプラグインはMITライセンスにてリリースされています。  
