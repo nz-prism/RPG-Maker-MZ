@@ -9,10 +9,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 03/26/2022 1.0.0 Released
+ * 04/01/2022 1.0.1 Fixed conflicts against other plugins
  * 
  * This plugin shows a mini-map on the map scene. When a player moves, the
  * adjacent area will be drawn on the mini-map.
@@ -133,10 +134,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2022/03/26 1.0.0 リリース
+ * 2022/04/01 1.0.1 他プラグインとの競合回避対策を強化
  * 
  * このプラグインを導入すると、マップ画面に小マップが描画されるようになります。
  * 小マップはプレイヤーが付近を通過するごとに追加描画されます。
@@ -316,7 +318,7 @@
     };
 
     Game_Map.prototype.saveMinimapData = function() {
-        if ($dataMap && $dataMap.meta.saveMinimap) $gameSystem.saveMinimapData(this._mapId, this._minimapData);
+        if ($dataMap?.meta?.saveMinimap) $gameSystem.saveMinimapData(this._mapId, this._minimapData);
     };
 
     Game_Map.prototype.updateInstantMinimap = function() {
