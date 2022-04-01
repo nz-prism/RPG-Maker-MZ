@@ -9,11 +9,15 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.0.1
+ * ver. 1.1.0
  * 
  * [History]
  * 03/30/2022 1.0.0 Released
  * 03/31/2022 1.0.1 Fixed the tradein message X
+ * 04/01/2022 1.1.0 Separated purchase and tradein processes
+ *                  Added a plugin parameter "Tradein Wait Count" to wait
+ *                  before the tradein window appears
+ *                  Added a sign "±" before 0 for equipment parameter changes
  * 
  * This plugin enables players to directly equip an actor with the purchased
  * equipment on the shop scene. It also enables to tradein the old equipment.
@@ -65,6 +69,13 @@
  * @type number
  * @default 480
  * 
+ * @param tradeinWaitCount
+ * @text Tradein Wait Count
+ * @desc The frames to wait before the tradein window appears.
+ * @parent tradeinWindow
+ * @type number
+ * @default 30
+ * 
  * @param tradeinText
  * @text Tradein Text
  * @desc The settings for texts drawn in the tradein window.
@@ -100,11 +111,15 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.0.1
+ * ver. 1.1.0
  * 
  * [バージョン履歴]
  * 2022/03/30 1.0.0 リリース
  * 2022/03/31 1.0.1 下取りメッセージX座標を修正
+ * 2022/04/01 1.1.0 下取り処理と購入処理を分離
+ *                  下取りウィンドウ表示前にウェイトするフレーム数を指定する新
+ *                  プラグインパラメータ「下取りウェイトフレーム数」を追加
+ *                  装備パラメータ増減値が0の場合「±」符号を追加
  * 
  * このプラグインはショップ画面にて、購入した装備品をその場で直接装備したり装備
  * していたアイテムを下取りに出したりすることを可能にします。
@@ -117,8 +132,8 @@
  * れます。下取り価格は通常の売却価格と同様、購入価格の半額です。
  * 
  * ステータスウィンドウ最上部にはMZデフォルトと同様「持っている数」が表示されま
- * すが、これを選択した場合MZデフォルトの購入手順と同様に購入する数量を入力し、
- * 完了するとパーティのアイテムに追加されます。
+ * すが、これを選択した場合MZデフォルトの購入手順と同様に購入する数量の入力画面
+ * が表示され、完了するとパーティのアイテムに追加されます。
  * 
  * 装備品でないアイテムを購入する際の手順はMZデフォルトと全く同様です。
  *
@@ -155,6 +170,13 @@
  * @parent tradeinWindow
  * @type number
  * @default 480
+ * 
+ * @param tradeinWaitCount
+ * @text 下取りウェイトフレーム数
+ * @desc 下取りウィンドウが表示されるまでにウェイトするフレーム数です。
+ * @parent tradeinWindow
+ * @type number
+ * @default 30
  * 
  * @param tradeinText
  * @text 下取りテキスト
@@ -193,6 +215,7 @@
     const STATUS_ITEM_OFFSET_X = Number(pluginParams.statusItemOffsetX);
 
     const TRADEIN_WINDOW_WIDTH = Number(pluginParams.tradeinWindowWidth);
+    const TRADEIN_WAIT_COUNT = Number(pluginParams.tradeinWaitCount);
     const TRADEIN_QUESTION = pluginParams.tradeinQuestion;
     const TRADEIN_OK = pluginParams.tradeinOk;
     const TRADEIN_CANCEL = pluginParams.tradeinCancel;
@@ -263,30 +286,26 @@
             numberWindow.show();
             numberWindow.activate();
         } else if (statusWindow.isItemIndex()) {
-            const tradeinWindow = this._tradeinWindow;
             const tradeinItem = statusWindow.item().object();
             this._tradeinItem = tradeinItem;
+            this.doBuyAndChangeEquip();
             if (tradeinItem) {
-                tradeinWindow.setItem(tradeinItem, this.tradeinPrice());
+                this._helpWindow.setItem(tradeinItem);
+                this._tradeinWindow.setItem(tradeinItem, this.tradeinPrice());
             } else {
-                this.endTradein(false);
+                this.activateBuyWindow();
             }
         }
     };
 
-    Scene_Shop.prototype.endTradein = function(tradein) {
+    Scene_Shop.prototype.doBuyAndChangeEquip = function() {
         const statusWindow = this._statusWindow;
-        const tradeinWindow = this._tradeinWindow;
         SoundManager.playShop();
         this.doBuy(1);
         this.doChangeEquip();
-        if (tradein) this.doTradein();
         this._goldWindow.refresh();
         statusWindow.refresh();
         statusWindow.deselect();
-        tradeinWindow.close();
-        tradeinWindow.deactivate();
-        this.activateBuyWindow();
     };
 
     Scene_Shop.prototype.onStatusCancel = function() {
@@ -330,11 +349,21 @@
     };
 
     Scene_Shop.prototype.onTradeinOk = function() {
-        this.endTradein(true);
+        const tradeinWindow = this._tradeinWindow;
+        SoundManager.playShop();
+        this.doTradein();
+        this._goldWindow.refresh();
+        tradeinWindow.close();
+        tradeinWindow.deactivate();
+        this.activateBuyWindow();
     };
 
     Scene_Shop.prototype.onTradeinCancel = function() {
-        this.endTradein(false);
+        const tradeinWindow = this._tradeinWindow;
+        SoundManager.playOk();
+        tradeinWindow.close();
+        tradeinWindow.deactivate();
+        this.activateBuyWindow();
     };
 
 
@@ -462,15 +491,21 @@
             this.changeTextColor(ColorManager.systemColor());
             this.drawText(this.actorSlotName(actor, this.slotIdAt(index)), x, y, width);
             const obj = item.object();
-            if (obj) {
-                this.drawItemName(obj, x + STATUS_ITEM_OFFSET_X, y, width - STATUS_ITEM_OFFSET_X);
-                this.drawActorParamChange(x, y, actor, obj);
-            }
+            this.drawItemName(obj, x + STATUS_ITEM_OFFSET_X, y, width - STATUS_ITEM_OFFSET_X);
+            this.drawActorParamChange(x, y, actor, obj);
         } else if (actor && this.isActorIndexAt(index)) {
             this.changePaintOpacity(true);
             this.changeTextColor(ColorManager.normalColor());
             this.drawText(actor.name(), x, y, width)
         }
+    };
+
+    Window_ShopStatus.prototype.drawActorParamChange = function(x, y, actor, item1) {
+        const width = this.innerWidth - this.itemPadding() - x;
+        const paramId = this.paramId();
+        const change = this._item.params[paramId] - (item1 ? item1.params[paramId] : 0);
+        this.changeTextColor(ColorManager.paramchangeTextColor(change));
+        this.drawText((change === 0 ? "±" : (change > 0 ? "+" : "")) + change, x, y, width, "right");
     };
     
     Window_ShopStatus.prototype.refresh = function() {
@@ -504,6 +539,7 @@
     Window_ShopTradein.prototype.initialize = function(rect) {
         Window_Command.prototype.initialize.call(this, rect);
         this._isWindow = false;
+        this._waitCount = 0;
         this.hide();
         this.close();
     };
@@ -555,6 +591,19 @@
 
     Window_ShopTradein.prototype.currencyUnit = function() {
         return TextManager.currencyUnit;
+    };
+
+    Window_ShopTradein.prototype.open = function() {
+        Window_HorzCommand.prototype.open.call(this);
+        this._waitCount = 0;
+    };
+
+    Window_ShopTradein.prototype.updateOpen = function() {
+        if (this._opening) {
+            this._waitCount += 1;
+            if (this._waitCount >= TRADEIN_WAIT_COUNT) this.openness += 32;
+            if (this.isOpen()) this._opening = false;
+        }
     };
     
 })();
