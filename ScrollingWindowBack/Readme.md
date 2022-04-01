@@ -1,5 +1,12 @@
 # ウィンドウ背景スクロール(ScrollingWindowBack)
 
+## バージョン
+### 最新バージョン（ダウンロード）
+[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ScrollingWindowBack/js/plugins/ScrollingWindowBack.js)
+
+### バージョン履歴
+- 2021/09/09 1.0.0 リリース
+
 ## 概要
 ウィンドウの背景をスクロールさせるプラグインです。  
 **Window.png**の左下部分がスクロールするようになります。  

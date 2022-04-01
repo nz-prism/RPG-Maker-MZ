@@ -1,5 +1,20 @@
 # アクター立ち絵管理(ActorPictures)
 
+## バージョン
+### 最新バージョン（ダウンロード）
+[1.3.4](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/ActorPictures.js)
+
+### バージョン履歴
+- 2021/06/20 1.0.0 リリース
+- 2021/06/23 1.1.0 ステート立ち絵優先度の修正およびプリロード機能を変更
+- 2021/07/01 1.1.1 drawActorPicture関数の引数を追加
+- 2021/07/02 1.2.0 立ち絵のズレを調整するためのプラグインパラメータを追加
+- 2021/07/05 1.3.0 立ち絵のアニメーション設定を追加
+- 2021/07/06 1.3.1 本体バージョン1.3.2のサブフォルダ機能改善に対応
+- 2021/07/10 1.3.2 PictureMessage.js用に関数を追加
+- 2022/02/14 1.3.3 自動プリロードのデフォルト値をtrueに変更
+- 2022/03/19 1.3.4 英語版にてPicture Animation Settingsのデフォルト値が反映されていなかった問題を修正
+
 ## 概要
 アクターごとに立ち絵を設定できるようにするプラグインです。標準の立ち絵のほか、ダメージ差分やステート差分も設定できます。また、標準・ダメージ・ステートそれぞれに複数の立ち絵を設定でき、表情や衣装差分に利用できます。
 
@@ -19,10 +34,19 @@ https://opensource.org/licenses/mit-license.php
 
 # AltMenuScreen立ち絵表示(ActorPictureOnAltMenuScreen)
 
+## バージョン
+### 最新バージョン（ダウンロード）
+[1.1.1](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js)
+
+### バージョン履歴
+- 2021/07/01 1.0.0 リリース
+- 2021/07/02 1.1.0 ActorPictures.jsに合わせて更新
+- 2021/09/01 1.1.1 MenuStatusPictures.jsとの競合に対処
+
 ## 概要
 ロンチプラグイン**AltMenuScreen.js**の表示を変更するプラグインです。顔グラフィックを描画する代わりに、立ち絵を描画します。立ち絵はベースプラグイン**ActorPictures.js**にて設定したものが反映されます。
 
-![AltMenuScreen](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ActorPictureOnAltMenuScreen1.png)
+![AltMenuScreen](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js)
 
 ## ライセンス
 このプラグインはMITライセンスにてリリースされています。  
@@ -36,6 +60,21 @@ https://opensource.org/licenses/mit-license.php
 ***
 
 # 会話時自動立ち絵表示(PictureMessage)
+
+## バージョン
+### 最新バージョン（ダウンロード）
+[1.3.4](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/PictureMessage.js)
+
+### バージョン履歴
+- 2021/07/03 1.0.0 リリース
+- 2021/07/05 1.1.0 アニメーションへの対応、位置ごとの反転設定の追加
+- 2021/07/06 1.1.1 イージングの方向が立ち絵反転設定を反映していなかった不具合を修正
+- 2021/07/10 1.2.0 多数のプラグインコマンドを追加、立ち絵状態をセーブ可能に
+- 2021/07/12 1.3.0 戦闘中コマンド入力時立ち絵表示機能を追加
+- 2021/07/13 1.3.1 タイムプログレスバトル時の立ち絵表示の不具合を修正
+- 2021/12/28 1.3.2 フキダシアイコンの位置がおかしかったのを修正
+- 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
+- 2022/03/22 1.3.4 微バグを修正
 
 ## 概要
 メッセージの名前枠に専用制御文字を入力するだけで、自動的にアクターの立ち絵を表示するプラグインです。マップ・戦闘どちらのイベントにも対応しています。立ち絵は上記**ActorPictures.js**にて設定したものが反映されます。

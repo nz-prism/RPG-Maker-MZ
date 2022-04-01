@@ -1,5 +1,12 @@
 # クリックアニメーション(ClickAnimation)
 
+## バージョン
+### 最新バージョン（ダウンロード）
+[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ClickAnimation/js/plugins/ClickAnimation.js)
+
+### バージョン履歴
+- 2022/03/12 1.0.0 リリース
+
 ## 概要
 このプラグインはウィンドウやボタンのうち、クリック可能なものをクリックした際にアニメーションを再生する機能を提供します。
 

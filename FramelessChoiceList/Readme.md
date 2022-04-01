@@ -1,5 +1,13 @@
 # 枠なし選択肢表示(FramelessChoiceList)
 
+## バージョン
+### 最新バージョン（ダウンロード）
+[1.1.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js)
+
+### バージョン履歴
+- 2021/06/26 1.0.0 リリース
+- 2021/06/26 1.1.0 プラグインパラメータ「Y座標オフセット」を追加
+
 ## 概要
 選択肢ウィンドウの枠をなくし、グラデーション付き黒背景に変更するプラグインです。  
 選択肢の行頭には画像を表示することができ、選択されている時とされていない時とで異なる画像を設定可能です。
