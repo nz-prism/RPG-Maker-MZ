@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.1.2
+ * ver. 1.1.3
  * 
  * [History]
  * 03/30/2022 1.0.0 Released
@@ -20,6 +20,7 @@
  *                  Added a sign "±" before 0 for equipment parameter changes
  * 04/01/2022 1.1.1 Fixed some SE issues
  * 04/01/2022 1.1.2 Fixed cursor flickering on actor names
+ * 04/02/2022 1.1.3 Fixed a cursor selecting issue as to dual wield actors
  * 
  * This plugin enables players to directly equip an actor with the purchased
  * equipment on the shop scene. It also enables to tradein the old equipment.
@@ -113,7 +114,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ShopTradein/js/plugins/ShopTradein.js
  *
  * @help ShopTradein.js
- * ver. 1.1.2
+ * ver. 1.1.3
  * 
  * [バージョン履歴]
  * 2022/03/30 1.0.0 リリース
@@ -124,6 +125,7 @@
  *                  装備パラメータ増減値が0の場合「±」符号を追加
  * 2022/04/01 1.1.1 SE関連不具合を修正
  * 2022/04/01 1.1.2 アクター名マウスオーバー時のカーソルちらつきを修正
+ * 2022/04/02 1.1.3 二刀流アクターが存在する場合のカーソル選択バグを修正
  * 
  * このプラグインはショップ画面にて、購入した装備品をその場で直接装備したり装備
  * していたアイテムを下取りに出したりすることを可能にします。
@@ -455,31 +457,69 @@
         return index > 0 && !this.itemAt(index);
     };
 
-    Window_ShopStatus.prototype.skipActorIndex = function(index) {
-        const decrement = this._index > index;
-        while (this.isActorIndexAt(index)) index += decrement ? -1 : 1;
+    Window_ShopStatus.prototype.skipActorIndex = function(index, wrap) {
+        const oldIndex = this._index;
+        const max = this.maxItems() - 1;
+        let decrement = (oldIndex === 0 && index === max) || (oldIndex > index);
+        while (this.isActorIndexAt(index)) {
+            index += decrement ? -1 : 1;
+            if (index > max) {
+                if (wrap) {
+                    return 0;
+                } else {
+                    decrement = true;
+                }
+            } else if (index < 0) {
+                if (wrap) {
+                    index = max;
+                } else {
+                    return 0;
+                }
+            } else if (index === oldIndex) {
+                return oldIndex;
+            }
+        }
         return index;
     };
 
-    const _Window_ShopStatus_prototype_smoothSelect = Window_ShopStatus.prototype.smoothSelect;
-    Window_ShopStatus.prototype.smoothSelect = function(index) {
-        _Window_ShopStatus_prototype_smoothSelect.call(this, this.skipActorIndex(index));
+    Window_ShopStatus.prototype.cursorDown = function(wrap) {
+        const index = this.index();
+        const maxItems = this.maxItems();
+        const maxCols = this.maxCols();
+        if (index < maxItems - maxCols || (wrap && maxCols === 1)) {
+            this.smoothSelect(this.skipActorIndex((index + maxCols) % maxItems, wrap));
+        }
+    };
+    
+    Window_ShopStatus.prototype.cursorUp = function(wrap) {
+        const index = Math.max(0, this.index());
+        const maxItems = this.maxItems();
+        const maxCols = this.maxCols();
+        if (index >= maxCols || (wrap && maxCols === 1)) {
+            this.smoothSelect(this.skipActorIndex((index - maxCols + maxItems) % maxItems, wrap));
+        }
     };
 
     Window_ShopStatus.prototype.cursorPagedown = function() {
         const index = this.index();
         const maxItems = this.maxItems();
         if (this.topRow() + this.maxPageRows() < this.maxRows()) {
-            this.smoothScrollDown(this.maxPageRows());
-            this.select(this.skipActorIndex(Math.min(index + this.maxPageItems(), maxItems - 1)));
+            const newIndex = this.skipActorIndex(Math.min(index + this.maxPageItems(), maxItems - 1), false);
+            if (newIndex !== index) {
+                this.smoothScrollDown(this.maxPageRows());
+                this.select(newIndex);
+            }
         }
     };
     
     Window_ShopStatus.prototype.cursorPageup = function() {
         const index = this.index();
         if (this.topRow() > 0) {
-            this.smoothScrollUp(this.maxPageRows());
-            this.select(this.skipActorIndex(Math.max(index - this.maxPageItems(), 0)));
+            const newIndex = this.skipActorIndex(Math.max(index - this.maxPageItems(), 0), false);
+            if (newIndex !== index) {
+                this.smoothScrollUp(this.maxPageRows());
+                this.select(newIndex);
+            }
         }
     };
 
