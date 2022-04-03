@@ -1,5 +1,5 @@
 //=============================================================================
-// RPG Maker MZ - 
+// RPG Maker MZ - Minimap
 //=============================================================================
 
 /*:
@@ -9,11 +9,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [History]
  * 03/26/2022 1.0.0 Released
  * 04/01/2022 1.0.1 Fixed conflicts against other plugins
+ * 04/03/2022 1.0.2 Fixed an error at the end of a battle test
  * 
  * This plugin shows a mini-map on the map scene. When a player moves, the
  * adjacent area will be drawn on the mini-map.
@@ -134,11 +135,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [バージョン履歴]
  * 2022/03/26 1.0.0 リリース
  * 2022/04/01 1.0.1 他プラグインとの競合回避対策を強化
+ * 2022/04/03 1.0.2 戦闘テスト終了時のエラーを修正
  * 
  * このプラグインを導入すると、マップ画面に小マップが描画されるようになります。
  * 小マップはプレイヤーが付近を通過するごとに追加描画されます。
@@ -280,7 +282,7 @@
     const _BattleManager_processVictory = BattleManager.processVictory;
     BattleManager.processVictory = function() {
         _BattleManager_processVictory.call(this);
-        $gameMap.updateInstantMinimap();
+        if (!DataManager.isBattleTest()) $gameMap.updateInstantMinimap();
     };
 
 
@@ -322,7 +324,7 @@
     };
 
     Game_Map.prototype.updateInstantMinimap = function() {
-        if ($dataMap.meta.instantMinimap || (INSTNT_MINIMAP_FOR_CITY && !this.hasAnyEncounter())) this.seeEntire();
+        if ($dataMap?.meta?.instantMinimap || (INSTNT_MINIMAP_FOR_CITY && !this.hasAnyEncounter())) this.seeEntire();
     };
 
     Game_Map.prototype.hasAnyEncounter = function() {
