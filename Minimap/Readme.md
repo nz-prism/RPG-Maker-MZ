@@ -2,11 +2,12 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/Minimap/js/plugins/Minimap.js)
+[1.0.2](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/Minimap/js/plugins/Minimap.js)
 
 ### バージョン履歴
 - 2022/03/26 1.0.0 リリース
 - 2022/04/01 1.0.1 他プラグインとの競合回避対策を強化
+- 2022/04/03 1.0.2 戦闘テスト終了時のエラーを修正
 
 ## 概要
 このプラグインはマップ画面に小マップを描画します。
