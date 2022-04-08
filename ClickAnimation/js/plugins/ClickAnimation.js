@@ -11,10 +11,11 @@
  * @orderAfter OptionEx
  *
  * @help ClickAnimation.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 03/12/2022 1.0.0 Released
+ * 04/08/2022 1.0.1 Fixed a no animation issue for battler sprites
  * 
  * This plugin provides a functionality to play an animation when players click
  * clickable objects, such as windows or buttons.
@@ -63,21 +64,22 @@
  * @orderAfter OptionEx
  *
  * @help ClickAnimation.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2022/03/12 1.0.0 リリース
+ * 2022/04/08 1.0.1 バトラーにアニメが表示されない不具合を修正
  * 
- * このプラグインはウィンドウやボタンのうち、クリック可能なものをクリックした際に
- * アニメーションを再生する機能を提供します。
+ * このプラグインはウィンドウやボタンのうち、クリック可能なものをクリックした際
+ * にアニメーションを再生する機能を提供します。
  * 
  * アニメ再生機能はマップ・戦闘・メニューなどあらゆるシーンにて有効です。
- * なおボタン類はクリックやタップだけでなく、対応する物理ボタン押下時にもアニメが
- * 再生されます。
+ * なおボタン類はクリックやタップだけでなく、対応する物理ボタン押下時にもアニメ
+ * が再生されます。
  * 
- * 本プラグインを導入すると画像の透明部分をクリックしても反応しなくなります。これ
- * により敵画像を重ねて表示する場合に、余白部分が重なってしまっているせいで意図せ
- * ぬ対象を選択してしまうことを防ぐことなどが可能になります。
+ * 本プラグインを導入すると画像の透明部分をクリックしても反応しなくなります。こ
+ * れにより敵画像を重ねて表示する場合に、余白部分が重なってしまっているせいで意
+ * 図せぬ対象を選択してしまうことを防ぐことなどが可能になります。
  *
  * 
  * このプラグインはMITライセンスにてリリースされています。
@@ -218,6 +220,13 @@
     };
 
 
+    const _Sprite_Battler_prototype_onClick = Sprite_Battler.prototype.onClick;
+    Sprite_Battler.prototype.onClick = function() {
+        Sprite_Clickable.prototype.onClick.call(this);
+        _Sprite_Battler_prototype_onClick.call(this);
+    };
+
+
     Sprite_Actor.prototype.isPointedValidPixel = function(x, y) {
         return this.getBitmapAlphaPixel(this._mainSprite.bitmap, x, y) > 0;
     };
@@ -355,7 +364,7 @@
     
     const _Spriteset_Base_prototype_removeAnimation = Spriteset_Base.prototype.removeAnimation;
     Spriteset_Base.prototype.removeAnimation = function(sprite) {
-        if (sprite.targetObjects[0] instanceof Sprite) {
+        if (sprite.isClickAnimation()) {
             this._animationSprites.remove(sprite);
             const parent = this.parent;
             if (parent) parent.removeAnimationSprite(sprite);

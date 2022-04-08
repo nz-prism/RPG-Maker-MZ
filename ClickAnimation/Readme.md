@@ -2,10 +2,11 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ClickAnimation/js/plugins/ClickAnimation.js)
+[1.0.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ClickAnimation/js/plugins/ClickAnimation.js)
 
 ### バージョン履歴
 - 2022/03/12 1.0.0 リリース
+- 2022/04/08 1.0.1 バトラーにアニメが表示されない不具合を修正
 
 ## 概要
 このプラグインはウィンドウやボタンのうち、クリック可能なものをクリックした際にアニメーションを再生する機能を提供します。
