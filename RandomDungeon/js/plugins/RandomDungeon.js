@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.0
+ * ver. 1.1.1
  * 
  * [History]
  * 05/01/2021 1.0.0 Released
@@ -18,6 +18,7 @@
  * 01/25/2022 1.0.3 Fixed an issue that unique events weren't chosen correctly
  * 03/21/2022 1.1.0 Added a functionality to embed a variable value in the map
  *                  display names.
+ * 04/15/2022 1.1.1 Fixed a rare error
  * 
  * This plugin enables to generate a random map when a player
  * moves to a map with "random" attribute.
@@ -155,7 +156,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.0
+ * ver. 1.1.1
  * 
  * [バージョン履歴]
  * 2021/05/01 1.0.0 リリース
@@ -164,6 +165,7 @@
  * 2022/01/25 1.0.3 uniqueイベントが適切に抽選されない問題を修正
  * 2022/03/21 1.1.0 マップ表示名にプラグインパラメータで指定した変数の値を埋め
  *                  込む機能を追加
+ * 2022/04/15 1.1.1 稀に発生するエラーを修正
  * 
  * このプラグインを導入すると、ランダム属性を持つマップに移動した際に
  * ダンジョンが自動生成されるようになります。
@@ -519,7 +521,8 @@
                 }
                 if (choices.length === 0) break;
                 if (count < size && choices.length > 1) {
-                    choices = choices.filter(map => DataManager.mapRoutes(map).length > 1)
+                    const filteredChoices = choices.filter(map => DataManager.mapRoutes(map).length > 1);
+                    if (filteredChoices.length > 0) choices = filteredChoices;
                 }
                 const pieceMap = choices[Math.floor(Math.random() * choices.length)];
                 bigMap[kx + ky * size] = pieceMap;

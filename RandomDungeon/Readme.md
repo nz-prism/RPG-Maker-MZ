@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.1.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/RandomDungeon/js/plugins/RandomDungeon.js)
+[1.1.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/RandomDungeon/js/plugins/RandomDungeon.js)
 
 ### バージョン履歴
 - 2021/05/01 1.0.0 リリース
@@ -10,6 +10,7 @@
 - 2021/12/15 1.0.2 タイルイベントの不具合を修正
 - 2022/01/25 1.0.3 uniqueイベントが適切に抽選されない問題を修正
 - 2022/03/21 1.1.0 マップ表示名にプラグインパラメータで指定した変数の値を埋め込む機能を追加
+- 2022/04/15 1.1.1 稀に発生するエラーを修正
 
 ## 概要
 あらかじめ用意したマップの部品をランダムに組み合わせて、ダンジョンを自動生成するプラグインです。
