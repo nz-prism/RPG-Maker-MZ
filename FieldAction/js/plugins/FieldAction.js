@@ -470,4 +470,19 @@
         }
     };
 
+    Scene_Map.prototype.updateSkillWindows = function() {
+        if (Input.isTriggered("control")) {
+            this._statusWindow.close();
+            this._skillTypeWindow.close();
+            this._itemWindow.close();
+            this._helpWindow.close();
+        }
+    };
+
+    const _Scene_Map_prototype_update = Scene_Map.prototype.update;
+    Scene_Map.prototype.update = function() {
+        this.updateSkillWindows();
+        _Scene_Map_prototype_update.call(this);
+    };
+
 })();
