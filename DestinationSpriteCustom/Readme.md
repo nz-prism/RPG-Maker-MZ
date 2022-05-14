@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ClickAnimation/js/plugins/DestinationSpriteCustom.js)
+[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/DestinationSpriteCustom/js/plugins/DestinationSpriteCustom.js)
 
 ### バージョン履歴
 - 2022/05/14 1.0.0 リリース
