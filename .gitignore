@@ -124,3 +124,10 @@
 !/ShopTradein/js/plugins/
 /ShopTradein/js/plugins/*
 !/ShopTradein/js/plugins/ShopTradein.js
+/DestinationSpriteCustom/*
+!/DestinationSpriteCustom/Readme.md
+!/DestinationSpriteCustom/js
+/DestinationSpriteCustom/js/*
+!/DestinationSpriteCustom/js/plugins/
+/DestinationSpriteCustom/js/plugins/*
+!/DestinationSpriteCustom/js/plugins/DestinationSpriteCustom.js
