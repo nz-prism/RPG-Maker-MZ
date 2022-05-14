@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc 
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/DestinationSpriteCustom/js/plugins/DestinationSpriteCustom.js
  *
  * @help DestinationSpriteCustom.js
  * ver. 1.0.0
@@ -148,7 +148,7 @@
  * @target MZ
  * @plugindesc マップクリック時の点滅をカスタマイズします。
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/DestinationSpriteCustom/js/plugins/DestinationSpriteCustom.js
  *
  * @help DestinationSpriteCustom.js
  * ver. 1.0.0
