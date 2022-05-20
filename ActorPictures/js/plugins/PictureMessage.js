@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.4
+ * ver 1.4.0
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -22,6 +22,7 @@
  * 12/28/2021 1.3.2 Fixed the balloon icon position
  * 02/14/2022 1.3.3 Changed the default balloon icon position
  * 03/22/2022 1.3.4 Fixed a minor issue
+ * 05/20/2022 1.4.0 Added a plugin parameter to specify easing directions
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -192,6 +193,44 @@
  * @type number
  * @default 30
  * @min 1
+ * 
+ * @param easingDirections
+ * @parent easing
+ * @text Easing Direction
+ * @desc The direction for easing.
+ * 
+ * @param easingDirectionLeft
+ * @parent easingDirections
+ * @text Left Picture Easing Direction
+ * @desc The direction for the left picture to appear. When disappearing, it will be opposite.
+ * @default 1
+ * @type select
+ * @option Left to Right
+ * @value 1
+ * @option Right to Left
+ * @value -1
+ * 
+ * @param easingDirectionCenter
+ * @parent easingDirections
+ * @text Center Picture Easing Direction
+ * @desc The direction for the center picture to appear. When disappearing, it will be opposite.
+ * @default -1
+ * @type select
+ * @option Left to Right
+ * @value 1
+ * @option Right to Left
+ * @value -1
+ * 
+ * @param easingDirectionRight
+ * @parent easingDirections
+ * @text Right Picture Easing Direction
+ * @desc The direction for the right picture to appear. When disappearing, it will be opposite.
+ * @default -1
+ * @type select
+ * @option Left to Right
+ * @value 1
+ * @option Right to Left
+ * @value -1
  * 
  * @param deactiveToneSettings
  * @text Deactive Tone Settings
@@ -677,18 +716,20 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.3.4
+ * ver 1.4.0
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
  * 2021/07/05 1.1.0 アニメーションへの対応、位置ごとの反転設定の追加
- * 2021/07/06 1.1.1 イージングの方向が立ち絵反転設定を反映していなかった不具合を修正
+ * 2021/07/06 1.1.1 イージングの方向が立ち絵反転設定を反映していなかった不具合
+ *                  を修正
  * 2021/07/10 1.2.0 多数のプラグインコマンドを追加、立ち絵状態をセーブ可能に
  * 2021/07/12 1.3.0 戦闘中コマンド入力時立ち絵表示機能を追加
  * 2021/07/13 1.3.1 タイムプログレスバトル時の立ち絵表示の不具合を修正
  * 2021/12/28 1.3.2 フキダシアイコンの位置がおかしかったのを修正
  * 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
  * 2022/03/22 1.3.4 微バグを修正
+ * 2022/05/20 1.4.0 イージング方向を指定するためのプラグインパラメータを追加
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -857,6 +898,44 @@
  * @type number
  * @default 30
  * @min 1
+ * 
+ * @param easingDirections
+ * @parent easing
+ * @text イージング方向
+ * @desc イージングの方向です。
+ * 
+ * @param easingDirectionLeft
+ * @parent easingDirections
+ * @text 左立ち絵イージング方向
+ * @desc 左立ち絵の出現時イージングの方向です。退場時は反対になります。
+ * @default 1
+ * @type select
+ * @option 左から右
+ * @value 1
+ * @option 右から左
+ * @value -1
+ * 
+ * @param easingDirectionCenter
+ * @parent easingDirections
+ * @text 中央立ち絵イージング方向
+ * @desc 中央立ち絵の出現時イージングの方向です。退場時は反対になります。
+ * @default -1
+ * @type select
+ * @option 左から右
+ * @value 1
+ * @option 右から左
+ * @value -1
+ * 
+ * @param easingDirectionRight
+ * @parent easingDirections
+ * @text 右立ち絵イージング方向
+ * @desc 右立ち絵の出現時イージングの方向です。退場時は反対になります。
+ * @default -1
+ * @type select
+ * @option 左から右
+ * @value 1
+ * @option 右から左
+ * @value -1
  * 
  * @param deactiveToneSettings
  * @text 非アクティブ話者色調設定
@@ -1363,6 +1442,11 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
 
     const EASING_OFFSET = Number(pluginParams.easingOffset);
     const EASING_FRAMES = Number(pluginParams.easingFrames);
+    const EASING_DIRECTIONS = [
+        Number(pluginParams.easingDirectionLeft),
+        Number(pluginParams.easingDirectionCenter),
+        Number(pluginParams.easingDirectionRight)
+    ];
 
     const DEACTIVE_TONE = Object.values(JSON.parse(pluginParams.deactiveTone)).map(s => Number(s));
     const DEACTIVE_FRAMES = Number(pluginParams.deactiveFrames);
@@ -1808,7 +1892,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     };
     
     Game_MessagePicture.prototype.easingOffsetX = function() {
-        return this._scaleX < 0 ? this._x - EASING_OFFSET : this._x + EASING_OFFSET;
+        return this._x - EASING_DIRECTIONS[this._position] * EASING_OFFSET;
     };
     
     Game_MessagePicture.prototype.easingOffsetY = function() {
