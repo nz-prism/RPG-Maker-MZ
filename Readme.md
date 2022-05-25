@@ -12,6 +12,7 @@ https://opensource.org/licenses/mit-license.php
 - [トロッコ搭乗](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/CartRide)
 - [クリックアニメーション](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ClickAnimation)
 - [ボタンピクチャカーソル表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/CursorApplicationToButtonPicture)
+- [目的地点滅カスタマイズ](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/DestinationSpriteCustom)
 - [動的エンカウント重み変動](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/DynamicEncounterWeight)
 - [枠なし選択肢表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/FramelessChoiceList)
 - [メニューステータスピクチャ表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/MenuStatusPictures)
