@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc It's a plugin template.
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/PluginLive/js/plugins/PluginLive.js
  *
  * @help PluginLive.js
  * ver. 1.0.0
@@ -48,7 +48,7 @@
  * @target MZ
  * @plugindesc プラグインのテンプレートです。
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/PluginLive/js/plugins/PluginLive.js
  *
  * @help PluginLive.js
  * ver. 1.0.0
