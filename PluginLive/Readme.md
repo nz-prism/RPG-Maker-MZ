@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/DynamicEncounterWeight/js/plugins/PluginLive.js)
+[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/PluginLive/js/plugins/PluginLive.js)
 
 ### バージョン履歴
 - 2022/06/11 1.0.0 リリース
