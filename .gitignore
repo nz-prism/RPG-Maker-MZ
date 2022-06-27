@@ -131,10 +131,10 @@
 !/DestinationSpriteCustom/js/plugins/
 /DestinationSpriteCustom/js/plugins/*
 !/DestinationSpriteCustom/js/plugins/DestinationSpriteCustom.js
-/PluginLive/*
-!/PluginLive/Readme.md
-!/PluginLive/js
-/PluginLive/js/*
-!/PluginLive/js/plugins/
-/PluginLive/js/plugins/*
-!/PluginLive/js/plugins/PluginLive.js
+/SaveSlotBackgroundPictures/*
+!/SaveSlotBackgroundPictures/Readme.md
+!/SaveSlotBackgroundPictures/js
+/SaveSlotBackgroundPictures/js/*
+!/SaveSlotBackgroundPictures/js/plugins/
+/SaveSlotBackgroundPictures/js/plugins/*
+!/SaveSlotBackgroundPictures/js/plugins/SaveSlotBackgroundPictures.js
