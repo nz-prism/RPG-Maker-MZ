@@ -59,6 +59,12 @@
  * @desc ストーリーの進行度に応じて表示されるピクチャです（複数設定可）。
  * @type struct<picture>[]
  * 
+ * @param drawPartyCharacters
+ * @text パーティキャラクター描画
+ * @desc オフにするとパーティキャラクターが描画されなくなります。
+ * @type boolean
+ * @default true
+ * 
  */
 
 /*~struct~picture:ja
@@ -66,6 +72,7 @@
  * @param variableValue
  * @text 進行度変数値
  * @desc 進行度を表す変数の値です。
+ * @default 1
  * @type number
  * @min 0
  * 
@@ -83,6 +90,8 @@
     const pluginParams = PluginManager.parameters(PLUGIN_NAME);
 
     const PROGRESS_VARIABLE_ID = pluginParams.progressVariableId;
+
+    const DRAW_PARTY_CHARACTERS = pluginParams.drawPartyCharacters === "true";
 
     const PROGRESS_PICTURE_NAMES = [];
     for (const str of JSON.parse(pluginParams.progressPictures)) {
@@ -112,6 +121,11 @@
         const info = DataManager.savefileInfo(savefileId);
         const pictureName = PROGRESS_PICTURE_NAMES[info?.progressValue ?? 0];
         return ImageManager.loadPicture(pictureName);
+    };
+
+    const _Window_SavefileList_prototype_drawPartyCharacters = Window_SavefileList.prototype.drawPartyCharacters;
+    Window_SavefileList.prototype.drawPartyCharacters = function(info, x, y) {
+        if (DRAW_PARTY_CHARACTERS) _Window_SavefileList_prototype_drawPartyCharacters.apply(this, arguments);
     };
 
 })();
