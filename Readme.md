@@ -20,5 +20,6 @@ https://opensource.org/licenses/mit-license.php
 - [ノベルゲームUI](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/NovelGameUI)
 - [オプション拡張](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/OptionEx)
 - [ランダムダンジョン](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/RandomDungeon)
+- [セーブスロットカスタム](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/SaveSlotCustom)
 - [ウィンドウ背景スクロール](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ScrollingWindowBack)
 - [ショップ下取り](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/ShopTradein)
