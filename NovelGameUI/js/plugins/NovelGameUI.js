@@ -11,7 +11,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.1.1
+ * ver. 1.2.0
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
@@ -19,6 +19,9 @@
  * 03/12/2022 1.0.2 Fixed minor issues and supported ClickAnimation.js
  * 03/16/2022 1.1.0 Added Hide UI functionality.
  * 03/22/2022 1.1.1 Fixed conflicts against other plugins.
+ * 08/20/2022 1.2.0 Added functionalities to limit the number of logs and to
+ *                  add logs manually. Fixed an issue when Scrolling Text is
+ *                  shown.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -83,20 +86,29 @@
  * setting the plugin parameter "Add Log Command", the log scene can be invoked
  * from the menu, which enables players to see the log even after events finish
  * running. Since the stored texts are to be saved, they can be seen even after
- * loading. Delete logs by using the plugin command "Delete Logs", for the logs
- * are not autmatically deleted. Even though logs can be stored unlimitedly,
- * periodical delete is recommended to save save files' volume.
+ * loading. If the number of the stored logs exceeds the value of the plugin
+ * parameter "Max Storable Logs", the oldest one will be deleted. if the value
+ * is set 0 (it defaults 0), no logs are automatically deleted. In this case,
+ * delete logs by using the plugin command "Delete Logs". Even though logs can
+ * be stored unlimitedly, periodical delete is recommended to save save files'
+ * volume.
  * 
  * By using the plugin command "Disable Logging", texts will not be stored
  * thereafter. By using the plugin command "Enable Logging", it restores the
  * default behavior and texts will be stored again.
  * 
  * You can control whether the text being shown will be appear on the log scene
- * by setting the plugin parameter "Exclude Text Being Shown".
+ * by setting the plugin parameter "Exclude Text Being Shown". Note if this
+ * value is true and the log scene is invoked during a message event, the
+ * number of logs to be displayed will be the value of "Max Storable Logs" - 1.
  * 
  * If no logs are stored, the log scene can't be invoked and a buzzer SE will
  * be played. The log command on the menu is also disabled. Note if "Exclude
  * Text Being Shown" is true, this will happen when the first message is shown.
+ * 
+ * You can add logs manually without displaying event messages by using the
+ * plugin command "Add Logs". This command is useful when you display messages
+ * as a picture without any message events.
  * 
  * 
  * 5. Skip
@@ -477,6 +489,14 @@
  * @parent log
  * @type boolean
  * @default true
+ * 
+ * @param maxStorableLogs
+ * @text Max Storable Logs
+ * @desc If the number of the stored logs exceeds this value, the oldest one will be deleted. If set 0, no logs are deleted.
+ * @parent log
+ * @type number
+ * @default 0
+ * @min 0
  * 
  * @param logSpeakerNameHeader
  * @text Speaker Name Header String
@@ -887,6 +907,20 @@
  * @text Delete Logs
  * @desc Deletes all the stored logs.
  * 
+ * @command addBackLogs
+ * @text Add Logs
+ * @desc Adds specified texts as a log.
+ * 
+ * @arg logSpeaker
+ * @text Log Speaker
+ * @desc The speaker of this log. If not necessary, set it blank.
+ * @type text
+ * 
+ * @arg logTexts
+ * @text Log Texts
+ * @desc The texts to be logged. Control characters can be used. Multiple lines can be set.
+ * @type text[]
+ * 
  */
 
 /*:ja
@@ -898,7 +932,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.1.1
+ * ver. 1.2.0
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
@@ -906,6 +940,8 @@
  * 2022/03/12 1.0.2 微バグの修正およびClickAnimation.jsに対応
  * 2022/03/16 1.1.0 UI非表示機能を追加
  * 2022/03/22 1.1.1 他のプラグインとの競合対策を強化
+ * 2022/08/20 1.2.0 ログ保存上限と手動ログ追加機能を追加
+ *                  文章スクロール表示時のバグ修正
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -972,22 +1008,31 @@
  * ラメータ「ログコマンドの追加」をオンにすることでバックログ画面をメニューか
  * ら呼び出すためのコマンドを追加することが可能です。これにより、イベントが終
  * 了してもログを閲覧できます。保存された文章はセーブ対象ですので、ロードすれ
- * ば再度表示できます。ログが自動的に消去されることはありませんので、プラグイ
- * ンコマンド「ログの消去」を適切なタイミングで実行して消去してください。保存
- * できるログの量に制限はありませんが、あまりにも溜まりすぎるとセーブデータ容
- * 量が肥大化します。
+ * ば再度表示できます。保存したメッセージの数がプラグインパラメータ「ログ保存
+ * 上限数」に設定した値を超えた場合、古いものが自動的に消去されます。なおこの
+ * パラメータを0に設定した場合（デフォルトは0です）、ログが自動的に消去される
+ * ことはなくなります。その場合、プラグインコマンド「ログの消去」を適切なタイ
+ * ミングで実行して手動で消去してください。保存できるログの量に制限はありま
+ * せんが、あまりにも溜まりすぎるとセーブデータ容量が肥大化します。
  * 
  * プラグインコマンド「ログ保存の無効化」を使用すると、以降のイベントにてログ
  * が保存されなくなります。プラグインコマンド「ログ保存の有効化」を使用するこ
  * とで元に戻り、ログが再び保存されるようになります。
  * 
  * いま表示されているメッセージもログに含めるかどうかは、プラグインパラメータ
- * 「表示中メッセージをログから除外」によって設定できます。
+ * 「表示中メッセージをログから除外」によって設定できます。このパラメータが
+ * オンに設定されていてメッセージ表示中にログを呼び出した場合、表示されるログ
+ * の数は「ログ保存上限数」に設定している値 - 1になるという点にご注意くださ
+ * い。
  * 
  * ログが一つも保存されていない状態では、ログボタンを押してもログ画面が開かれ
  * ず、ブザー音が演奏されます。また、メニューのバックログコマンドもグレーアウ
  * トされます。「表示中メッセージをログから除外」がオンの場合、初回メッセージ
  * 表示中はこのような状態になるという点にご注意ください。
+ * 
+ * プラグインコマンド「ログの追加」を使用すると、イベントによりメッセージを表
+ * 示しなくても任意のテキストをログに追加することができます。ピクチャ扱いで表
+ * 示したメッセージをログに含めたい場合等にご使用ください。
  * 
  * 
  * 5. スキップ
@@ -1374,6 +1419,14 @@
  * @parent log
  * @type boolean
  * @default true
+ * 
+ * @param maxStorableLogs
+ * @text ログ保存上限
+ * @desc 保存しているログの数がこの値を超えると、古いログが消去されます。0にすると保存制限がなくなります。
+ * @parent log
+ * @type number
+ * @default 0
+ * @min 0
  * 
  * @param logSpeakerNameHeader
  * @text メッセージ話者名先頭付加文字列
@@ -1785,6 +1838,20 @@
  * @text ログの消去
  * @desc 保存されているすべてのログを消去します。
  * 
+ * @command addBackLogs
+ * @text ログの追加
+ * @desc 任意のテキストをログに追加します。
+ * 
+ * @arg logSpeaker
+ * @text ログ話者
+ * @desc このログの話者の名前です。不要の場合空欄にしてください。
+ * @type text
+ * 
+ * @arg logTexts
+ * @text ログテキスト
+ * @desc 保存したいログ本文です。制御文字が使用可能です。改行する場合、テキストを追加してください。
+ * @type text[]
+ * 
  */
 
 
@@ -1823,6 +1890,7 @@
     const USE_LOG = pluginParams.useLog === "true";
     const LOG_KEY = pluginParams.logKey;
     const EXCLUDE_CURRENT_MESSAGE = pluginParams.excludeCurrentMessage === "true";
+    const MAX_STORABLE_LOGS = Number(pluginParams.maxStorableLogs);
     const LOG_SPEAKER_NAME_HEADER = pluginParams.logSpeakerNameHeader;
     const LOG_MESSAGE_PADS = Number(pluginParams.logMessagePads);
     const ADD_LOG_COMMAND = pluginParams.addLogCommand === "true";
@@ -1889,6 +1957,17 @@
 
     PluginManager.registerCommand(PLUGIN_NAME, "clearBackLogs", args => {
         $gameSystem.clearBackLogs();
+    });
+
+    PluginManager.registerCommand(PLUGIN_NAME, "addBackLogs", args => {
+        const speakerName = args.logSpeaker;
+        const texts = JSON.parse(args.logTexts);
+        const logFooter = LOG_FOOTER.format($gameSystem.mainFontSize());
+        const logs = [];
+        if (speakerName) logs.push(LOG_SPEAKER_NAME_HEADER + speakerName + logFooter);
+        texts.forEach(text => logs.push(speakerName ? text.padStart(text.length + LOG_MESSAGE_PADS) : text));
+        logs.push(logFooter);
+        $gameSystem.addBackLogs(logs);
     });
 
 
@@ -2114,7 +2193,12 @@
     };
 
     Game_System.prototype.addBackLogs = function(texts) {
-        this._backLogs.push(texts);
+        const logs = this._backLogs;
+        logs.push(texts);
+        const length = logs.length;
+        this._backLogs = logs.slice(
+            (MAX_STORABLE_LOGS > length || MAX_STORABLE_LOGS === 0) ? 0 : (length - MAX_STORABLE_LOGS)
+        );
     };
 
     Game_System.prototype.backLogs = function(excludeLast=false) {
@@ -2497,7 +2581,11 @@
         _Scene_Map_prototype_updateMainMultiply.call(this);
         if ($gameTemp.isQuitMessageRequested()) {
             $gameTemp.clearQuitMessageRequest();
-            this._messageWindow.quitMessage();
+            if ($gameMessage.scrollMode()) {
+                this._scrollTextWindow.terminateMessage();
+            } else {
+                this._messageWindow.quitMessage();
+            }
         }
         if ($gameTemp.isOptionsSceneRequested()) {
             $gameTemp.clearOptionsSceneRequest();
