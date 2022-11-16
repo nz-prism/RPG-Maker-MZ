@@ -11,7 +11,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.2.0
+ * ver. 1.3.0
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
@@ -22,6 +22,9 @@
  * 08/20/2022 1.2.0 Added functionalities to limit the number of logs and to
  *                  add logs manually. Fixed an issue when Scrolling Text is
  *                  shown.
+ * 11/16/2022 1.3.0 Added Game End functionality.
+ *                  Added functionalities to switch the visibility of pictures
+ *                  when the UI is hidden.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -29,7 +32,7 @@
  * It requires OptionEx.js ver. 1.2.2 or later. Insert this plugin under
  * OptionEx.
  * 
- * It provides 7 functionalities;
+ * It provides 8 functionalities;
  * 
  * 1. Options
  * 2. Save
@@ -38,6 +41,7 @@
  * 5. Skip
  * 6. Auto
  * 7. Hide UI
+ * 8. Game End
  * 
  * You can select which functionality to use for the game. For example, you
  * can set it up to use only Log.
@@ -47,11 +51,11 @@
  * the button, the corresponding functionality will be invoked. Also, you can
  * assign keys of a keyboard and buttons of a gamepad to the functionalities
  * to be used to invoke them by pressing.
- * If this plugin is enabled, players can use LT/RT/Menu buttons (as in XBox
- * controller) of a gamepad, which are basically disabled by MZ default. LT
- * button is used as tab key, RT as control key and Menu as alt key. Therefore,
- * you can assign the functionalities to the 7 buttons; X, Y, LB, RB, LT, RT,
- * and Menu by using the plugin parameters.
+ * If this plugin is enabled, players can use LT/RT/Menu/View buttons (as in
+ *  XBox controller) of a gamepad, which are basically disabled by MZ default.
+ * LT button is used as tab key, RT as control key, Menu as alt key and View as
+ * F6 key. Therefore, you can assign the functionalities to the 8 buttons; X,
+ * Y, LB, RB, LT, RT, Menu and View by using the plugin parameters.
  * Note when a message window is shown, players can usually proceed the message
  * by pressing either OK or Cancel button. However, if this plugin is enabled,
  * only OK button can be used for it. Thank you for your understanding!
@@ -195,7 +199,18 @@
  * If this functionality is invoked, the UI components, such as windows or
  * control buttons, will be invisible and the message stops. If players
  * left/right-click or press OK/Cancel button, the UI components will be shown
- * and the message continues again.
+ * and the message continues again. By setting picture IDs to the plugin
+ * parameter "Shown Picture IDs", the pictures will usually be invisible but
+ * visible only when the UI is hidden. Use it to show watermarks on a picture.
+ * By setting picture IDs to the plugin parameter "Hidden Picture IDs", the
+ * pictures will usually visible but invisible only when the UI is hidden. Use
+ * it to hide UI components which are created by using the picture commands.
+ * 
+ * 
+ * 8. Game End
+ * Adds a button to immediately return to the title scene. Even though players
+ * can also return by pressing F5 key, this functionality enables to show
+ * confirmation choices.
  * 
  * 
  * This plugin is released under MIT license.
@@ -221,7 +236,7 @@
  * 
  * @param optionsKey
  * @text Options Key
- * @desc a key of a keyboard and a button of a gamepad assigned to Options.
+ * @desc A key of a keyboard and a button of a gamepad assigned to Options.
  * @parent options
  * @default menu
  * @type select
@@ -239,6 +254,8 @@
  * @value control
  * @option alt key/Menu button
  * @value alt
+ * @option F6 key/View button
+ * @value function
  * 
  * @param optionsButtonImages
  * @text Button Images
@@ -302,7 +319,7 @@
  * 
  * @param saveKey
  * @text Save Key
- * @desc a key of a keyboard and a button of a gamepad assigned to Save.
+ * @desc A key of a keyboard and a button of a gamepad assigned to Save.
  * @parent save
  * @default control
  * @type select
@@ -320,6 +337,8 @@
  * @value control
  * @option alt key/Menu button
  * @value alt
+ * @option F6 key/View button
+ * @value function
  * 
  * @param saveButtonImages
  * @text Button Images
@@ -383,7 +402,7 @@
  * 
  * @param loadKey
  * @text Load Key
- * @desc a key of a keyboard and a button of a gamepad assigned to Load.
+ * @desc A key of a keyboard and a button of a gamepad assigned to Load.
  * @parent load
  * @default tab
  * @type select
@@ -401,6 +420,8 @@
  * @value control
  * @option alt key/Menu button
  * @value alt
+ * @option F6 key/View button
+ * @value function
  * 
  * @param loadButtonImages
  * @text Button Images
@@ -464,7 +485,7 @@
  * 
  * @param logKey
  * @text Log Key
- * @desc a key of a keyboard and a button of a gamepad assigned to Log.
+ * @desc A key of a keyboard and a button of a gamepad assigned to Log.
  * @parent log
  * @default pageup
  * @type select
@@ -482,6 +503,8 @@
  * @value control
  * @option alt key/Menu button
  * @value alt
+ * @option F6 key/View button
+ * @value function
  * 
  * @param excludeCurrentMessage
  * @text Exclude Text Being Shown
@@ -589,7 +612,7 @@
  * 
  * @param skipKey
  * @text Skip Key
- * @desc a key of a keyboard and a button of a gamepad assigned to Skip.
+ * @desc A key of a keyboard and a button of a gamepad assigned to Skip.
  * @parent skip
  * @default pagedown
  * @type select
@@ -607,6 +630,8 @@
  * @value control
  * @option alt key/Menu button
  * @value alt
+ * @option F6 key/View button
+ * @value function
  * 
  * @param makeMasterInfo
  * @text Make Master Save File
@@ -717,7 +742,7 @@
  * 
  * @param autoKey
  * @text Auto Key
- * @desc a key of a keyboard and a button of a gamepad assigned to Auto.
+ * @desc A key of a keyboard and a button of a gamepad assigned to Auto.
  * @parent auto
  * @default shift
  * @type select
@@ -735,6 +760,8 @@
  * @value control
  * @option alt key/Menu button
  * @value alt
+ * @option F6 key/View button
+ * @value function
  * 
  * @param autoPauseFrames
  * @text Pause Frames
@@ -819,7 +846,7 @@
  * 
  * @param hideUiKey
  * @text Hide UI Key
- * @desc a key of a keyboard and a button of a gamepad assigned to Hide UI.
+ * @desc A key of a keyboard and a button of a gamepad assigned to Hide UI.
  * @parent hideUi
  * @default alt
  * @type select
@@ -837,6 +864,27 @@
  * @value control
  * @option alt key/Menu button
  * @value alt
+ * @option F6 key/View button
+ * @value function
+ * 
+ * @param hideUiPictures
+ * @text Pictures
+ * @desc The settngs to switch the visibility of pictures when the UI is hidden.
+ * @parent hideUi
+ * 
+ * @param hideUiVisiblePictureIds
+ * @text Shown Picture IDs
+ * @desc The picture IDs which are usually hidden but shown only when the UI is hidden.
+ * @parent hideUiPictures
+ * @type number[]
+ * @min 1
+ * 
+ * @param hideUiInvisiblePictureIds
+ * @text Hidden Picture IDs
+ * @desc The picture IDs which are usually shown but hidden only when the UI is hidden.
+ * @parent hideUiPictures
+ * @type number[]
+ * @min 1
  * 
  * @param hideUiButtonImages
  * @text Button Images
@@ -863,14 +911,14 @@
  * @parent hideUi
  * 
  * @param hideUiButtonX
- * @text Option Button X
+ * @text Hide UI Button X
  * @desc The X coordinate for Hide UI Button.
  * @parent hideUiButtonCoordinates
  * @type number
  * @default 172
  * 
  * @param hideUiButtonY
- * @text Option Button Y
+ * @text Hide UI Button Y
  * @desc The Y coordinate for Hide UI Button.
  * @parent hideUiButtonCoordinates
  * @type number
@@ -880,6 +928,89 @@
  * @text Hide UI Button Origin
  * @desc The origin for Hide UI button.
  * @parent hideUiButtonCoordinates
+ * @default 0.5
+ * @type select
+ * @option Upper Left
+ * @value 0
+ * @option Center
+ * @value 0.5
+ * 
+ * @param gameEnd
+ * @text Game End
+ * @desc The settings for Game End functionality.
+ * 
+ * @param useGameEnd
+ * @text Use Game End
+ * @desc If true, Game End functionality can be used.
+ * @parent gameEnd
+ * @type boolean
+ * @default true
+ * 
+ * @param gameEndKey
+ * @text Game End Key
+ * @desc A key of a keyboard and a button of a gamepad assigned to Game End.
+ * @parent gameEnd
+ * @default function
+ * @type select
+ * @option shift key/X button
+ * @value shift
+ * @option X key/Y button
+ * @value menu
+ * @option pageup key/LB button
+ * @value pageup
+ * @option pagedown key/RB button
+ * @value pagedown
+ * @option tab key/LT button
+ * @value tab
+ * @option control key/RT button
+ * @value control
+ * @option alt key/Menu button
+ * @value alt
+ * @option F6 key/View button
+ * @value function
+ * 
+ * @param gameEndButtonImages
+ * @text Button Images
+ * @desc The image settings for Game End button.
+ * @parent gameEnd
+ * 
+ * @param gameEndButtonUnselectedImageName
+ * @text Game End Button Unselected Image
+ * @desc The image for unselected Game End button.
+ * @parent gameEndButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param gameEndButtonSelectedImageName
+ * @text Game End Button Selected Image
+ * @desc The image for selected Game End button.
+ * @parent gameEndButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param gameEndButtonCoordinates
+ * @text Button Coordinates
+ * @desc The coordinate settings for Game End button.
+ * @parent gameEnd
+ * 
+ * @param gameEndButtonX
+ * @text Game End Button X
+ * @desc The X coordinate for Game End Button.
+ * @parent gameEndButtonCoordinates
+ * @type number
+ * @default 240
+ * 
+ * @param gameEndButtonY
+ * @text Game End Button Y
+ * @desc The Y coordinate for Game End Button.
+ * @parent gameEndButtonCoordinates
+ * @type number
+ * @default 400
+ * 
+ * @param gameEndButtonOrigin
+ * @text Game End Button Origin
+ * @desc The origin for Game End button.
+ * @parent gameEndButtonCoordinates
  * @default 0.5
  * @type select
  * @option Upper Left
@@ -932,7 +1063,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.2.0
+ * ver. 1.3.0
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
@@ -942,6 +1073,9 @@
  * 2022/03/22 1.1.1 他のプラグインとの競合対策を強化
  * 2022/08/20 1.2.0 ログ保存上限と手動ログ追加機能を追加
  *                  文章スクロール表示時のバグ修正
+ * 2022/11/16 1.3.0 ゲーム終了機能を追加
+ *                  UI非表示時にピクチャを表示させる機能および非表示にする機能
+ *                  を追加
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -949,7 +1083,7 @@
  * 本プラグインは「オプション拡張（OptionEx.js）」プラグインのバージョン1.2.2
  * （以降）の導入が前提となります。OptionExよりも後に配置してください。
  * 
- * 以下の７種類の機能が利用できます。
+ * 以下の８種類の機能が利用できます。
  * 
  * 1. オプション
  * 2. セーブ
@@ -958,6 +1092,7 @@
  * 5. スキップ
  * 6. オート
  * 7. UI非表示
+ * 8. ゲーム終了
  * 
  * 上記機能はいずれも使用するかどうかを個別に選択できます。例えばログ機能だけを
  * 使用する、といったことも可能です。
@@ -968,14 +1103,15 @@
  * す。また、各機能にはキーボードやゲームパッドのキーを割り当てることが可能であ
  * り、それらを押下することでも対応機能を実行できます。
  * なお本プラグインを導入すると、MZデフォルトでは何も機能が割り当てられていない
- * ボタンであるゲームパッドのLT・RT・メニューボタン（XBoxコントローラーにおけ
- * る名称）にそれぞれ機能が割り当てられます。LTボタンにはtabキーが、RTボタンに
- * はcontrolキーが、メニューボタンにはaltキーが割り当てられます。それらを含め
- * X・Y・LB・RB・LT・RT・メニューの7つのボタンにそれぞれ割り当てることが可能で
- * す。実際のキー割り当てにはプラグインパラメータを使用します。
- * MZデフォルトではメッセージ表示時、決定ボタンだけでなくキャンセルボタンで
- * もメッセージ送りができますが、本プラグインを導入するとキャンセルボタンでは
- * メッセージ送りができなくなります。あらかじめご了承ください。
+ * ボタンであるゲームパッドのLT・RT・メニュー・ビューボタン（XBoxコントローラー
+ * における名称）にそれぞれ機能が割り当てられます。LTボタンにはtabキーが、RTボ
+ * タンにはcontrolキーが、メニューボタンにはaltキーが、ビューボタンにはF6キー
+ * が割り当てられます。それらを含めX・Y・LB・RB・LT・RT・メニュー・ビューの8つ
+ * のボタンにそれぞれ割り当てることが可能です。実際のキー割り当てにはプラグイン
+ * パラメータを使用します。MZデフォルトではメッセージ表示時、決定ボタンだけでな
+ * くキャンセルボタンでもメッセージ送りができますが、本プラグインを導入すると
+ * キャンセルボタンではメッセージ送りができなくなります。あらかじめご了承くださ
+ * い。
  * 
  * プラグインコマンド「制御ボタンの無効化」を使用すると、上記ボタンがすべて表示
  * されなくなります。対応するキー/ボタンを押下してもその機能は実行されません。
@@ -1125,7 +1261,19 @@
  * 7. UI非表示
  * ウィンドウや制御ボタンといったUI要素が非表示になり、メッセージは一時停止しま
  * す。タップや左/右クリック、決定ボタンやキャンセルボタンの押下により元に戻り
- * ます。
+ * ます。プラグインパラメータ「表示ピクチャ番号」にピクチャ番号を設定する（複数
+ * 設定可能）と、その番号のピクチャは通常時表示されなくなりますがUI非表示時にの
+ * み表示されるようになります。スチル上に転載禁止などの文言や透かしなどを表示さ
+ * せたい場合等に使用してください。プラグインパラメータ「非表示ピクチャ番号」に
+ * ピクチャ番号を設定する（複数設定可能）と、その番号のピクチャは通常時表示され
+ * ますがUI非表示時にのみ非表示になります。UI部品等をピクチャで表示していて、そ
+ * れらも同時に非表示にしたい場合等に使用してください。
+ * 
+ * 
+ * 8. ゲーム終了
+ * 即座にタイトルに戻ることができるボタンが追加されます。MZデフォルトでもF5キー
+ * を押すことで同様のことが可能ですが、こちらは確認メッセージが表示されるという
+ * 点が異なります。
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
@@ -1169,6 +1317,8 @@
  * @value control
  * @option altキー/メニューボタン
  * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
  * 
  * @param optionsButtonImages
  * @text ボタン画像
@@ -1250,6 +1400,8 @@
  * @value control
  * @option altキー/メニューボタン
  * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
  * 
  * @param saveButtonImages
  * @text ボタン画像
@@ -1331,6 +1483,8 @@
  * @value control
  * @option altキー/メニューボタン
  * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
  * 
  * @param loadButtonImages
  * @text ボタン画像
@@ -1412,6 +1566,8 @@
  * @value control
  * @option altキー/メニューボタン
  * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
  * 
  * @param excludeCurrentMessage
  * @text 表示中メッセージをログから除外
@@ -1537,6 +1693,8 @@
  * @value control
  * @option altキー/メニューボタン
  * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
  * 
  * @param makeMasterInfo
  * @text マスターセーブファイルの作成
@@ -1665,6 +1823,8 @@
  * @value control
  * @option altキー/メニューボタン
  * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
  * 
  * @param autoPauseFrames
  * @text ポーズフレーム数
@@ -1767,6 +1927,27 @@
  * @value control
  * @option altキー/メニューボタン
  * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
+ * 
+ * @param hideUiPictures
+ * @text ピクチャ
+ * @desc UI非表示時に表示状態を切り替えるピクチャに関する設定です。
+ * @parent hideUi
+ * 
+ * @param hideUiVisiblePictureIds
+ * @text 表示ピクチャ番号
+ * @desc 通常は非表示だがUI非表示時にのみ表示するピクチャ番号です（複数設定可）。
+ * @parent hideUiPictures
+ * @type number[]
+ * @min 1
+ * 
+ * @param hideUiInvisiblePictureIds
+ * @text 非表示ピクチャ番号
+ * @desc 通常は表示されているがUI非表示時にのみ非表示にするピクチャ番号です（複数設定可）。
+ * @parent hideUiPictures
+ * @type number[]
+ * @min 1
  * 
  * @param hideUiButtonImages
  * @text ボタン画像
@@ -1817,6 +1998,88 @@
  * @option 中央
  * @value 0.5
  * 
+ * @param gameEnd
+ * @text ゲーム終了
+ * @desc ゲーム終了に関する設定です。
+ * 
+ * @param useGameEnd
+ * @text ゲーム終了有効化
+ * @desc オンにするとゲーム終了が使用可能になります。
+ * @parent gameEnd
+ * @type boolean
+ * @default true
+ * 
+ * @param gameEndKey
+ * @text ゲーム終了キー
+ * @desc ゲーム終了に割り当てるキーボード/ゲームパッドのキー/ボタンです。
+ * @parent gameEnd
+ * @default function
+ * @type select
+ * @option shiftキー/Xボタン
+ * @value shift
+ * @option Xキー/Yボタン
+ * @value menu
+ * @option pageupキー/LBボタン
+ * @value pageup
+ * @option pagedownキー/RBボタン
+ * @value pagedown
+ * @option tabキー/LTボタン
+ * @value tab
+ * @option controlキー/RTボタン
+ * @value control
+ * @option altキー/メニューボタン
+ * @value alt
+ * @option F6キー/ビューボタン
+ * @value function
+ * 
+ * @param gameEndButtonImages
+ * @text ボタン画像
+ * @desc ゲーム終了ボタンの画像に関する設定です。
+ * @parent gameEnd
+ * 
+ * @param gameEndButtonUnselectedImageName
+ * @text ゲーム終了ボタン未選択画像
+ * @desc 未選択状態のゲーム終了ボタンの画像です。
+ * @parent gameEndButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param gameEndButtonSelectedImageName
+ * @text ゲーム終了ボタン選択画像
+ * @desc 選択状態のゲーム終了ボタンの画像です。
+ * @parent gameEndButtonImages
+ * @type file
+ * @dir img/system
+ * 
+ * @param gameEndButtonCoordinates
+ * @text ボタン座標
+ * @desc ゲーム終了ボタンの座標に関する設定です。
+ * @parent gameEnd
+ * 
+ * @param gameEndButtonX
+ * @text ゲーム終了ボタンX座標
+ * @desc ゲーム終了ボタンのX座標です。
+ * @parent gameEndButtonCoordinates
+ * @type number
+ * @default 240
+ * 
+ * @param gameEndButtonY
+ * @text ゲーム終了ボタンY座標
+ * @desc ゲーム終了ボタンのY座標です。
+ * @parent gameEndButtonCoordinates
+ * @type number
+ * @default 400
+ * 
+ * @param gameEndButtonOrigin
+ * @text ゲーム終了ボタン原点
+ * @desc ゲーム終了ボタンの原点です。
+ * @parent gameEndButtonCoordinates
+ * @default 0.5
+ * @type select
+ * @option 左上
+ * @value 0
+ * @option 中央
+ * @value 0.5
  * 
  * @command enableControlButtons
  * @text 制御ボタンの有効化
@@ -1930,11 +2193,21 @@
 
     const USE_HIDE_UI = pluginParams.useHideUi === "true";
     const HIDE_UI_KEY = pluginParams.hideUiKey;
+    const HIDE_UI_VISIBLE_PICTURE_IDS = JSON.parse(pluginParams.hideUiVisiblePictureIds).map(str => Number(str));
+    const HIDE_UI_INVISIBLE_PICTURE_IDS = JSON.parse(pluginParams.hideUiInvisiblePictureIds).map(str => Number(str));
     const HIDE_UI_BUTTON_UNSELECTED_IMAGE_NAME = pluginParams.hideUiButtonUnselectedImageName;
     const HIDE_UI_BUTTON_SELECTED_IMAGE_NAME = pluginParams.hideUiButtonSelectedImageName;
     const HIDE_UI_BUTTON_X = Number(pluginParams.hideUiButtonX);
     const HIDE_UI_BUTTON_Y = Number(pluginParams.hideUiButtonY);
     const HIDE_UI_BUTTON_ORIGIN = Number(pluginParams.hideUiButtonOrigin);
+
+    const USE_GAME_END = pluginParams.useGameEnd === "true";
+    const GAME_END_KEY = pluginParams.gameEndKey;
+    const GAME_END_BUTTON_UNSELECTED_IMAGE_NAME = pluginParams.gameEndButtonUnselectedImageName;
+    const GAME_END_BUTTON_SELECTED_IMAGE_NAME = pluginParams.gameEndButtonSelectedImageName;
+    const GAME_END_BUTTON_X = Number(pluginParams.gameEndButtonX);
+    const GAME_END_BUTTON_Y = Number(pluginParams.gameEndButtonY);
+    const GAME_END_BUTTON_ORIGIN = Number(pluginParams.gameEndButtonOrigin);
 
     const LOG_FOOTER = "\\C[0]\\FS[%1]";
 
@@ -2034,11 +2307,14 @@
     };
 
     Input.keyMapper[18] = "alt";
+    Input.keyMapper[117] = "function";
     Input.defaultGamepadMapper[6] = "tab";
     Input.defaultGamepadMapper[7] = "control";
+    Input.defaultGamepadMapper[8] = "function";
     Input.defaultGamepadMapper[9] = "alt";
     Input.switchedGamepadMapper[6] = "tab";
     Input.switchedGamepadMapper[7] = "control";
+    Input.switchedGamepadMapper[8] = "function";
     Input.switchedGamepadMapper[9] = "alt";
 
 
@@ -2107,6 +2383,18 @@
 
     Game_Temp.prototype.clearLogSceneRequest = function() {
         this._logSceneRequested = false;
+    };
+
+    Game_Temp.prototype.requestGameEndScene = function() {
+        this._gameEndSceneRequested = true;
+    };
+
+    Game_Temp.prototype.isGameEndSceneRequested = function() {
+        return this._gameEndSceneRequested;
+    };
+
+    Game_Temp.prototype.clearGameEndSceneRequest = function() {
+        this._gameEndSceneRequested = false;
     };
 
     Game_Temp.prototype.requestToggleAuto = function() {
@@ -2216,6 +2504,42 @@
     };
 
 
+    Game_Screen.prototype.applyPictureVisibility = function() {
+        if ($gameMessage.isHideUiMode()) {
+            HIDE_UI_VISIBLE_PICTURE_IDS.forEach(pictureId => this.picture(pictureId).appear());
+            HIDE_UI_INVISIBLE_PICTURE_IDS.forEach(pictureId => this.picture(pictureId).hide());
+        } else {
+            HIDE_UI_VISIBLE_PICTURE_IDS.forEach(pictureId => this.picture(pictureId).hide());
+            HIDE_UI_INVISIBLE_PICTURE_IDS.forEach(pictureId => this.picture(pictureId).appear());
+        }
+    };
+
+    const _Game_Screen_prototype_showPicture = Game_Screen.prototype.showPicture;
+    Game_Screen.prototype.showPicture = function(pictureId, name, origin, x, y, scaleX, scaleY, opacity, blendMode) {
+        _Game_Screen_prototype_showPicture.apply(this, arguments);
+        if (HIDE_UI_VISIBLE_PICTURE_IDS.includes(pictureId)) this._pictures[this.realPictureId(pictureId)].hide();
+    };
+
+
+    const _Game_Picture_prototype_initBasic = Game_Picture.prototype.initBasic;
+    Game_Picture.prototype.initBasic = function() {
+        _Game_Picture_prototype_initBasic.call(this);
+        this._visible = true;
+    };
+
+    Game_Picture.prototype.visible = function() {
+        return this._visible;
+    };
+
+    Game_Picture.prototype.appear = function() {
+        this._visible = true;
+    };
+
+    Game_Picture.prototype.hide = function() {
+        this._visible = false;
+    };
+
+
     const _Game_Message_prototype_initialize = Game_Message.prototype.initialize;
     Game_Message.prototype.initialize = function() {
         _Game_Message_prototype_initialize.call(this);
@@ -2233,6 +2557,7 @@
 
     Game_Message.prototype.toggleHideUiMode = function() {
         this._hideUiMode = !this._hideUiMode;
+        $gameScreen.applyPictureVisibility();
     };
 
     Game_Message.prototype.isHideUiMode = function() {
@@ -2318,6 +2643,12 @@
         }
         if (USE_HIDE_UI && Input.isTriggered(HIDE_UI_KEY)) {
             $gameTemp.requestToggleHideUi();
+            SoundManager.playOk();
+            return true;
+        }
+        if (USE_GAME_END && Input.isTriggered(GAME_END_KEY) && this.jumpBackToMessageTop()) {
+            $gameTemp.requestQuitMessage();
+            $gameTemp.requestGameEndScene();
             SoundManager.playOk();
             return true;
         }
@@ -2437,6 +2768,10 @@
             ImageManager.loadSystem(HIDE_UI_BUTTON_UNSELECTED_IMAGE_NAME);
             ImageManager.loadSystem(HIDE_UI_BUTTON_SELECTED_IMAGE_NAME);
         }
+        if (USE_GAME_END) {
+            ImageManager.loadSystem(GAME_END_BUTTON_UNSELECTED_IMAGE_NAME);
+            ImageManager.loadSystem(GAME_END_BUTTON_SELECTED_IMAGE_NAME);
+        }
     };
 
     const _Scene_Boot_prototype_loadPlayerData = Scene_Boot.prototype.loadPlayerData;
@@ -2468,6 +2803,7 @@
         if (USE_SKIP) buttons.push(this.createSkipButton());
         if (USE_AUTO) buttons.push(this.createAutoButton());
         if (USE_HIDE_UI) buttons.push(this.createHideUiButton());
+        if (USE_GAME_END) buttons.push(this.createGameEndButton());
         this._messageWindow.setControlButtons(buttons);
     };
 
@@ -2548,6 +2884,17 @@
         return button;
     };
 
+    Scene_Map.prototype.createGameEndButton = function() {
+        const button = new Sprite_ControlButton(GAME_END_KEY);
+        button.x = GAME_END_BUTTON_X;
+        button.y = GAME_END_BUTTON_Y;
+        button.anchor.x = GAME_END_BUTTON_ORIGIN;
+        button.anchor.y = GAME_END_BUTTON_ORIGIN;
+        button.visible = false;
+        this.addWindow(button);
+        return button;
+    };
+
     const _Scene_Map_prototype_update = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
         this.updateInput();
@@ -2605,6 +2952,9 @@
         } else if ($gameTemp.isToggleHideUiRequested()) {
             $gameTemp.clearToggleHideUiRequest();
             $gameMessage.toggleHideUiMode();
+        } else if ($gameTemp.isGameEndSceneRequested()) {
+            $gameTemp.clearGameEndSceneRequest();
+            SceneManager.push(Scene_GameEnd);
         }
     };
 
@@ -2612,6 +2962,13 @@
     const _Scene_Options_prototype_maxCommands = Scene_Options.prototype.maxCommands;
     Scene_Options.prototype.maxCommands = function() {
         return _Scene_Options_prototype_maxCommands.call(this) + (USE_SKIP && USE_LIMIT_SKIP ? 1 : 0);
+    };
+
+
+    const _Sprite_Picture_prototype_updateOther = Sprite_Picture.prototype.updateOther;
+    Sprite_Picture.prototype.updateOther = function() {
+        _Sprite_Picture_prototype_updateOther.call(this);
+        this.visible = this.picture().visible();
     };
     
 
@@ -2779,6 +3136,8 @@
                 }
             case HIDE_UI_KEY:
                 return this._hovered ? HIDE_UI_BUTTON_SELECTED_IMAGE_NAME : HIDE_UI_BUTTON_UNSELECTED_IMAGE_NAME;
+            case GAME_END_KEY:
+                return this._hovered ? GAME_END_BUTTON_SELECTED_IMAGE_NAME : GAME_END_BUTTON_UNSELECTED_IMAGE_NAME;
         }
     };
 
