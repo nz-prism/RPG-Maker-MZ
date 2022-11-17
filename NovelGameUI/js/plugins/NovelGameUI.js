@@ -11,7 +11,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.3.0
+ * ver. 1.3.1
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
@@ -25,6 +25,7 @@
  * 11/16/2022 1.3.0 Added Game End functionality.
  *                  Added functionalities to switch the visibility of pictures
  *                  when the UI is hidden.
+ * 11/17/2022 1.3.1 Added default values for the new plugin parameters.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -200,17 +201,18 @@
  * control buttons, will be invisible and the message stops. If players
  * left/right-click or press OK/Cancel button, the UI components will be shown
  * and the message continues again. By setting picture IDs to the plugin
- * parameter "Shown Picture IDs", the pictures will usually be invisible but
- * visible only when the UI is hidden. Use it to show watermarks on a picture.
- * By setting picture IDs to the plugin parameter "Hidden Picture IDs", the
- * pictures will usually visible but invisible only when the UI is hidden. Use
- * it to hide UI components which are created by using the picture commands.
+ * parameter "Picture IDs to be Shown", the pictures will usually be invisible
+ * but visible only when the UI is hidden. Use it to show watermarks on a
+ * picture. By setting picture IDs to the plugin parameter "Picture IDs to be
+ * Hidden", the pictures will usually visible but invisible only when the UI is
+ * hidden. Use it to hide UI components which are created by using the picture
+ * commands.
  * 
  * 
  * 8. Game End
- * Adds a button to immediately return to the title scene. Even though players
- * can also return by pressing F5 key, this functionality enables to show
- * confirmation choices.
+ * If this functionality is invoked, a dialog to return to the title will be
+ * called. Unlike pressing F5, which immediately makes it return, this
+ * functionality enables players to cancel returning.
  * 
  * 
  * This plugin is released under MIT license.
@@ -873,18 +875,20 @@
  * @parent hideUi
  * 
  * @param hideUiVisiblePictureIds
- * @text Shown Picture IDs
- * @desc The picture IDs which are usually hidden but shown only when the UI is hidden.
+ * @text Picture IDs to be Shown
+ * @desc The picture IDs which are usually hidden but will be shown only when the UI is hidden.
  * @parent hideUiPictures
  * @type number[]
  * @min 1
+ * @default []
  * 
  * @param hideUiInvisiblePictureIds
- * @text Hidden Picture IDs
- * @desc The picture IDs which are usually shown but hidden only when the UI is hidden.
+ * @text Picture IDs to be Hidden
+ * @desc The picture IDs which are usually shown but will be hidden only when the UI is hidden.
  * @parent hideUiPictures
  * @type number[]
  * @min 1
+ * @default []
  * 
  * @param hideUiButtonImages
  * @text Button Images
@@ -1063,7 +1067,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.3.0
+ * ver. 1.3.1
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
@@ -1076,6 +1080,7 @@
  * 2022/11/16 1.3.0 ゲーム終了機能を追加
  *                  UI非表示時にピクチャを表示させる機能および非表示にする機能
  *                  を追加
+ * 2022/11/17 1.3.1 新プラグインパラメータ２種にデフォルト値を追加
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -1272,7 +1277,7 @@
  * 
  * 8. ゲーム終了
  * 即座にタイトルに戻ることができるボタンが追加されます。MZデフォルトでもF5キー
- * を押すことで同様のことが可能ですが、こちらは確認メッセージが表示されるという
+ * を押すことで同様のことが可能ですが、こちらは確認ダイアログが表示されるという
  * 点が異なります。
  * 
  * 
@@ -1941,6 +1946,7 @@
  * @parent hideUiPictures
  * @type number[]
  * @min 1
+ * @default []
  * 
  * @param hideUiInvisiblePictureIds
  * @text 非表示ピクチャ番号
@@ -1948,6 +1954,7 @@
  * @parent hideUiPictures
  * @type number[]
  * @min 1
+ * @default []
  * 
  * @param hideUiButtonImages
  * @text ボタン画像
