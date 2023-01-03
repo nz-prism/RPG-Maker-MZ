@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CartRide/js/plugins/CartRide.js
  *
  * @help CartRide.js
- * ver. 2.1.0
+ * ver. 2.1.1
  * 
  * [History]
  * 09/26/2020 1.0.0 Released
@@ -19,6 +19,7 @@
  * 06/22/2021 2.0.1 Sub-folder compatibility for RMMZ 1.3.0 or later
  * 07/06/2021 2.0.2 Supported sub-folder improvement of RMMZ 1.3.2
  * 03/23/2022 2.1.0 Added a functionality to make rails passable
+ * 01/03/2023 2.1.1 Added a default value for Cart Image.
  * 
  * This plugin provides a capability to force the player move along the rail
  * with a cart sprite.
@@ -61,6 +62,7 @@
  * @text Cart Image
  * @desc Image information for a cart.
  * @type struct<character>
+ * @default {"fileName":"Vehicle","characterIndex":"6"}
  * 
  * 
  * @param passableTerrainTag
@@ -97,7 +99,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/CartRide/js/plugins/CartRide.js
  *
  * @help CartRide.js
- * ver. 2.1.0
+ * ver. 2.1.1
  * 
  * [バージョン履歴]
  * 2020/09/26 1.0.0 リリース
@@ -107,6 +109,7 @@
  * 2021/06/22 2.0.1 本体バージョン1.3.0以降のサブフォルダへの格納に対応
  * 2021/07/06 2.0.2 本体バージョン1.3.2のサブフォルダ機能改善に対応
  * 2022/03/23 2.1.0 レール上を歩行可能にする機能を追加
+ * 2023/01/03 2.1.1 トロッコ画像にデフォルト値を設定
  * 
  * このプラグインは、プレイヤーが自動的に線路に沿って移動する機能を提供します。
  * その際、グラフィックもトロッコに搭乗した状態に変化します。
@@ -153,6 +156,7 @@
  * @text トロッコ画像
  * @desc トロッコとして使用するキャラクター画像の情報です。
  * @type struct<character>
+ * @default {"fileName":"Vehicle","characterIndex":"6"}
  * 
  * @param passableTerrainTag
  * @text 通過可能地形タグ
