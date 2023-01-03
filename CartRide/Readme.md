@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[2.1.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/CartRide/js/plugins/CartRide.js)
+[2.1.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/CartRide/js/plugins/CartRide.js)
 
 ### バージョン履歴
 - 2020/09/26 1.0.0 リリース
@@ -11,6 +11,7 @@
 - 2021/06/22 2.0.1 本体バージョン1.3.0以降のサブフォルダへの格納に対応
 - 2021/07/06 2.0.2 本体バージョン1.3.2のサブフォルダ機能改善に対応
 - 2022/03/23 2.1.0 レール上を歩行可能にする機能を追加
+- 2023/01/03 2.1.1 トロッコ画像にデフォルト値を設定
 
 ## 概要
 マップに敷いたレール上に配置したトロッコを調べると、自動的にレールに沿って走り出すプラグインです。
