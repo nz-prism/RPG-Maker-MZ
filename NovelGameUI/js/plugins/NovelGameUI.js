@@ -11,7 +11,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.3.1
+ * ver. 1.3.2
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
@@ -26,6 +26,7 @@
  *                  Added functionalities to switch the visibility of pictures
  *                  when the UI is hidden.
  * 11/17/2022 1.3.1 Added default values for the new plugin parameters.
+ * 01/03/2023 1.3.2 Fixed an error when using a keyboard/gamepad.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -1067,7 +1068,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.3.1
+ * ver. 1.3.2
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
@@ -1081,6 +1082,7 @@
  *                  UI非表示時にピクチャを表示させる機能および非表示にする機能
  *                  を追加
  * 2022/11/17 1.3.1 新プラグインパラメータ２種にデフォルト値を追加
+ * 2023/01/03 1.3.2 キーボード/ゲームパッド使用時の不具合を修正
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -2972,6 +2974,11 @@
     };
 
 
+    Sprite_Clickable.prototype.isHovered = function() {
+        return this._hovered;
+    };
+
+
     const _Sprite_Picture_prototype_updateOther = Sprite_Picture.prototype.updateOther;
     Sprite_Picture.prototype.updateOther = function() {
         _Sprite_Picture_prototype_updateOther.call(this);
@@ -2989,8 +2996,8 @@
         this._controlButtons = buttons;
     };
 
-    Window_Message.prototype.isAnyButtonTouched = function() {
-        return this._controlButtons.some(button => button.isBeingTouched());
+    Window_Message.prototype.isAnyButtonHovered = function() {
+        return this._controlButtons.some(button => button.isHovered());
     };
 
     Window_Message.prototype.updateControlButtons = function() {
@@ -3062,7 +3069,7 @@
     };
 
     Window_Message.prototype.isTriggered = function() {
-        return !this.isAnyButtonTouched() && (Input.isRepeated("ok") || TouchInput.isRepeated());
+        return !this.isAnyButtonHovered() && (Input.isRepeated("ok") || TouchInput.isRepeated());
     };
 
 
