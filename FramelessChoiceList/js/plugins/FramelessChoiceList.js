@@ -9,11 +9,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js
  *
  * @help FramelessChoiceList.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [History]
  * 06/26/2021 1.0.0 Released
  * 06/26/2021 1.1.0 Added a plugin parameter Y Axis Offset.
+ * 01/22/2023 1.1.1 Made the window position reflected.
  * 
  * This plugin makes the choice window frameless and display black
  * backs with gradation for choices. It also display selection
@@ -94,11 +95,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js
  *
  * @help FramelessChoiceList.js
- * ver 1.1.0
+ * ver 1.1.1
  *
  * [バージョン履歴]
  * 2021/06/26 1.0.0 リリース
  * 2021/06/26 1.1.0 プラグインパラメータ「Y座標オフセット」を追加
+ * 2023/01/22 1.1.1 ウィンドウ位置が反映されるように変更
  * 
  * このプラグインは、選択肢ウィンドウの枠をなくして代わりに背景をグラデーション
  * 付き黒背景にします。選択肢の行頭には選択時・非選択時に表示が切り替わる選択画
@@ -226,10 +228,6 @@
     
     Window_ChoiceList.prototype.rowSpacing = function() {
         return ROW_SPACING;
-    };
-    
-    Window_ChoiceList.prototype.windowX = function() {
-        return Graphics.boxWidth / 2 - this.windowWidth() / 2;
     };
 
     Window_ChoiceList.prototype.windowY = function() {

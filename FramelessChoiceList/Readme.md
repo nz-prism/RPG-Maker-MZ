@@ -2,11 +2,12 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.1.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js)
+[1.1.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/FramelessChoiceList/js/plugins/FramelessChoiceList.js)
 
 ### バージョン履歴
 - 2021/06/26 1.0.0 リリース
 - 2021/06/26 1.1.0 プラグインパラメータ「Y座標オフセット」を追加
+- 2023/01/22 1.1.1 ウィンドウ位置が反映されるように変更
 
 ## 概要
 選択肢ウィンドウの枠をなくし、グラデーション付き黒背景に変更するプラグインです。  
