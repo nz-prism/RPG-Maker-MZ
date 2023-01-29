@@ -11,7 +11,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.3.2
+ * ver. 1.3.3
  * 
  * [History]
  * 02/20/2022 1.0.0 Released
@@ -27,6 +27,7 @@
  *                  when the UI is hidden.
  * 11/17/2022 1.3.1 Added default values for the new plugin parameters.
  * 01/03/2023 1.3.2 Fixed an error when using a keyboard/gamepad.
+ * 01/29/2023 1.3.3 Now auto-mode is cleared when disabling control buttons.
  * 
  * This plugin provides a novel-game like interface usable when an event is
  * running on a map.
@@ -1068,7 +1069,7 @@
  * @orderAfter OptionEx
  *
  * @help NovelGameUI.js
- * ver. 1.3.2
+ * ver. 1.3.3
  * 
  * [バージョン履歴]
  * 2022/02/20 1.0.0 リリース
@@ -1083,6 +1084,7 @@
  *                  を追加
  * 2022/11/17 1.3.1 新プラグインパラメータ２種にデフォルト値を追加
  * 2023/01/03 1.3.2 キーボード/ゲームパッド使用時の不具合を修正
+ * 2023/01/29 1.3.3 制御ボタン無効時にオートモードを解除するように修正
  * 
  * このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インター
  * フェースを提供します。
@@ -2454,6 +2456,7 @@
 
     Game_System.prototype.disableControlButtons = function() {
         this._controlButtonsEnabled = false;
+        $gameMessage.clearAutoMode();
     };
 
     Game_System.prototype.areControlButtonsEnabled = function() {
@@ -2558,6 +2561,10 @@
 
     Game_Message.prototype.toggleAutoMode = function() {
         this._autoMode = !this._autoMode;
+    };
+
+    Game_Message.prototype.clearAutoMode = function() {
+        this._autoMode = false;
     };
 
     Game_Message.prototype.isAutoMode = function() {
