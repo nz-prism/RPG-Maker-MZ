@@ -1907,7 +1907,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         const height = this._height;
         const offsetY = this._offsetY;
         const y = BOTTOM_Y_ORIGIN ? this._y - height : this._y + offsetY;
-        return y + (height - this._offsetY) / 7;
+        return y + (height - offsetY) / 7;
     };
 
 
