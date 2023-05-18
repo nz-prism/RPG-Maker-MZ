@@ -7,6 +7,8 @@
  * @plugindesc Displays actor pictures on messages automatically.
  * @author nz_prism
  * @base ActorPictures
+ * @base Utils
+ * @orderAfter Utils
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
@@ -23,6 +25,7 @@
  * 02/14/2022 1.3.3 Changed the default balloon icon position
  * 03/22/2022 1.3.4 Fixed a minor issue
  * 05/20/2022 1.4.0 Added a plugin parameter to specify easing directions
+ * 05/18/2023 1.4.1 Enhanced compatibility with other plugins
  * 05/18/2023 2.0.0 Branched for Last Minute
  *
  * This plugin displays actor pictures on messages automatically.
@@ -714,6 +717,8 @@
  * @plugindesc 会話時に自動的に立ち絵を表示するプラグインです。
  * @author nz_prism
  * @base ActorPictures
+ * @base Utils
+ * @orderAfter Utils
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
@@ -731,6 +736,7 @@
  * 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
  * 2022/03/22 1.3.4 微バグを修正
  * 2022/05/20 1.4.0 イージング方向を指定するためのプラグインパラメータを追加
+ * 2023/05/18 1.4.1 競合対策を強化
  * 2023/05/18 2.0.0 Last Minute用ブランチ作成
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
@@ -1916,10 +1922,11 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     const _Sprite_Balloon_prototype_setup = Sprite_Balloon.prototype.setup;
     Sprite_Balloon.prototype.setup = function(targetSprite, balloonId, offsetX, offsetY, scaleX, scaleY) {
         _Sprite_Balloon_prototype_setup.call(this, targetSprite, balloonId);
-        this._offsetX = offsetX || 0;
-        this._offsetY = offsetY || 0;
-        this.scale.x = scaleX || 1;
-        this.scale.y = scaleY || 1;
+        const scale = Graphics.scaleToScreenSize();
+        this._offsetX = offsetX ? Math.round(offsetX * Graphics.scaleXToScreenSize()) : 0;
+        this._offsetY = offsetY ? Math.round(offsetY * Graphics.scaleYToScreenSize()) : 0;
+        this.scale.x = scaleX ? scaleX * scale : 1;
+        this.scale.y = scaleY ? scaleY * scale : 1;
         this.z = 7;
     };
 
@@ -1970,15 +1977,15 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     };
 
     Sprite_MessagePicture.prototype.offsetY = function() {
-        return this.picture().offsetY();
+        return Math.round(this.picture().offsetY() * Graphics.scaleYToScreenSize());
     };
 
     Sprite_MessagePicture.prototype.balloonX = function(mirror=false) {
-        return this.picture().balloonX(mirror);
+        return Math.round(this.picture().balloonX(mirror) * Graphics.scaleXToScreenSize());
     };
 
     Sprite_MessagePicture.prototype.balloonY = function() {
-        return this.picture().balloonY();
+        return Math.round(this.picture().balloonY() * Graphics.scaleYToScreenSize());
     };
 
     Sprite_MessagePicture.prototype.update = function() {
@@ -2016,9 +2023,16 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
 
     Sprite_MessagePicture.prototype.updatePosition = function() {
         const picture = this.picture();
-        this.x = Math.round(picture.x());
-        this.y = Math.round(picture.y());
+        this.x = Math.round(picture.x() * Graphics.scaleXToScreenSize());
+        this.y = Math.round(picture.y() * Graphics.scaleYToScreenSize());
         this.z = Math.round(picture.z());
+    };
+
+    Sprite_MessagePicture.prototype.updateScale = function() {
+        Sprite_Picture.prototype.updateScale.call(this);
+        const scale = Graphics.scaleToScreenSize();
+        this.scale.x *= scale;
+        this.scale.y *= scale;
     };
 
 
