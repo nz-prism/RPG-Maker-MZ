@@ -63,7 +63,7 @@ https://opensource.org/licenses/mit-license.php
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.4.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/PictureMessage.js)
+[1.4.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/PictureMessage.js)
 
 ### バージョン履歴
 - 2021/07/03 1.0.0 リリース
@@ -76,6 +76,7 @@ https://opensource.org/licenses/mit-license.php
 - 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
 - 2022/03/22 1.3.4 微バグを修正
 - 2022/05/20 1.4.0 イージング方向を指定するためのプラグインパラメータを追加
+- 2023/05/18 1.4.1 競合対策を強化
 
 ## 概要
 メッセージの名前枠に専用制御文字を入力するだけで、自動的にアクターの立ち絵を表示するプラグインです。マップ・戦闘どちらのイベントにも対応しています。立ち絵は上記**ActorPictures.js**にて設定したものが反映されます。

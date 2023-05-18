@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.0
+ * ver 1.4.1
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -23,6 +23,7 @@
  * 02/14/2022 1.3.3 Changed the default balloon icon position
  * 03/22/2022 1.3.4 Fixed a minor issue
  * 05/20/2022 1.4.0 Added a plugin parameter to specify easing directions
+ * 05/18/2023 1.4.1 Enhanced compatibility with other plugins
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -716,7 +717,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.0
+ * ver 1.4.1
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -730,6 +731,7 @@
  * 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
  * 2022/03/22 1.3.4 微バグを修正
  * 2022/05/20 1.4.0 イージング方向を指定するためのプラグインパラメータを追加
+ * 2023/05/18 1.4.1 競合対策を強化
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -2013,10 +2015,8 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     };
 
     Sprite_MessagePicture.prototype.updatePosition = function() {
-        const picture = this.picture();
-        this.x = Math.round(picture.x());
-        this.y = Math.round(picture.y());
-        this.z = Math.round(picture.z());
+        Sprite_Picture.prototype.updatePosition.call(this);
+        this.z = Math.round(this.picture().z());
     };
 
 
