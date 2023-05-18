@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.0
+ * ver 2.0.0
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -23,6 +23,7 @@
  * 02/14/2022 1.3.3 Changed the default balloon icon position
  * 03/22/2022 1.3.4 Fixed a minor issue
  * 05/20/2022 1.4.0 Added a plugin parameter to specify easing directions
+ * 05/18/2023 2.0.0 Branched for Last Minute
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -85,7 +86,7 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param bottomYOrigin
+ * @param alignBottom
  * @text Use Bottom as Y Axis Origin
  * @desc If true, the bottom of the picture will be used as Y-axis origin. If false, the top will be the origin.
  * @type boolean
@@ -716,7 +717,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.0
+ * ver 2.0.0
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -730,6 +731,7 @@
  * 2022/02/14 1.3.3 フキダシアイコンのデフォルト表示位置を変更
  * 2022/03/22 1.3.4 微バグを修正
  * 2022/05/20 1.4.0 イージング方向を指定するためのプラグインパラメータを追加
+ * 2023/05/18 2.0.0 Last Minute用ブランチ作成
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -790,7 +792,7 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param bottomYOrigin
+ * @param alignBottom
  * @text 立ち絵Y座標原点を下にする
  * @desc オンにすると画像の下端が立ち絵のY座標原点になります。オフにすると上端が原点になります。
  * @type boolean
@@ -1432,7 +1434,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         pluginParams.rightMirror === "true"
     ];
 
-    const BOTTOM_Y_ORIGIN = pluginParams.bottomYOrigin === "true";
+    const ALIGN_BOTTOM = pluginParams.alignBottom === "true";
 
     const PICTURE_COORDINATES = [
         {x: Number(pluginParams.leftPictureX),   y: Number(pluginParams.leftPictureY)},
@@ -1703,7 +1705,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         this._x = PICTURE_COORDINATES[this._position].x;
         this._y = PICTURE_COORDINATES[this._position].y;
         this._z = 5;
-        if (!BOTTOM_Y_ORIGIN) this._y -= this._offsetY;
+        if (!ALIGN_BOTTOM) this._y -= this._offsetY;
         this._scaleX = PICTURE_MIRRORS[this._position] ? -100 : 100;
         this._scaleY = 100;
         this._opacity = 255;
@@ -1752,7 +1754,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
 
     Game_MessagePicture.prototype.setName = function(name) {
         const offsetY = ImageManager.offsetY(name);
-        if (!BOTTOM_Y_ORIGIN) {
+        if (!ALIGN_BOTTOM) {
             this._y += this._offsetY;
             this._y -= offsetY;
             this._originalY = this._y;
@@ -1906,7 +1908,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     Game_MessagePicture.prototype.balloonY = function() {
         const height = this._height;
         const offsetY = this._offsetY;
-        const y = BOTTOM_Y_ORIGIN ? this._y - height : this._y + offsetY;
+        const y = ALIGN_BOTTOM ? this._y - height : this._y + offsetY;
         return y + (height - offsetY) / 7;
     };
 
@@ -2008,7 +2010,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
             const centerX = ImageManager.centerX(this._pictureName);
             const cx = (centerX > 0) ? centerX : (width / 2);
             this.anchor.x = cx / width;
-            this.anchor.y = BOTTOM_Y_ORIGIN ? 1 : 0;
+            this.anchor.y = ALIGN_BOTTOM ? 1 : 0;
         }
     };
 
