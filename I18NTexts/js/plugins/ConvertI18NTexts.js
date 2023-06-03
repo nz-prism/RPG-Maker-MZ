@@ -577,8 +577,6 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
         const ALERT_INVALID_SOURCE_EN = "\"Source Language\" is set to invalid value. Reset the plugin parameter.";
         const ALERT_INVALID_TARGET_JP = "「ターゲット言語」が無効な値です。プラグインパラメータを再設定してください。";
         const ALERT_INVALID_TARGET_EN = "\"Target Language\" is set to invalid value. Reset the plugin parameter.";
-        const ALERT_SAME_LANGUAGES_JP = "「ソース言語」と「ターゲット言語」が同じです。違う言語に設定してください。";
-        const ALERT_SAME_LANGUAGES_EN = "\"Source Language\" and \"Target Language\" are the same. Choose different ones.";
         const ALERT_INITIAL_SOURCE_ESCAPE_JP = "初回起動時は「ソース言語」に「制御文字」以外の言語を設定してください。";
         const ALERT_INITIAL_SOURCE_ESCAPE_EN = "For the first time, you must not choose \"Escape Character\" for \"Source Language\".";
         const ALERT_INITIAL_TARGET_NOT_ESCAPE_JP = "初回起動時は「ターゲット言語」に「制御文字」を設定してください。";
