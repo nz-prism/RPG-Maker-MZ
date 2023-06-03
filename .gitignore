@@ -138,3 +138,11 @@
 !/SaveSlotCustom/js/plugins/
 /SaveSlotCustom/js/plugins/*
 !/SaveSlotCustom/js/plugins/SaveSlotCustom.js
+/I18NTexts/*
+!/I18NTexts/Readme.md
+!/I18NTexts/js
+/I18NTexts/js/*
+!/I18NTexts/js/plugins/
+/I18NTexts/js/plugins/*
+!/I18NTexts/js/plugins/DisplayI18NTexts.js
+!/I18NTexts/js/plugins/ConvertI18NTexts.js
