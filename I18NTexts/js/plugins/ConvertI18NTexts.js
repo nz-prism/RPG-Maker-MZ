@@ -6,6 +6,7 @@
  * @target MZ
  * @plugindesc Converts all the texts used in a game to escape characers and generates a JSON file with the original texts.
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
  * ver. 1.0.0
@@ -270,6 +271,7 @@
  * @target MZ
  * @plugindesc ゲーム中に使用されるあらゆる文字列を専用制御文字に変換し、元の文字列をJSONファイルとして出力します。
  * @author nz_prism
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
  * ver. 1.0.0

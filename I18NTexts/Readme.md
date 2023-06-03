@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/ActorPictures.js)
+[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/DisplayI18NTexts.js)
 
 ### バージョン履歴
 - 2023/06/04 1.0.0 リリース
@@ -35,7 +35,7 @@ https://opensource.org/licenses/mit-license.php
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/ActorPictures/js/plugins/ActorPictureOnAltMenuScreen.js)
+[1.0.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/ConvertI18NTexts.js)
 
 ### バージョン履歴
 - 2023/06/04 1.0.0 リリース

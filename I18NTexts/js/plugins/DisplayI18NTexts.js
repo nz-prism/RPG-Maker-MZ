@@ -6,7 +6,7 @@
  * @target MZ
  * @plugindesc Displays each text replacing a string referred from a JSON file based on the language option.
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/DisplayI18NTexts.js
  * @base OptionEx
  * @orderAfter OptionEx
  *
@@ -79,7 +79,7 @@
  * @target MZ
  * @plugindesc オプションで設定されている言語に応じて、専用制御文字を専用のJSONファイルから参照した文字列に変換して表示します。
  * @author nz_prism
- * @url 
+ * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/DisplayI18NTexts.js
  * @base OptionEx
  * @orderAfter OptionEx
  *
