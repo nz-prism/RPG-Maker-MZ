@@ -101,6 +101,6 @@ https://opensource.org/licenses/mit-license.php
 https://opensource.org/licenses/mit-license.php
 
 ## 使用方法
-導入方法は通常のプラグインと同様です。
-**js/plugins**フォルダに**ConvertI18NTexts.js**をコピーし、プラグイン管理にて有効化してください。  
+導入方法については、上記手順を参考にしてください。
+**js/plugins**フォルダに**ConvertI18NTexts.js**をコピーし、上記手順に従って使用してください。  
 その他の詳細はプラグイン説明をご覧ください。
