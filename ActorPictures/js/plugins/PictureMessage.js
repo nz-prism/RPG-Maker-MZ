@@ -10,7 +10,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.1
+ * ver 1.4.2
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -24,6 +24,7 @@
  * 03/22/2022 1.3.4 Fixed a minor issue
  * 05/20/2022 1.4.0 Added a plugin parameter to specify easing directions
  * 05/18/2023 1.4.1 Enhanced compatibility with other plugins
+ * 06/04/2023 1.4.2 Solved a conflict with DisplayI18NTexts
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -717,7 +718,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.1
+ * ver 1.4.2
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -732,6 +733,7 @@
  * 2022/03/22 1.3.4 微バグを修正
  * 2022/05/20 1.4.0 イージング方向を指定するためのプラグインパラメータを追加
  * 2023/05/18 1.4.1 競合対策を強化
+ * 2023/06/04 1.4.2 DisplayI18NTextsとの競合を修正
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -1646,6 +1648,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     
     const _Game_Message_prototype_setSpeakerName = Game_Message.prototype.setSpeakerName;
     Game_Message.prototype.setSpeakerName = function(speakerName) {
+        if (TextManager.translate) speakerName = TextManager.translate(speakerName);
         const reg = /\\AP\[(\d+)\s*(.+?)\]/;
         const ary = reg.exec(speakerName);
         let actorId;
