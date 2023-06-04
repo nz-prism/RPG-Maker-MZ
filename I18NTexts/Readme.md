@@ -1,4 +1,4 @@
-# 多言語表示(DisplayI18NTexts.json)
+# 多言語文字列表示(DisplayI18NTexts.json)
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
@@ -17,8 +17,14 @@
 
 **1**はオプション画面に「言語」オプションを追加する機能です。言語オプションでは、プラグインパラメータ「使用言語」に設定した言語から選択できます。このパラメータの一番上に設定した言語がデフォルト言語になります。このパラメータに設定されている言語が一つしかない場合、言語オプションは表示されなくなります。
 
+![Option](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/DisplayI18NTexts1.png)
+
 **2**は専用制御文字「\I18N[n]」を「I18NTexts.json」から取得した文字列に置き換えて表示する機能です。アクターの名前やプロフィール、アイテムの名前や説明といったデータベースのテキストやイベント中の文章など、ゲーム中に使用される文字列中に「\I18N[n]」が含まれていれば、それを変換して表示します。専用のJSONファイル「I18NTexts.json」中の「id」が制御文字中の「n」と一致するデータを参照します。このJSONファイルは別プラグイン「ConvertI18NTexts.js」によって生成されます。詳細は**ConvertI18NTexts.js**の説明をご覧ください。  
 なお**I18NTexts.json**が「data」フォルダに存在しない場合、本プラグインはエラーになりますのでご注意ください。
+
+![Option](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/DisplayI18NTexts2.png)
+![Option](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/DisplayI18NTexts3.png)
+![Option](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/DisplayI18NTexts4.png)
 
 ## ライセンス
 このプラグインはMITライセンスにてリリースされています。  
@@ -31,7 +37,7 @@ https://opensource.org/licenses/mit-license.php
 
 ***
 
-# 多言語変換(ConvertI18NTexts.json)
+# 多言語文字列変換(ConvertI18NTexts.json)
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
@@ -67,7 +73,7 @@ https://opensource.org/licenses/mit-license.php
  6. **ConvertI18NTexts.js**を有効にする
  7. テストプレイを実行する
  8. 全ての変換対象の文字列が制御文字に変換されていることを確認する
- 9. dataフォルダ内に**I18NTexts.json**が生成されていることを確認する
+ 9. **data**フォルダ内に**I18NTexts.json**が生成されていることを確認する
 10. **I18NTexts.json**を開き、「ja-JP」というキーの値にツクール上に入力されていた文字列が、「en-US」というキーの値に「temp[n]」という仮文字列が設定されていることを確認する
 11. **ConvertI18NTexts.js**を無効にする
 12. **DisplayI18NTexts.js**のプラグインパラメータ「使用言語」に「日本語」と「英語」を指定する

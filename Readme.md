@@ -15,6 +15,7 @@ https://opensource.org/licenses/mit-license.php
 - [目的地点滅カスタマイズ](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/DestinationSpriteCustom)
 - [動的エンカウント重み変動](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/DynamicEncounterWeight)
 - [枠なし選択肢表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/FramelessChoiceList)
+- [多言語文字列表示・多言語文字列変換](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/I18NTexts)
 - [メニューステータスピクチャ表示](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/MenuStatusPictures)
 - [ミニマップ](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/Minimap)
 - [ノベルゲームUI](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/NovelGameUI)
