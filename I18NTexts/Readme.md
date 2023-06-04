@@ -54,21 +54,20 @@ https://opensource.org/licenses/mit-license.php
 ![Dialog](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts1.png)
 
 これによって文字列の変更がツクールに反映されます。実際に文字列を変換するとき以外は本プラグインを無効にしてください。なお有効にしたままデプロイメントしてしまったとしても、本プラグインはテストプレイ時にしか機能しませんので問題ありません。  
-変換が完了するとデータベースやイベントのあらゆる変換対象文字列が、対応する文字列に変換されます。また初回起動時、**I18NTexts.json**ファイルが**data**フォルダ内に生成されます。二回目以降の起動の場合、同ファイルが更新されます。このファイルには変換前、データベースに入力されていた全ての文字列が出力されます。別プラグインである**DisplayI18NTexts.js**を使用することで、オプションで選択されている言語に応じた文字列を表示することが可能です。
-
-![Database](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts2.png)
-![Folder](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts3.png)
+変換が完了するとデータベースやイベントのあらゆる変換対象文字列が、対応する文字列に変換されます。また初回起動時、**I18NTexts.json**ファイルが**data**フォルダ内に生成されます。二回目以降の起動の場合、同ファイルが更新されます。このファイルには変換前、データベースに入力されていた全ての文字列が出力されます。別プラグインである**DisplayI18NTexts.js**を使用することで、オプションで選択されている言語に応じた文字列を表示することが可能です。  
+![Database](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts2.png)  
+![Folder](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts3.png)  
 
 起動前に必ず以下のプラグインパラメータの設定を確認してください。  
 - **ソース言語**には、現在データベースに実際に入力されているテキストの言語（例：**日本語**）を指定します。これは変換完了後、JSONファイルに書き込まれる文字列の言語の指定になります。  
 - **ターゲット言語**には、置換先言語を指定します。初回起動時は必ず**制御文字**を選択してください。データベース等の文字列は変換完了後、ここで選択した言語に対応する文字列に置き換わります。**制御文字**の場合は専用の数字が割り振られた制御文字「\I18N[n]」に置換されます。それ以外の言語の場合、**I18NTexts.json**にターゲット言語が含まれていれば対応する文字列に置き換わります。含まれていない場合、新しくその言語のデータ枠が用意されます。  
 - **翻訳候補言語リスト**には、現在使用されている言語も含めて翻訳を検討している全ての言語を指定してください。初回起動時、ここで設定した全ての言語が**I18NTexts.json**のキーとして設定されます。ソース言語以外の言語の値には「temp[n]」という仮文字列が入力されます。  
-![JSON](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts4.png)
+![JSON](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts4.png)  
 - ゲームタイトルも変換対象にしたい場合、**ゲームタイトルの変換**を**オン**にしてください。ただしタイトルバーに表示されるタイトルは翻訳されないので、このパラメータを**オン**にすることは推奨されません。  
 - **未使用文字列の変換**を**オン**にすると、敵グループの名前やアニメーションの名前、イベントの名前といったツクール標準ではゲーム中表示されることのない文字列（メモ・注釈以外）も変換対象になります。  
 - **メモの変換**を**オン**にすると、データベースの各種**メモ**およびイベントの**注釈**も変換対象になります。  
-- **プラグインパラメータ**にプラグイン名およびそのプラグインのプラグインパラメータ名を指定することで、プラグインパラメータに入力されている文字列も変換対象になります。ただし変換できるのは通常の文字列（**string**）のみであり、文字列のリスト（**string[]**）や構造体（**struct**）の中の文字列は変換できませんのでご注意ください。なお**DisplayI18NTexts.js**の前提プラグインである**OptionEx**の各種オプション項目名のプラグインパラメータ名は、あらかじめ指定されています。
-![PluginParameters](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts5.png)
+- **プラグインパラメータ**にプラグイン名およびそのプラグインのプラグインパラメータ名を指定することで、プラグインパラメータに入力されている文字列も変換対象になります。ただし変換できるのは通常の文字列（**string**）のみであり、文字列のリスト（**string[]**）や構造体（**struct**）の中の文字列は変換できませんのでご注意ください。なお**DisplayI18NTexts.js**の前提プラグインである**OptionEx**の各種オプション項目名のプラグインパラメータ名は、あらかじめ指定されています。  
+![PluginParameters](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts5.png)  
 
 本プラグインを一度実行した後、次回以降の起動では**変換対象文字列**以下のパラメータを変更しないでください。また、データベース項目やイベント（イベント中のイベントコマンドも含む）を追加することは問題ありませんが、削除したり順番を変更したりしないでください。IDがずれて正常に変換できなくなってしまいます。そうした変更を加える必要がある場合は、**data**フォルダ内の**I18NTexts.json**を削除してください。これにより初期化されます。
 
