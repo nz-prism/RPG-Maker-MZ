@@ -7,10 +7,12 @@
  * @plugindesc Displays actor pictures on messages automatically.
  * @author nz_prism
  * @base ActorPictures
+ * @base Utils
+ * @orderAfter Utils
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.2
+ * ver 2.0.1
  *
  * [History]
  * 07/03/2021 1.0.0 Released
@@ -24,7 +26,8 @@
  * 03/22/2022 1.3.4 Fixed a minor issue
  * 05/20/2022 1.4.0 Added a plugin parameter to specify easing directions
  * 05/18/2023 1.4.1 Enhanced compatibility with other plugins
- * 06/04/2023 1.4.2 Solved a conflict with DisplayI18NTexts
+ * 05/18/2023 2.0.0 Branched for Last Minute
+ * 06/04/2023 2.0.1 Solved a conflict with DisplayI18NTexts
  *
  * This plugin displays actor pictures on messages automatically.
  * It requires ActorPictures.js. Configure pictures for each
@@ -87,7 +90,7 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param bottomYOrigin
+ * @param alignBottom
  * @text Use Bottom as Y Axis Origin
  * @desc If true, the bottom of the picture will be used as Y-axis origin. If false, the top will be the origin.
  * @type boolean
@@ -715,10 +718,12 @@
  * @plugindesc 会話時に自動的に立ち絵を表示するプラグインです。
  * @author nz_prism
  * @base ActorPictures
+ * @base Utils
+ * @orderAfter Utils
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ActorPictures/js/plugins/PictureMessage.js
  *
  * @help PictureMessage.js
- * ver 1.4.2
+ * ver 2.0.1
  *
  * [バージョン履歴]
  * 2021/07/03 1.0.0 リリース
@@ -733,7 +738,8 @@
  * 2022/03/22 1.3.4 微バグを修正
  * 2022/05/20 1.4.0 イージング方向を指定するためのプラグインパラメータを追加
  * 2023/05/18 1.4.1 競合対策を強化
- * 2023/06/04 1.4.2 DisplayI18NTextsとの競合を修正
+ * 2023/05/18 2.0.0 Last Minute用ブランチ作成
+ * 2023/06/04 2.0.1 DisplayI18NTextsとの競合を修正
  *
  * このプラグインを使用すると、会話時に自動的に立ち絵が表示されるようになりま
  * す。ActorPictures.jsが前提プラグインとなります。使用にあたっては、まず
@@ -794,7 +800,7 @@
  * https://opensource.org/licenses/mit-license.php
  * 
  * 
- * @param bottomYOrigin
+ * @param alignBottom
  * @text 立ち絵Y座標原点を下にする
  * @desc オンにすると画像の下端が立ち絵のY座標原点になります。オフにすると上端が原点になります。
  * @type boolean
@@ -1436,7 +1442,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         pluginParams.rightMirror === "true"
     ];
 
-    const BOTTOM_Y_ORIGIN = pluginParams.bottomYOrigin === "true";
+    const ALIGN_BOTTOM = pluginParams.alignBottom === "true";
 
     const PICTURE_COORDINATES = [
         {x: Number(pluginParams.leftPictureX),   y: Number(pluginParams.leftPictureY)},
@@ -1708,7 +1714,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
         this._x = PICTURE_COORDINATES[this._position].x;
         this._y = PICTURE_COORDINATES[this._position].y;
         this._z = 5;
-        if (!BOTTOM_Y_ORIGIN) this._y -= this._offsetY;
+        if (!ALIGN_BOTTOM) this._y -= this._offsetY;
         this._scaleX = PICTURE_MIRRORS[this._position] ? -100 : 100;
         this._scaleY = 100;
         this._opacity = 255;
@@ -1757,7 +1763,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
 
     Game_MessagePicture.prototype.setName = function(name) {
         const offsetY = ImageManager.offsetY(name);
-        if (!BOTTOM_Y_ORIGIN) {
+        if (!ALIGN_BOTTOM) {
             this._y += this._offsetY;
             this._y -= offsetY;
             this._originalY = this._y;
@@ -1911,7 +1917,7 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     Game_MessagePicture.prototype.balloonY = function() {
         const height = this._height;
         const offsetY = this._offsetY;
-        const y = BOTTOM_Y_ORIGIN ? this._y - height : this._y + offsetY;
+        const y = ALIGN_BOTTOM ? this._y - height : this._y + offsetY;
         return y + (height - offsetY) / 7;
     };
 
@@ -1919,10 +1925,11 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     const _Sprite_Balloon_prototype_setup = Sprite_Balloon.prototype.setup;
     Sprite_Balloon.prototype.setup = function(targetSprite, balloonId, offsetX, offsetY, scaleX, scaleY) {
         _Sprite_Balloon_prototype_setup.call(this, targetSprite, balloonId);
-        this._offsetX = offsetX || 0;
-        this._offsetY = offsetY || 0;
-        this.scale.x = scaleX || 1;
-        this.scale.y = scaleY || 1;
+        const scale = Graphics.scaleToScreenSize();
+        this._offsetX = offsetX ? Math.round(offsetX * Graphics.scaleXToScreenSize()) : 0;
+        this._offsetY = offsetY ? Math.round(offsetY * Graphics.scaleYToScreenSize()) : 0;
+        this.scale.x = scaleX ? scaleX * scale : 1;
+        this.scale.y = scaleY ? scaleY * scale : 1;
         this.z = 7;
     };
 
@@ -1973,15 +1980,15 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
     };
 
     Sprite_MessagePicture.prototype.offsetY = function() {
-        return this.picture().offsetY();
+        return Math.round(this.picture().offsetY() * Graphics.scaleYToScreenSize());
     };
 
     Sprite_MessagePicture.prototype.balloonX = function(mirror=false) {
-        return this.picture().balloonX(mirror);
+        return Math.round(this.picture().balloonX(mirror) * Graphics.scaleXToScreenSize());
     };
 
     Sprite_MessagePicture.prototype.balloonY = function() {
-        return this.picture().balloonY();
+        return Math.round(this.picture().balloonY() * Graphics.scaleYToScreenSize());
     };
 
     Sprite_MessagePicture.prototype.update = function() {
@@ -2013,13 +2020,22 @@ Game_MessagePicture.prototype.constructor = Game_MessagePicture;
             const centerX = ImageManager.centerX(this._pictureName);
             const cx = (centerX > 0) ? centerX : (width / 2);
             this.anchor.x = cx / width;
-            this.anchor.y = BOTTOM_Y_ORIGIN ? 1 : 0;
+            this.anchor.y = ALIGN_BOTTOM ? 1 : 0;
         }
     };
 
     Sprite_MessagePicture.prototype.updatePosition = function() {
-        Sprite_Picture.prototype.updatePosition.call(this);
-        this.z = Math.round(this.picture().z());
+        const picture = this.picture();
+        this.x = Math.round(picture.x() * Graphics.scaleXToScreenSize());
+        this.y = Math.round(picture.y() * Graphics.scaleYToScreenSize());
+        this.z = Math.round(picture.z());
+    };
+
+    Sprite_MessagePicture.prototype.updateScale = function() {
+        Sprite_Picture.prototype.updateScale.call(this);
+        const scale = Graphics.scaleToScreenSize();
+        this.scale.x *= scale;
+        this.scale.y *= scale;
     };
 
 
