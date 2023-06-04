@@ -85,7 +85,8 @@ https://opensource.org/licenses/mit-license.php
 1. **ConvertI18NTexts.js**を無効にする
 1. **DisplayI18NTexts.js**のプラグインパラメータ**使用言語**に**日本語**と**英語**を指定する
 1. **DisplayI18NTexts.js**を有効にする
-1. **I18NTexts.json**内の任意のデータの**en-US**キーの値に、**ja-JP**キーの値の文字列を翻訳した文字列を入力する（オプション画面にて表示される文字列推奨）
+1. **I18NTexts.json**内の任意のデータの**en-US**キーの値に、**ja-JP**キーの値の文字列を翻訳した文字列を入力する（オプション画面にて表示される文字列推奨）  
+![PluginParameters](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/ConvertI18NTexts6.png)  
 1. テストプレイを実行し、オプション画面を開く
 1. **言語**にて日本語と英語を切り替え、**14**で入力した文字列が正常に翻訳されていることを確認する
 1. 全ての文字列の翻訳が完了するまで**14**〜**16**を繰り返す
@@ -110,7 +111,7 @@ https://opensource.org/licenses/mit-license.php
 ロシア語: **ru-RU**  
 
 ## ライセンス
-このプラグインはMITライセンスにてリリースされています。  
+このプラグインは**MITライセンス**にてリリースされています。  
 https://opensource.org/licenses/mit-license.php
 
 ## 使用方法
