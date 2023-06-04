@@ -9,10 +9,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
+ * 06/04/2023 1.0.1 Fixed locales (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 
  * Converts all the texts used in a game to escape characters and generates a
  * JSON file with the original texts. It makes changes to the database files
@@ -86,14 +87,14 @@
  *  8. Confirm all the target texts have been converted to escape characters.
  *  9. Confirm I18NTexts.json has been generated in data folder.
  * 10. Open I18NTexts.json and confirm the texts which had been populated on
- *     the database are populated for the values for "en-US" keys and temporary
- *     texts "temp[n]" are populated for "ja-JP" keys.
+ *     the database are populated for the values for "en_US" keys and temporary
+ *     texts "temp[n]" are populated for "ja_JP" keys.
  * 11. Disable ConvertI18NTexts.js.
  * 12. Specify "English" and "Japanese" for the plugin parameter "Supported
  *     Languages" of DisplayI18NTexts.js.
  * 13. Enable DisplayI18NTexts.js.
- * 14. In I18NTexts.json, populate some texts for "en-US" keys translated from
- *     those for "ja-JP" keys (the texts shown on the option screen are
+ * 14. In I18NTexts.json, populate some texts for "en_US" keys translated from
+ *     those for "ja_JP" keys (the texts shown on the option screen are
  *     recommended).
  * 15. Run playtest and open the option screen.
  * 16. For "Language", switch English and Japanese and confirm the texts you
@@ -114,8 +115,8 @@
  * I18NTexts.json will be updated.
  * 
  * The language keys for I18NTexts.json
- * English: en-US
- * Japanese: ja-JP
+ * English: en_US
+ * Japanese: ja_JP
  * Simplified Chinese: zh_CN
  * Traditional Chinese: zh_TW
  * Korean: ko_KR
@@ -124,7 +125,7 @@
  * German: de_DE
  * Spanish: es_ES
  * Portuguese: pt_BR
- * Russian: ru-RU
+ * Russian: ru_RU
  * 
  * 
  * This plugin is released under MIT license.
@@ -134,14 +135,14 @@
  * @param sourceLanguage
  * @text Source Language
  * @desc Choose the source language, which is currently populated on the database.
- * @default ja-JP
+ * @default ja_JP
  * @type select
  * @option Escape Character (\I18N[n])
  * @value escape
  * @option English
- * @value en-US
+ * @value en_US
  * @option Japanese
- * @value ja-JP
+ * @value ja_JP
  * @option Simplified Chinese
  * @value zh_CN
  * @option Traditional Chinese
@@ -159,7 +160,7 @@
  * @option Portuguese
  * @value pt_BR
  * @option Russian
- * @value ru-RU
+ * @value ru_RU
  * 
  * @param targetLanguage
  * @text Target Language
@@ -169,9 +170,9 @@
  * @option Escape Character (\I18N[n])
  * @value escape
  * @option English
- * @value en-US
+ * @value en_US
  * @option Japanese
- * @value ja-JP
+ * @value ja_JP
  * @option Simplified Chinese
  * @value zh_CN
  * @option Traditional Chinese
@@ -189,17 +190,17 @@
  * @option Portuguese
  * @value pt_BR
  * @option Russian
- * @value ru-RU
+ * @value ru_RU
  * 
  * @param languagesToBeSupported
  * @text Languages to be Supported
  * @desc Specify all the languages to be translated. The languages will be used for the keys in I18NTexts.json.
- * @default ["en-US","ja-JP"]
+ * @default ["en_US","ja_JP"]
  * @type select[]
  * @option English
- * @value en-US
+ * @value en_US
  * @option Japanese
- * @value ja-JP
+ * @value ja_JP
  * @option Simplified Chinese
  * @value zh_CN
  * @option Traditional Chinese
@@ -217,7 +218,7 @@
  * @option Portuguese
  * @value pt_BR
  * @option Russian
- * @value ru-RU
+ * @value ru_RU
  * 
  * @param targetText
  * @text Target Texts
@@ -274,10 +275,11 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
+ * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 
  * ゲーム中に使用されるあらゆる文字列を専用制御文字に変換し、元の文字列をJSON
  * ファイルとして出力します。本プラグインはデータベースの文字列を直接変更しま
@@ -348,14 +350,14 @@
  *  7. テストプレイを実行する
  *  8. 全ての変換対象の文字列が制御文字に変換されていることを確認する
  *  9. dataフォルダ内にI18NTexts.jsonが生成されていることを確認する
- * 10. I18NTexts.jsonを開き、「ja-JP」というキーの値にツクール上に入力されてい
- *     た文字列が、「en-US」というキーの値に「temp[n]」という仮文字列が設定さ
+ * 10. I18NTexts.jsonを開き、「ja_JP」というキーの値にツクール上に入力されてい
+ *     た文字列が、「en_US」というキーの値に「temp[n]」という仮文字列が設定さ
  *     れていることを確認する
  * 11. ConvertI18NTexts.jsを無効にする
  * 12. DisplayI18NTexts.jsのプラグインパラメータ「使用言語」に「日本語」と「英
  *     語」を指定する
  * 13. DisplayI18NTexts.jsを有効にする
- * 14. I18NTexts.json内の任意のデータの「en-US」キーの値に、「ja-JP」キーの値
+ * 14. I18NTexts.json内の任意のデータの「en_US」キーの値に、「ja_JP」キーの値
  *     の文字列を翻訳した文字列を入力する（オプション画面にて表示される文字列
  *     推奨）
  * 15. テストプレイを実行し、オプション画面を開く
@@ -377,8 +379,8 @@
  * I18NTexts.jsonに変更が反映されます。
  * 
  * I18NTexts.jsonの言語別キー一覧
- * 日本語: ja-JP
- * 英語: en-US
+ * 日本語: ja_JP
+ * 英語: en_US
  * 中国語（簡体字）: zh_CN
  * 中国語（繁体字）: zh_TW
  * 韓国語: ko_KR
@@ -387,7 +389,7 @@
  * ドイツ語: de_DE
  * スペイン語: es_ES
  * ポルトガル語: pt_BR
- * ロシア語: ru-RU
+ * ロシア語: ru_RU
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
@@ -397,14 +399,14 @@
  * @param sourceLanguage
  * @text ソース言語
  * @desc 現在データベースやイベントに入力されている文字列の言語を選択してください。
- * @default ja-JP
+ * @default ja_JP
  * @type select
  * @option 制御文字（\I18N[n]）
  * @value escape
  * @option 日本語
- * @value ja-JP
+ * @value ja_JP
  * @option 英語
- * @value en-US
+ * @value en_US
  * @option 中国語（簡体字）
  * @value zh_CN
  * @option 中国語（繁体字）
@@ -422,7 +424,7 @@
  * @option ポルトガル語
  * @value pt_BR
  * @option ロシア語
- * @value ru-RU
+ * @value ru_RU
  * 
  * @param targetLanguage
  * @text ターゲット言語
@@ -432,9 +434,9 @@
  * @option 制御文字（\I18N[n]）
  * @value escape
  * @option 日本語
- * @value ja-JP
+ * @value ja_JP
  * @option 英語
- * @value en-US
+ * @value en_US
  * @option 中国語（簡体字）
  * @value zh_CN
  * @option 中国語（繁体字）
@@ -452,17 +454,17 @@
  * @option ポルトガル語
  * @value pt_BR
  * @option ロシア語
- * @value ru-RU
+ * @value ru_RU
  * 
  * @param languagesToBeSupported
  * @text 翻訳候補言語リスト
  * @desc すべての翻訳候補言語を設定してください。ここで指定した言語がI18NTexts.jsonのキーとして追加されます。
- * @default ["ja-JP","en-US"]
+ * @default ["ja_JP","en_US"]
  * @type select[]
  * @option 日本語
- * @value ja-JP
+ * @value ja_JP
  * @option 英語
- * @value en-US
+ * @value en_US
  * @option 中国語（簡体字）
  * @value zh_CN
  * @option 中国語（繁体字）
@@ -480,7 +482,7 @@
  * @option ポルトガル語
  * @value pt_BR
  * @option ロシア語
- * @value ru-RU
+ * @value ru_RU
  * 
  * @param targetText
  * @text 変換対象文字列
@@ -560,8 +562,8 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
         const ESCAPE_TEXT = "\\I18N[%1]";
     
         const LANGUAGE_OPTION_NAMES = {
-            "ja-JP":"言語",
-            "en-US":"Language",
+            "ja_JP":"言語",
+            "en_US":"Language",
             "zh_CN":"语言",
             "zh_TW":"語言",
             "ko_KR":"언어",
@@ -570,7 +572,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             "de_DE":"Sprache",
             "es_ES":"Idioma",
             "pt_BR":"Linguagem",
-            "ru-RU":"Язык"
+            "ru_RU":"Язык"
         };
     
         const ALERT_INVALID_SOURCE_JP = "「ソース言語」が無効な値です。プラグインパラメータを再設定してください。";

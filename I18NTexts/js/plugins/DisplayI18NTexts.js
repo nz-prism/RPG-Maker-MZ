@@ -11,10 +11,12 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
+ * 06/04/2023 1.0.1 Fixed locales (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
+ * 
  * 
  * Displays each text replacing a string referred from a JSON file based on the
  * language option. It requires "OptionEx" plugin. Place this plugin under
@@ -48,12 +50,12 @@
  * @param supportedLanguages
  * @text Supported Languages
  * @desc Choose supported languages. If single one is chosen, the option will not appear. The top one will be the default.
- * @default ["en-US","ja-JP"]
+ * @default ["en_US","ja_JP"]
  * @type select[]
  * @option English
- * @value en-US
+ * @value en_US
  * @option Japanese
- * @value ja-JP
+ * @value ja_JP
  * @option Simplified Chinese
  * @value zh_CN
  * @option Traditional Chinese
@@ -71,7 +73,7 @@
  * @option Portuguese
  * @value pt_BR
  * @option Russian
- * @value ru-RU
+ * @value ru_RU
  * 
  */
 
@@ -84,10 +86,11 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.0
+ * ver. 1.0.1
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
+ * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 
  * オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
  * 「OptionEx」プラグインの導入が前提となります。OptionExよりも後に配置してく
@@ -121,12 +124,12 @@
  * @param supportedLanguages
  * @text 使用言語
  * @desc 使用言語を設定してください。1つ以下の場合このオプションは表示されなくなります。一番上がデフォルト言語になります。
- * @default ["ja-JP","en-US"]
+ * @default ["ja_JP","en_US"]
  * @type select[]
  * @option 日本語
- * @value ja-JP
+ * @value ja_JP
  * @option 英語
- * @value en-US
+ * @value en_US
  * @option 中国語（簡体字）
  * @value zh_CN
  * @option 中国語（繁体字）
@@ -144,7 +147,7 @@
  * @option ポルトガル語
  * @value pt_BR
  * @option ロシア語
- * @value ru-RU
+ * @value ru_RU
  * 
  */
 
@@ -160,8 +163,8 @@ $dataI18nTexts = null;
     const I18N_REGEXP = /\\I18N\[(\d+)\]/gi;
     
     const LANGUAGE_NAMES = {
-        "ja-JP":"日本語",
-        "en-US":"English",
+        "ja_JP":"日本語",
+        "en_US":"English",
         "zh_CN":"简体中文",
         "zh_TW":"繁体中文",
         "ko_KR":"한국어",
@@ -170,7 +173,7 @@ $dataI18nTexts = null;
         "de_DE":"Deutsch",
         "es_ES":"Español",
         "pt_BR":"Português",
-        "ru-RU":"Русский"
+        "ru_RU":"Русский"
     };
 
     
@@ -310,13 +313,13 @@ $dataI18nTexts = null;
     
     Window_NameInput.prototype.table = function() {
         switch (ConfigManager.language()) {
-            case "ja-JP":
+            case "ja_JP":
                 return [
                     Window_NameInput.JAPAN1,
                     Window_NameInput.JAPAN2,
                     Window_NameInput.JAPAN3
                 ];
-            case "ru-RU":
+            case "ru_RU":
                 return [Window_NameInput.RUSSIA];
             default:
                 return [Window_NameInput.LATIN1, Window_NameInput.LATIN2];
