@@ -9,11 +9,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.0.1
+ * ver. 1.1.0
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
  * 06/04/2023 1.0.1 Fixed locales (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
+ * 06/05/2023 1.1.0 Added a functionality to prevent a double conversion.
  * 
  * Converts all the texts used in a game to escape characters and generates a
  * JSON file with the original texts. It makes changes to the database files
@@ -67,10 +68,16 @@
  *   plugin parameter names of OptionEx, required by DisplayI18NTexts.js, are
  *   populated by default.
  * 
+ * After conversion, this plugin will automatically be disabled. Plus, "Source
+ * Language" and "Target Language" will be swapped. This behavior prevents
+ * double conversion, which messes database and JSON texts.
+ * 
  * Note once you ran this plugin, do not change the values of plugin parameters
  * below Target Texts afterwards. Plus, though it doesn't matter to add items
  * for the database or events, including event commands, do not delete items or
  * change the order. Otherwise, it doesn't work correctly due to ID changes.
+ * It doesn't convert empty texts. If you populate a text for a field which was
+ * originally empty, or vice versa, texts will be messed due to ID changes.
  * If you want to delete items or change orders, delete I18NTexts.json in data
  * folder. It will be initialized by running this plugin.
  * 
@@ -275,11 +282,12 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.0.1
+ * ver. 1.1.0
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
  * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
+ * 2023/06/05 1.1.0 二重変換防止機能を追加
  * 
  * ゲーム中に使用されるあらゆる文字列を専用制御文字に変換し、元の文字列をJSON
  * ファイルとして出力します。本プラグインはデータベースの文字列を直接変更しま
@@ -331,12 +339,19 @@
  * 　の各種オプション項目名のプラグインパラメータ名は、あらかじめ指定されていま
  * 　す。
  * 
+ * 変換が完了すると、本プラグインは自動的に無効化されます。また、「ソース言語」
+ * と「ターゲット言語」が入れ替わります。誤って本プラグインを二重に実行すると
+ * データベースやJSONファイルがおかしくなってしまうため、これを防ぐために用意
+ * された機能です。
+ * 
  * 本プラグインを一度実行した後、次回以降の起動では「変換対象文字列」以下のパ
  * ラメータを変更しないでください。また、データベース項目やイベント（イベント
  * 中のイベントコマンドも含む）を追加することは問題ありませんが、削除したり順
  * 番を変更したりしないでください。IDがずれて正常に変換できなくなってしまいま
- * す。そうした変更を加える必要がある場合は、dataフォルダ内のI18NTexts.jsonを
- * 削除してください。これにより初期化されます。
+ * す。なお空の文字列は変換対象になりません。元は空文字列だったデータに文字列
+ * を入力する、あるいはその反対の編集を行うとやはりIDがずれてしまいます。そう
+ * した変更を加える必要がある場合は、dataフォルダ内のI18NTexts.jsonを削除して
+ * ください。これにより初期化されます。
  * 
  * 本プラグインは以下の手順にて使用することを推奨します（ゲーム中の文字列とし
  * て日本語と英語の2ヶ国語を使用する場合の例です）。
@@ -1541,27 +1556,33 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const plugin = $plugins[i];
                 if (!plugin) continue;
                 const pluginName = plugin.name;
-                const parameters = PLUGIN_PARAMETERS[pluginName];
-                if (parameters) {
-                    const header = pluginName + "-";
-                    for (let j=0; j<parameters.length; j++) {
-                        const parameterName = parameters[j];
-                        const str = plugin.parameters[parameterName];
-                        if (str) {
-                            const escapeText = ESCAPE_TEXT.format(id);
-                            if (update) {
-                                if (UPDATING_TEXTS) {
-                                    texts[id][SOURCE_LANGUAGE] = str;
+                if (pluginName === PLUGIN_NAME) {
+                    plugin.status = false;
+                    plugin.parameters.sourceLanguage = TARGET_LANGUAGE;
+                    plugin.parameters.targetLanguage = SOURCE_LANGUAGE;
+                } else {
+                    const parameters = PLUGIN_PARAMETERS[pluginName];
+                    if (parameters) {
+                        const header = pluginName + "-";
+                        for (let j=0; j<parameters.length; j++) {
+                            const parameterName = parameters[j];
+                            const str = plugin.parameters[parameterName];
+                            if (str) {
+                                const escapeText = ESCAPE_TEXT.format(id);
+                                if (update) {
+                                    if (UPDATING_TEXTS) {
+                                        texts[id][SOURCE_LANGUAGE] = str;
+                                    } else {
+                                        plugin.parameters[parameterName] = CONVERTING_TO_ESCAPE ? escapeText : texts[id][TARGET_LANGUAGE];
+                                    }
                                 } else {
-                                    plugin.parameters[parameterName] = CONVERTING_TO_ESCAPE ? escapeText : texts[id][TARGET_LANGUAGE];
+                                    const obj = {"id":id, "identifier": header+parameterName};
+                                    obj[SOURCE_LANGUAGE] = str;
+                                    plugin.parameters[parameterName] = escapeText;
+                                    texts.push(obj);
                                 }
-                            } else {
-                                const obj = {"id":id, "identifier": header+parameterName};
-                                obj[SOURCE_LANGUAGE] = str;
-                                plugin.parameters[parameterName] = escapeText;
-                                texts.push(obj);
+                                id++;
                             }
-                            id++;
                         }
                     }
                 }
