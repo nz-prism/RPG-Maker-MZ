@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.3.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/OptionEx/js/plugins/OptionEx.js)
+[1.4.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/OptionEx/js/plugins/OptionEx.js)
 
 ### バージョン履歴
 - 2021/02/28 1.0.0 リリース
@@ -15,6 +15,7 @@
 - 2022/02/21 1.2.3 オプション系他プラグインとの競合回避を強化
 - 2022/02/24 1.3.0 ボタンよりも下にウィンドウを配置するプラグインパラメータを追加、説明文追記
 - 2022/03/03 1.3.1 ニューゲームにデフォルト値を反映するように修正
+- 2023/08/24 1.4.0 メッセージ瞬間表示時の制御文字の挙動に関するプラグインパラメータ2種を追加
 
 ## 概要
 このプラグインは、オプション画面にさまざまな機能を追加します。
