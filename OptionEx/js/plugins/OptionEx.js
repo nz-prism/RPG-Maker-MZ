@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.3.1
+ * ver. 1.4.0
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
@@ -26,6 +26,8 @@
  * 02/24/2022 1.3.0 Added a plugin parameter to lower the window under the
  *                  buttons and rewrote this description.
  * 03/03/2022 1.3.1 Fixed to reflect the default values for a new game.
+ * 08/24/2023 1.4.0 Added 2 plugin parameters as to the Control Characters
+ *                  behavior when Fast Message option is ON.
  * 
  * This plugin extends the option scene.
  * The functionalities include not only changing the option window cosmetics
@@ -69,6 +71,11 @@
  * 
  * 2. Fast Message
  * If ON, texts appear instantly on the message window.
+ * The plugin parameter "Wait Time Factor for Fast Message" can set a factor
+ * with which you can shorten or remove the wait time for Control Characters
+ * "\." and "\|". The plugin parameter "Button Input Wait for Fast Message"
+ * enables you to remove the wait for button input brought by Control Characer
+ * "\!".
  * 
  * 3. Dash Speed
  * 3 speeds can be selected. "1" is the same speed as MZ default.
@@ -284,6 +291,28 @@
  * @default true
  * @type boolean
  * 
+ * @param waitTimeForFastMessage
+ * @text Wait Time Factor for Fast Message
+ * @desc The wait time factor for Control Characters "\." and "\|" when Fast Message option is ON.
+ * @parent fastMessage
+ * @default 1
+ * @type select
+ * @option x 1
+ * @value 1
+ * @option x 1/3
+ * @value 3
+ * @option x 1/5
+ * @value 5
+ * @option x 0
+ * @value 0
+ * 
+ * @param buttonWaitForFastMessage
+ * @text Button Input Wait for Fast Message
+ * @desc If false, it will not wait for button input even though Control Character "\!" exists.
+ * @parent fastMessage
+ * @default true
+ * @type boolean
+ * 
  * @param fastMessageName
  * @text Fast Message Name
  * @desc Specify the name of an option to show messages immediately.
@@ -425,7 +454,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.3.1
+ * ver. 1.4.0
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
@@ -440,6 +469,8 @@
  * 2022/02/24 1.3.0 ボタンよりも下にウィンドウを配置するプラグインパラメータを
  *                  追加、説明文追記
  * 2022/03/03 1.3.1 ニューゲームにデフォルト値を反映するように修正
+ * 2023/08/24 1.4.0 メッセージ瞬間表示時の制御文字の挙動に関するプラグインパラ
+ *                  メータ2種を追加
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
  * オプション画面の外観の変更や音量等のオプションに対するゲージの描画だけでな
@@ -483,6 +514,11 @@
  * 
  * 2. メッセージ瞬間表示
  * オンにするとメッセージが瞬間的に表示されるようになります。
+ * プラグインパラメータ「メッセージ瞬間表示時ウェイト時間係数」により、このオプ
+ * ションがオンのときの制御文字「\.」「\|」のウェイト時間を無くしたり短縮したり
+ * できます。プラグインパラメータ「メッセージ瞬間表示時入力待ち」により、このオ
+ * プションがオンのときに制御文字「\!」によってボタン入力待ちを行うかどうかを設
+ * 定できます。
  * 
  * 3. ダッシュ速度
  * ダッシュ時の速度を３段階から選択できます。「1」がツクールデフォルトと同じ速
@@ -699,6 +735,28 @@
  * @default true
  * @type boolean
  * 
+ * @param waitTimeForFastMessage
+ * @text メッセージ瞬間表示時ウェイト時間係数
+ * @desc メッセージ瞬間表示がオンのときの、制御文字「\.」「\|」によるウェイト時間の係数です。
+ * @parent fastMessage
+ * @default 1
+ * @type select
+ * @option x 1
+ * @value 1
+ * @option x 1/3
+ * @value 3
+ * @option x 1/5
+ * @value 5
+ * @option x 0
+ * @value 0
+ * 
+ * @param buttonWaitForFastMessage
+ * @text メッセージ瞬間表示時入力待ち
+ * @desc オフにするとメッセージ瞬間表示がオンのとき、制御文字「\!」によるボタン入力待ちを行いません。
+ * @parent fastMessage
+ * @default true
+ * @type boolean
+ * 
  * @param fastMessageName
  * @text メッセージ瞬間表示名
  * @desc メッセージ瞬間表示の表示名を設定してください。
@@ -850,6 +908,9 @@
 
     const HIDE_TOUCH_UI_FOR_MOBILES = pluginParams.hideTouchUIForMobiles === "true";
     const HIDE_SWITCH_AB_BUTTONS_IF_GAMEPAD_UNCONNECTED = pluginParams.hideSwitchABButtonsIfGamepadUnconnected === "true";
+
+    const WAIT_TIME_FOR_FAST_MESSAGE = Number(pluginParams.waitTimeForFastMessage);
+    const BUTTON_WAIT_FOR_FAST_MESSAGE = pluginParams.buttonWaitForFastMessage === "true";
 
     const WINDOWSKINS = JSON.parse(pluginParams.windowskins);
 
@@ -1143,6 +1204,25 @@
         } else {
             return _Window_Message_prototype_shouldBreakHere.call(this, textState);
         }
+    };
+
+
+    const _Window_Message_prototype_processEscapeCharacter = Window_Message.prototype.processEscapeCharacter;
+    Window_Message.prototype.processEscapeCharacter = function(code, textState) {
+        if (USE_FAST_MESSAGE && ConfigManager.fastMessage) {
+            switch (code) {
+                case ".":
+                    if (WAIT_TIME_FOR_FAST_MESSAGE !== 0) this.startWait(Math.floor(15 / WAIT_TIME_FOR_FAST_MESSAGE));
+                    return;
+                case "|":
+                    if (WAIT_TIME_FOR_FAST_MESSAGE !== 0) this.startWait(Math.floor(60 / WAIT_TIME_FOR_FAST_MESSAGE));
+                    return;
+                case "!":
+                    if (BUTTON_WAIT_FOR_FAST_MESSAGE) this.startPause();
+                    return;
+            }
+        }
+        _Window_Message_prototype_processEscapeCharacter.call(this, code, textState);
     };
 
 
