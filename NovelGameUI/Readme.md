@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.3.3](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/NovelGameUI/js/plugins/NovelGameUI.js)
+[1.3.4](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/NovelGameUI/js/plugins/NovelGameUI.js)
 
 ### バージョン履歴
 - 2022/02/20 1.0.0 リリース
@@ -15,6 +15,7 @@
 - 2022/11/17 1.3.1 新プラグインパラメータ２種にデフォルト値を追加
 - 2023/01/03 1.3.2 キーボード/ゲームパッド使用時の不具合を修正
 - 2023/01/29 1.3.3 制御ボタン無効時にオートモードを解除するように修正
+- 2023/09/10 1.3.4 オートモード切り替え直後はオート送りされない不具合修正
 
 ## 概要
 このプラグインは、マップでのイベント実行中に使用可能なノベルゲーム風インターフェースを提供します。
