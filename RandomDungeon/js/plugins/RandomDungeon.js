@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.1
+ * ver. 1.1.2
  * 
  * [History]
  * 05/01/2021 1.0.0 Released
@@ -19,6 +19,8 @@
  * 03/21/2022 1.1.0 Added a functionality to embed a variable value in the map
  *                  display names.
  * 04/15/2022 1.1.1 Fixed a rare error
+ * 09/17/2023 1.1.2 Fixed an error which happens when loading a save data in a
+ *                  random map after project is updated.
  * 
  * This plugin enables to generate a random map when a player
  * moves to a map with "random" attribute.
@@ -156,7 +158,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.1
+ * ver. 1.1.2
  * 
  * [バージョン履歴]
  * 2021/05/01 1.0.0 リリース
@@ -166,6 +168,8 @@
  * 2022/03/21 1.1.0 マップ表示名にプラグインパラメータで指定した変数の値を埋め
  *                  込む機能を追加
  * 2022/04/15 1.1.1 稀に発生するエラーを修正
+ * 2023/09/17 1.1.2 プロジェクト更新後にランダムダンジョンでのセーブデータを
+ *                  ロードすると発生するエラーを修正
  * 
  * このプラグインを導入すると、ランダム属性を持つマップに移動した際に
  * ダンジョンが自動生成されるようになります。
@@ -767,6 +771,12 @@
 
     Game_Event.prototype.clearSelfSwitches = function() {
         ["A","B","C","D"].forEach(c => $gameSelfSwitches.setValue([this._mapId, this._eventId, c], false));
+    };
+
+
+    const _Scene_Load_prototype_reloadMapIfUpdated = Scene_Load.prototype.reloadMapIfUpdated;
+    Scene_Load.prototype.reloadMapIfUpdated = function() {
+        if (!$gameMap.isRandom()) _Scene_Load_prototype_reloadMapIfUpdated.call(this);
     };
 
 
