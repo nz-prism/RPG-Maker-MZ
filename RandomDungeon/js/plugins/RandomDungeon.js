@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.2
+ * ver. 1.1.3
  * 
  * [History]
  * 05/01/2021 1.0.0 Released
@@ -21,6 +21,7 @@
  * 04/15/2022 1.1.1 Fixed a rare error
  * 09/17/2023 1.1.2 Fixed an error which happens when loading a save data in a
  *                  random map after project is updated.
+ * 09/18/2023 1.1.3 Fixed an error on transfer from a random dungeon.
  * 
  * This plugin enables to generate a random map when a player
  * moves to a map with "random" attribute.
@@ -158,7 +159,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.2
+ * ver. 1.1.3
  * 
  * [バージョン履歴]
  * 2021/05/01 1.0.0 リリース
@@ -170,6 +171,7 @@
  * 2022/04/15 1.1.1 稀に発生するエラーを修正
  * 2023/09/17 1.1.2 プロジェクト更新後にランダムダンジョンでのセーブデータを
  *                  ロードすると発生するエラーを修正
+ * 2023/09/18 1.1.3 ランダムダンジョンから場所移動する時のエラーを修正
  * 
  * このプラグインを導入すると、ランダム属性を持つマップに移動した際に
  * ダンジョンが自動生成されるようになります。
@@ -723,7 +725,7 @@
     };
 
     Game_Map.prototype.clearAllSelfSwitches = function() {
-        this._events.forEach(event => event.clearSelfSwitches());
+        this._events.forEach(event => event?.clearSelfSwitches());
     };
 
 
