@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.3
+ * ver. 1.1.4
  * 
  * [History]
  * 05/01/2021 1.0.0 Released
@@ -22,6 +22,7 @@
  * 09/17/2023 1.1.2 Fixed an error which happens when loading a save data in a
  *                  random map after project is updated.
  * 09/18/2023 1.1.3 Fixed an error on transfer from a random dungeon.
+ * 09/30/2023 1.1.4 Fixed an error on the event test from the event editor.
  * 
  * This plugin enables to generate a random map when a player
  * moves to a map with "random" attribute.
@@ -159,7 +160,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/RandomDungeon/js/plugins/RandomDungeon.js
  *
  * @help RandomDungeon.js
- * ver. 1.1.3
+ * ver. 1.1.4
  * 
  * [バージョン履歴]
  * 2021/05/01 1.0.0 リリース
@@ -172,6 +173,7 @@
  * 2023/09/17 1.1.2 プロジェクト更新後にランダムダンジョンでのセーブデータを
  *                  ロードすると発生するエラーを修正
  * 2023/09/18 1.1.3 ランダムダンジョンから場所移動する時のエラーを修正
+ * 2023/09/30 1.1.4 イベントエディタ上のイベントテストでのエラーを修正
  * 
  * このプラグインを導入すると、ランダム属性を持つマップに移動した際に
  * ダンジョンが自動生成されるようになります。
@@ -393,7 +395,8 @@
 
     const _Game_Map_prototype_displayName = Game_Map.prototype.displayName;
     Game_Map.prototype.displayName = function() {
-        return _Game_Map_prototype_displayName.call(this).format($gameVariables.value(MAP_NAME_VARIABLE_ID));
+        const name = _Game_Map_prototype_displayName.call(this);
+        return name ? name.format($gameVariables.value(MAP_NAME_VARIABLE_ID)) : "";
     };
 
     Game_Map.prototype.isRandom = function() {
@@ -440,8 +443,7 @@
     };
     
     Game_Map.prototype.setupData = function() {
-        const isRandom = $dataMap.meta.random;
-        if (isRandom) {
+        if ($dataMap.meta?.random) {
             this._random = true;
             const mapId = this._mapId;
             const pieceIds = $dataMapInfos.filter(mi => mi && mi.parentId === mapId).map(mi => mi.id);
