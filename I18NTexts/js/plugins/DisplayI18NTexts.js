@@ -11,11 +11,12 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
  * 06/04/2023 1.0.1 Fixed locales (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
+ * 10/02/2023 1.0.2 Fixed an error on a left cursor input at the language option.
  * 
  * 
  * Displays each text replacing a string referred from a JSON file based on the
@@ -86,11 +87,12 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
  * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
+ * 2023/10/02 1.0.2 言語オプションで左にカーソルを動かすと発生するエラーを修正
  * 
  * オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
  * 「OptionEx」プラグインの導入が前提となります。OptionExよりも後に配置してく
@@ -273,7 +275,7 @@ $dataI18nTexts = null;
     const _Window_Options_prototype_changeNumberBySymbol = Window_Options.prototype.changeNumberBySymbol;
     Window_Options.prototype.changeNumberBySymbol = function(symbol, forward, skip, wrap, offsetValue=null) {
         if (symbol === "languageIndex") {
-            const offset = offsetValue ?? (skip ? 2 : 1);
+            let offset = offsetValue ?? (skip ? 2 : 1);
             if (!offsetValue && !forward) offset *= -1;
             this.changeNumber(symbol, offset, SUPPORTED_LANGUAGES.length - 1, 0, wrap);
         } else {

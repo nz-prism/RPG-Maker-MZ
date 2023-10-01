@@ -2,11 +2,12 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.1](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/DisplayI18NTexts.js)
+[1.0.2](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/DisplayI18NTexts.js)
 
 ### バージョン履歴
 - 2023/06/04 1.0.0 リリース
 - 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
+- 2023/10/02 1.0.2 言語オプションで左にカーソルを動かすと発生するエラーを修正
 
 ## 概要
 オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
