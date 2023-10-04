@@ -9,7 +9,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.4.0
+ * ver. 1.5.0
  * 
  * [History]
  * 02/28/2021 1.0.0 Released
@@ -28,6 +28,7 @@
  * 03/03/2022 1.3.1 Fixed to reflect the default values for a new game.
  * 08/24/2023 1.4.0 Added 2 plugin parameters as to the Control Characters
  *                  behavior when Fast Message option is ON.
+ * 04/10/2023 1.5.0 Enabled ME/BGS Volumes to be merged with BGM/SE Volume.
  * 
  * This plugin extends the option scene.
  * The functionalities include not only changing the option window cosmetics
@@ -220,17 +221,29 @@
  * 
  * @param useBgsVolume
  * @text Use BGS Volume
- * @desc Specify to enable an option to tune BGS volume.
+ * @desc Specify to enable an option to tune BGS volume. If Merge with SE Volume, it will refer to SE Volume.
  * @parent volumes
- * @default true
- * @type boolean
+ * @default 2
+ * @type select
+ * @option Yes
+ * @value 2
+ * @option Merge with SE Volume
+ * @value 1
+ * @option No
+ * @value 0
  * 
  * @param useMeVolume
  * @text Use ME Volume
- * @desc Specify to enable an option to tune ME volume.
+ * @desc Specify to enable an option to tune ME volume. If Merge with BGM Volume, it will refer to BGM Volume.
  * @parent volumes
- * @default true
- * @type boolean
+ * @default 2
+ * @type select
+ * @option Yes
+ * @value 2
+ * @option Merge with BGM Volume
+ * @value 1
+ * @option No
+ * @value 0
  * 
  * @param useSeVolume
  * @text Use SE Volume
@@ -454,7 +467,7 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/OptionEx/js/plugins/OptionEx.js
  *
  * @help OptionEx.js
- * ver. 1.4.0
+ * ver. 1.5.0
  * 
  * [バージョン履歴]
  * 2021/02/28 1.0.0 リリース
@@ -471,6 +484,7 @@
  * 2022/03/03 1.3.1 ニューゲームにデフォルト値を反映するように修正
  * 2023/08/24 1.4.0 メッセージ瞬間表示時の制御文字の挙動に関するプラグインパラ
  *                  メータ2種を追加
+ * 2023/10/04 1.5.0 ME/BGS音量をBGM/SE音量に統合できるように修正
  * 
  * このプラグインは、オプション画面にさまざまな機能を追加します。
  * オプション画面の外観の変更や音量等のオプションに対するゲージの描画だけでな
@@ -664,17 +678,29 @@
  * 
  * @param useBgsVolume
  * @text BGS音量の使用
- * @desc BGS音量オプションを使用するかどうかを設定してください。
+ * @desc BGS音量オプションを使用するかどうかを設定してください。「SE音量と統合する」を選択するとSE音量と一体化されます。
  * @parent volumes
- * @default true
- * @type boolean
+ * @default 2
+ * @type select
+ * @option 使用する
+ * @value 2
+ * @option SE音量と統合する
+ * @value 1
+ * @option 使用しない
+ * @value 0
  * 
  * @param useMeVolume
  * @text ME音量の使用
- * @desc ME音量オプションを使用するかどうかを設定してください。
+ * @desc ME音量オプションを使用するかどうかを設定してください。「BGM音量と統合する」を選択するとBGM音量と一体化されます。
  * @parent volumes
- * @default true
- * @type boolean
+ * @default 2
+ * @type select
+ * @option 使用する
+ * @value 2
+ * @option BGM音量と統合する
+ * @value 1
+ * @option 使用しない
+ * @value 0
  * 
  * @param useSeVolume
  * @text SE音量の使用
@@ -827,8 +853,6 @@
  * @param windowTone
  * @text ウィンドウカラー
  * @desc ウィンドウカラーオプションに関する設定です。
- * @default true
- * @type boolean
  * 
  * @param useWindowTone
  * @text ウィンドウカラーの使用
@@ -918,8 +942,8 @@
     const USE_COMMAND_REMEMBER = pluginParams.useCommandRemember === "true";
     const USE_TOUCH_UI = pluginParams.useTouchUI === "true";
     const USE_BGM_VOLUME = pluginParams.useBgmVolume === "true";
-    const USE_BGS_VOLUME = pluginParams.useBgsVolume === "true";
-    const USE_ME_VOLUME = pluginParams.useMeVolume === "true";
+    const USE_BGS_VOLUME = Number(pluginParams.useBgsVolume);
+    const USE_ME_VOLUME = Number(pluginParams.useMeVolume);
     const USE_SE_VOLUME = pluginParams.useSeVolume === "true";
     
     const USE_SWITCH_AB_BUTTONS = pluginParams.useSwitchABButtons === "true";
@@ -949,6 +973,33 @@
     const DEFAULT_WINDOW_OPACITY = Number(pluginParams.defaultWindowOpacity);
     
 
+    if (USE_ME_VOLUME === 1) {
+        Object.defineProperty(ConfigManager, "bgmVolume", {
+            get: function() {
+                return AudioManager._bgmVolume;
+            },
+            set: function(value) {
+                AudioManager.bgmVolume = value;
+                AudioManager.meVolume = value;
+            },
+            configurable: true
+        });
+    }
+    
+    if (USE_BGS_VOLUME === 1) {
+        Object.defineProperty(ConfigManager, "seVolume", {
+            get: function() {
+                return AudioManager.seVolume;
+            },
+            set: function(value) {
+                AudioManager.seVolume = value;
+                AudioManager.bgsVolume = value;
+            },
+            configurable: true
+        });
+    }
+
+
     ConfigManager.switchABButtons = false;
     ConfigManager.fastMessage = false;
     ConfigManager.dashSpeed = 0;
@@ -975,6 +1026,8 @@
     const _ConfigManager_makeData = ConfigManager.makeData;
     ConfigManager.makeData = function() {
         const config = _ConfigManager_makeData.call(this);
+        if (USE_BGS_VOLUME === 1) config.bgsVolume = this.seVolume;
+        if (USE_ME_VOLUME === 1) config.meVolume = this.bgmVolume;
         config.switchABButtons = this.switchABButtons;
         config.fastMessage = this.fastMessage;
         config.dashSpeed = this.dashSpeed;
@@ -1124,8 +1177,8 @@
         if (!USE_COMMAND_REMEMBER) result--;
         if (!ConfigManager.useTouchUI()) result--;
         if (!USE_BGM_VOLUME) result--;
-        if (!USE_BGS_VOLUME) result--;
-        if (!USE_ME_VOLUME) result--;
+        if (USE_BGS_VOLUME < 2) result--;
+        if (USE_ME_VOLUME < 2) result--;
         if (!USE_SE_VOLUME) result--;
         if (ConfigManager.useSwitchABButtons()) result++;
         if (USE_FAST_MESSAGE) result++;
@@ -1304,8 +1357,8 @@
 
     Window_Options.prototype.addVolumeOptions = function() {
         if (USE_BGM_VOLUME) this.addCommand(TextManager.bgmVolume, "bgmVolume");
-        if (USE_BGS_VOLUME) this.addCommand(TextManager.bgsVolume, "bgsVolume");
-        if (USE_ME_VOLUME) this.addCommand(TextManager.meVolume, "meVolume");
+        if (USE_BGS_VOLUME === 2) this.addCommand(TextManager.bgsVolume, "bgsVolume");
+        if (USE_ME_VOLUME === 2) this.addCommand(TextManager.meVolume, "meVolume");
         if (USE_SE_VOLUME) this.addCommand(TextManager.seVolume, "seVolume");
     };
 
@@ -1481,26 +1534,34 @@
         this.contentsBack.clearRect(rect.x, rect.y, rect.width, rect.height);
     };
 
-    Window_Options.prototype.changeValue = function(symbol, value) {
+    Window_Options.prototype.changeValue = function(symbol, value, needRefresh=false) {
         const lastValue = this.getConfigValue(symbol);
         if (lastValue !== value) {
             this.setConfigValue(symbol, value);
-            switch (symbol) {
-                case "windowskin":
-                    this.loadWindowskin();
-                    break;
-                case "windowToneRed":
-                case "windowToneGreen":
-                case "windowToneBlue":
-                    $gameSystem.setWindowTone(ConfigManager.windowTone());
-                    this.updateTone();
-                    break;
-                case "windowOpacity":
-                    this.updateBackOpacity();
-                    break;
+            this.onValueChange(symbol);
+            if (needRefresh) {
+                this.refresh();
+            } else {
+                this.redrawItem(this.findSymbol(symbol));
             }
-            this.redrawItem(this.findSymbol(symbol));
             this.playCursorSound();
+        }
+    };
+
+    Window_Options.prototype.onValueChange = function(symbol) {
+        switch (symbol) {
+            case "windowskin":
+                this.loadWindowskin();
+                break;
+            case "windowToneRed":
+            case "windowToneGreen":
+            case "windowToneBlue":
+                $gameSystem.setWindowTone(ConfigManager.windowTone());
+                this.updateTone();
+                break;
+            case "windowOpacity":
+                this.updateBackOpacity();
+                break;
         }
     };
 
@@ -1533,6 +1594,7 @@
                 offset = offsetValue ?? (skip ? this.volumeOffset() : 5);
                 max = 100;
                 min = 0;
+                break;
         }
         if (!offsetValue && !forward) offset *= -1;
         this.changeNumber(symbol, offset, max, min, wrap);

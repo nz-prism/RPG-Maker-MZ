@@ -11,12 +11,14 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.2
+ * ver. 1.0.3
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
  * 06/04/2023 1.0.1 Fixed locales (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
- * 10/02/2023 1.0.2 Fixed an error on a left cursor input at the language option.
+ * 10/02/2023 1.0.2 Fixed an error on a left cursor input at the language
+ *                  option.
+ * 10/04/2023 1.0.3 Adjusted to OptionEx v1.5.0.
  * 
  * 
  * Displays each text replacing a string referred from a JSON file based on the
@@ -30,9 +32,9 @@
  * 
  * Funcionality 1 adds "Language" option on the config screen. For Language
  * option, players can choose a language from ones specified for the plugin
- * parameter "Supported Languages". The top language of the parameter will be the
- * default one. If single one is specified, the option will not appear on the
- * config screen.
+ * parameter "Supported Languages". The top language of the parameter will be
+ * the default one. If single one is specified, the option will not appear on
+ * the config screen.
  * 
  * Functionality 2 replaces escape characers "\I18N[n]" with corresponding
  * strings referred from a JSON file "I18NTexts.json". All the texts in the
@@ -87,12 +89,13 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.2
+ * ver. 1.0.3
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
  * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 2023/10/02 1.0.2 言語オプションで左にカーソルを動かすと発生するエラーを修正
+ * 2023/10/04 1.0.3 OptionEx v1.5.0に合わせて修正
  * 
  * オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
  * 「OptionEx」プラグインの導入が前提となります。OptionExよりも後に配置してく
@@ -284,17 +287,8 @@ $dataI18nTexts = null;
     };
 
     const _Window_Options_prototype_changeValue = Window_Options.prototype.changeValue;
-    Window_Options.prototype.changeValue = function(symbol, value) {
-        if (symbol === "languageIndex") {
-            const lastValue = this.getConfigValue(symbol);
-            if (lastValue !== value) {
-                this.setConfigValue(symbol, value);
-                this.refresh();
-                this.playCursorSound();
-            }
-        } else {
-            _Window_Options_prototype_changeValue.apply(this, arguments);
-        }
+    Window_Options.prototype.changeValue = function(symbol, value, needRefresh=false) {
+        _Window_Options_prototype_changeValue.call(this, symbol, value, (needRefresh || symbol === "languageIndex"));
     };
 
     const _Window_Options_prototype_restoreDefaultValues = Window_Options.prototype.restoreDefaultValues;
