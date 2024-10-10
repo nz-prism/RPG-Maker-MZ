@@ -9,12 +9,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.1.0
+ * ver. 1.2.0
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
  * 06/04/2023 1.0.1 Fixed locales (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 06/05/2023 1.1.0 Added a functionality to prevent a double conversion.
+ * 10/10/2024 1.2.0 Added 2 parameters to control target texts.
  * 
  * Converts all the texts used in a game to escape characters and generates a
  * JSON file with the original texts. It makes changes to the database files
@@ -61,6 +62,14 @@
  *   will be converted as well.
  * Convert Notes: If true, the notes on the database and the comments in event
  *   pages will be converted as well.
+ * Convert Empty Lines: If true, empty lines on the message-type events will
+ *   be converted as well. In accordance with the previous version in which
+ *   empty lines were to be converted, the default value is true.
+ * Convert Full Escape Character Texts: If true, texts composed of Escape
+ *   Characters only will be converted as well. If such texts don't have to be
+ *   converted, set this parameter false. In accordance with the previous
+ *   version in which full Escape Character texts were to be converted, the
+ *   default value is true.
  * Plugin Parameters: By specifying plugin names and their parameter names,
  *   the texts populated for the parameters will be converted as well. Note
  *   it converts only simple texts (string). String lists (string[]) and
@@ -252,6 +261,20 @@
  * @default false
  * @type boolean
  * 
+ * @param convertEmptyLines
+ * @text Convert Empty Lines
+ * @desc If true, empty lines within message type events, including Comment, will be converted.
+ * @parent targetText
+ * @default true
+ * @type boolean
+ * 
+ * @param convertFullEscapeCharacterTexts
+ * @text Convert Full Escape Character Texts
+ * @desc If false, texts composed of Escape Characters only will not be converted.
+ * @parent targetText
+ * @default true
+ * @type boolean
+ * 
  * @param pluginParameters
  * @text Plugin Parameters
  * @desc Specify plugin names and their parameter names, which will be converted.
@@ -282,12 +305,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.1.0
+ * ver. 1.2.0
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
  * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 2023/06/05 1.1.0 二重変換防止機能を追加
+ * 2024/10/10 1.2.0 変換対象を制御する２つのパラメータを追加
  * 
  * ゲーム中に使用されるあらゆる文字列を専用制御文字に変換し、元の文字列をJSON
  * ファイルとして出力します。本プラグインはデータベースの文字列を直接変更しま
@@ -331,6 +355,14 @@
  * 　文字列（メモ・注釈以外）も変換対象になります。
  * ・「メモの変換」をオンにすると、データベースの各種「メモ」およびイベントの
  * 　「注釈」も変換対象になります。
+ * ・「空行の変換」をオンにすると、メッセージ系イベントの空行も変換対象になり
+ * 　ます。言語によって適切な行数が異なるため、空行で行数を増やす場合などに使
+ * 　用してください。空行が変換対象だった前バージョンに合わせるため、デフォル
+ * 　トはオンになっています。
+ * ・「全制御文字テキストの変換」をオンにすると、制御文字のみで構成されたテキ
+ * 　ストも変換対象になります。このようなテキストが翻訳不要である場合はオフに
+ * 　してください。このようなテキストが変換対象だった前バージョンに合わせるた
+ * 　め、デフォルトはオンになっています。
  * ・「プラグインパラメータ」にプラグイン名およびそのプラグインのプラグインパ
  * 　ラメータ名を指定することで、プラグインパラメータに入力されている文字列も
  * 　変換対象になります。ただし変換できるのは通常の文字列（string）のみであり、
@@ -524,6 +556,20 @@
  * @default false
  * @type boolean
  * 
+ * @param convertEmptyLines
+ * @text 空行の変換
+ * @desc オンにするとメッセージ系のイベント（注釈も含む）の空行も変換対象になります。
+ * @parent targetText
+ * @default true
+ * @type boolean
+ * 
+ * @param convertFullEscapeCharacterTexts
+ * @text 全制御文字テキストの変換
+ * @desc オンにすると制御文字のみで構成されたテキストも変換対象になります。
+ * @parent targetText
+ * @default true
+ * @type boolean
+ * 
  * @param pluginParameters
  * @text プラグインパラメータ
  * @desc 各種プラグインのプラグインパラメータを変換対象に指定します（複数設定可能）。
@@ -557,6 +603,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
         const SOURCE_LANGUAGE = pluginParams.sourceLanguage;
         const TARGET_LANGUAGE = pluginParams.targetLanguage;
         const CONVERTING_TO_ESCAPE = TARGET_LANGUAGE === "escape";
+        const CONVERTING_FROM_ESCAPE = SOURCE_LANGUAGE === "escape";
         const UPDATING_TEXTS = TARGET_LANGUAGE === SOURCE_LANGUAGE;
 
         const LANGUAGES_TO_BE_SUPPORTED = JSON.parse(pluginParams.languagesToBeSupported);
@@ -565,6 +612,8 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
         const CONVERT_GAME_TITLE = pluginParams.convertGameTitle === "true";
         const CONVERT_UNUSED_TEXTS = pluginParams.convertUnusedTexts === "true";
         const CONVERT_NOTES = pluginParams.convertNotes === "true";
+        const CONVERT_EMPTY_LINES = pluginParams.convertEmptyLines === "true";
+        const CONVERT_FULL_ESCAPE_CHARACTER_TEXTS = pluginParams.convertFullEscapeCharacterTexts === "true";
     
         const PLUGIN_PARAMETERS = {};
         for (const str of JSON.parse(pluginParams.pluginParameters)) {
@@ -603,13 +652,31 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
         const fs = require("fs");
         if (fs.existsSync(FILE_PATH)) DataManager._databaseFiles.push({ name: "$dataI18nTexts", src: "I18NTexts.json" });
     
+        
+        StorageManager.shouldConvertText = function(text) {
+            if (!text) {
+                return false;
+            } else if (CONVERT_FULL_ESCAPE_CHARACTER_TEXTS) {
+                return true;
+            } else {
+                text = text.replace(/\s/g, "");
+                text = text.replace(/\\/g, "\x1b");
+                text = text.replace(/\x1b\x1b/g, "\\");
+                text = text.replace(/\x1b[G$.|^!><{}]/gi, "");
+                while (text.match(/\x1b..?\[\d*\]/gi)) {
+                    text = text.replace(/\x1b..?\[\d*\]/gi, "");
+                }
+                return text !== "";
+            }
+        };
+
     
         StorageManager.processSystemTexts = function(id, texts, update=false) {
             const systemHeader = "system-";
     
             if (CONVERT_GAME_TITLE) {
                 const title = $dataSystem.gameTitle;
-                if (title) {
+                if (this.shouldConvertText(title)) {
                     const titleEscape = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -628,7 +695,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             }
     
             const currency = $dataSystem.currencyUnit;
-            if (currency) {
+            if (this.shouldConvertText(currency)) {
                 const currencyEscape = ESCAPE_TEXT.format(id);
                 if (update) {
                     if (UPDATING_TEXTS) {
@@ -649,7 +716,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const elements = $dataSystem.elements;
             for (let i=1; i<elements.length; i++) {
                 const str = elements[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -671,7 +738,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const skillTypes = $dataSystem.skillTypes;
             for (let i=1; i<skillTypes.length; i++) {
                 const str = skillTypes[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -693,7 +760,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const weaponTypes = $dataSystem.weaponTypes;
             for (let i=1; i<weaponTypes.length; i++) {
                 const str = weaponTypes[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -715,7 +782,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const armorTypes = $dataSystem.armorTypes;
             for (let i=1; i<armorTypes.length; i++) {
                 const str = armorTypes[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -737,7 +804,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const equipTypes = $dataSystem.equipTypes;
             for (let i=1; i<equipTypes.length; i++) {
                 const str = equipTypes[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -762,7 +829,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const basicHeader = termHeader + "basic";
             for (let i=0; i<basic.length; i++) {
                 const str = basic[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -784,7 +851,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const commandHeader = termHeader + "command";
             for (let i=0; i<commands.length; i++) {
                 const str = commands[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -806,7 +873,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const paramHeader = termHeader + "param";
             for (let i=0; i<params.length; i++) {
                 const str = params[i];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     if (update) {
                         if (UPDATING_TEXTS) {
@@ -828,7 +895,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             const messageHeader = termHeader + "message-";
             for (const ary of Object.entries(messages)) {
                 const str = ary[1];
-                if (str) {
+                if (this.shouldConvertText(str)) {
                     const escapeText = ESCAPE_TEXT.format(id);
                     const name = ary[0];
                     if (update) {
@@ -860,7 +927,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "actor" + i + "-";
                 for (const property of properties) {
                     const str = actor[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -891,7 +958,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "class" + i + "-";
                 for (const property of properties) {
                     const str = dclass[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -922,7 +989,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "skill" + i + "-";
                 for (const property of properties) {
                     const str = skill[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -953,7 +1020,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "item" + i + "-";
                 for (const property of properties) {
                     const str = item[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -984,7 +1051,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "weapon" + i + "-";
                 for (const property of properties) {
                     const str = weapon[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1015,7 +1082,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "armor" + i + "-";
                 for (const property of properties) {
                     const str = armor[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1045,7 +1112,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 if (CONVERT_NOTES) properties.push("note");
                 for (const property of properties) {
                     const str = enemy[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1076,7 +1143,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "state" + i + "-";
                 for (const property of properties) {
                     const str = state[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1106,7 +1173,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                     const header = "animation" + i + "-";
                     const property = "name";
                     const str = animation[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1138,7 +1205,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const header = "tileset" + i + "-";
                 for (const property of properties) {
                     const str = tileset[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1168,7 +1235,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 if (CONVERT_UNUSED_TEXTS) {
                     const property = "name";
                     const str = troop[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1206,7 +1273,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 if (CONVERT_UNUSED_TEXTS) {
                     const property = "name";
                     const str = commonEvent[property];
-                    if (str) {
+                    if (this.shouldConvertText(str)) {
                         const escapeText = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1237,7 +1304,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                     const header1 = "mapInfo" + i + "-";
                     const property = "name";
                     const str1 = mapInfo[property];
-                    if (str1) {
+                    if (this.shouldConvertText(str1)) {
                         const escapeText1 = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1262,7 +1329,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 if (CONVERT_NOTES) properties.push("note");
                 for (const property of properties) {
                     const str2 = map[property];
-                    if (str2) {
+                    if (this.shouldConvertText(str2)) {
                         const escapeText2 = ESCAPE_TEXT.format(id);
                         if (update) {
                             if (UPDATING_TEXTS) {
@@ -1289,7 +1356,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                     if (CONVERT_NOTES) properties.push("note");
                     for (const property of properties) {
                         const str3 = event[property];
-                        if (str3) {
+                        if (this.shouldConvertText(str3)) {
                             const escapeText3 = ESCAPE_TEXT.format(id);
                             if (update) {
                                 if (UPDATING_TEXTS) {
@@ -1343,8 +1410,10 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 const escapeText1 = ESCAPE_TEXT.format(id);
                 switch (command.code) {
                     case 101: //message(base)
+                        messageId++;
+                        messageLineId = 0;
                         const speakerName = command.parameters[4];
-                        if (speakerName) {
+                        if (this.shouldConvertText(speakerName)) {
                             if (update) {
                                 if (UPDATING_TEXTS) {
                                     texts[id][SOURCE_LANGUAGE] = speakerName;
@@ -1352,8 +1421,6 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                                     command.parameters[4] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
                                 }
                             } else {
-                                messageId++;
-                                messageLineId = 0;
                                 obj1["id"] = id;
                                 obj1["identifier"] = header + "message" + messageId + "-name";
                                 obj1[SOURCE_LANGUAGE] = speakerName;
@@ -1364,21 +1431,24 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                         }
                         break;
                     case 401: //message(line)
-                        if (update) {
-                            if (UPDATING_TEXTS) {
-                                texts[id][SOURCE_LANGUAGE] = command.parameters[0];
+                        messageLineId++;
+                        const message = command.parameters[0];
+                        if ((CONVERT_EMPTY_LINES && message === "") || this.shouldConvertText(message)) {
+                            if (update) {
+                                if (UPDATING_TEXTS) {
+                                    texts[id][SOURCE_LANGUAGE] = message;
+                                } else {
+                                    command.parameters[0] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
+                                }
                             } else {
-                                command.parameters[0] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
+                                obj1["id"] = id;
+                                obj1["identifier"] = header + "message" + messageId + "-line" + messageLineId;
+                                obj1[SOURCE_LANGUAGE] = message;
+                                command.parameters[0] = escapeText1;
+                                texts.push(obj1);
                             }
-                        } else {
-                            messageLineId++;
-                            obj1["id"] = id;
-                            obj1["identifier"] = header + "message" + messageId + "-line" + messageLineId;
-                            obj1[SOURCE_LANGUAGE] = command.parameters[0];
-                            command.parameters[0] = escapeText1;
-                            texts.push(obj1);
+                            id++;
                         }
-                        id++;
                         break;
                     case 102: //choice(base)
                         choiceId++;
@@ -1387,31 +1457,33 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                         const choiceHeader = header + "choice" + choiceId + "-line";
                         const ary = [];
                         for (let j=0; j<choices.length; j++) {
+                            choiceLineId++;
                             const last = (j === choices.length-1);
-                            const escapeText2 = ESCAPE_TEXT.format(id);
                             const sourceText = choices[j];
                             let targetText;
-                            if (update) {
-                                if (UPDATING_TEXTS) {
-                                    texts[id][SOURCE_LANGUAGE] = sourceText;
+                            if (this.shouldConvertText(sourceText)) {
+                                const escapeText2 = ESCAPE_TEXT.format(id);
+                                if (update) {
+                                    if (UPDATING_TEXTS) {
+                                        texts[id][SOURCE_LANGUAGE] = sourceText;
+                                    } else {
+                                        targetText = CONVERTING_TO_ESCAPE ? escapeText2 : texts[id][TARGET_LANGUAGE];
+                                    }
                                 } else {
-                                    targetText = CONVERTING_TO_ESCAPE ? escapeText2 : texts[id][TARGET_LANGUAGE];
+                                    targetText = escapeText2;
+                                    const obj2 = {};
+                                    obj2["id"] = id;
+                                    obj2["identifier"] = choiceHeader + choiceLineId;
+                                    obj2[SOURCE_LANGUAGE] = sourceText;
+                                    texts.push(obj2);
                                 }
-                            } else {
-                                choiceLineId++;
-                                targetText = escapeText2;
-                                const obj2 = {};
-                                obj2["id"] = id;
-                                obj2["identifier"] = choiceHeader + choiceLineId;
-                                obj2[SOURCE_LANGUAGE] = sourceText;
-                                texts.push(obj2);
+                                if (!update || !UPDATING_TEXTS) choices[j] = targetText;
+                                id++;
                             }
                             ary[j] = {
                                 "targetText":targetText,
                                 "last":last
                             };
-                            if (!update || !UPDATING_TEXTS) choices[j] = targetText;
-                            id++;
                         }
                         choiceInfos[indent] = ary;
                         break;
@@ -1420,7 +1492,8 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                         if (infos) {
                             const choiceInfo = infos[command.parameters[0]];
                             if (choiceInfo) {
-                                if (!update || !UPDATING_TEXTS) command.parameters[1] = choiceInfo.targetText;
+                                const targetText = choiceInfo.targetText;
+                                if (targetText && (!update || !UPDATING_TEXTS)) command.parameters[1] = targetText;
                                 if (choiceInfo.last) choiceInfos[indent] = null;
                             }
                         }
@@ -1430,64 +1503,74 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                         scrollLineId = 0;
                         break;
                     case 405: //scrollText(line)
-                        if (update) {
-                            if (UPDATING_TEXTS) {
-                                texts[id][SOURCE_LANGUAGE] = command.parameters[0];
-                            } else {
-                                command.parameters[0] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
-                            }
-                        } else {
-                            scrollLineId++;
-                            obj1["id"] = id;
-                            obj1["identifier"] = header + "scroll" + scrollId + "-line" + scrollLineId;
-                            obj1[SOURCE_LANGUAGE] = command.parameters[0];
-                            command.parameters[0] = escapeText1;
-                            texts.push(obj1);
-                        }
-                        id++;
-                        break;
-                    case 108: //comment(base)
-                        if (CONVERT_NOTES) {
+                        scrollLineId++;
+                        const scrollText = command.parameters[0];
+                        if ((CONVERT_EMPTY_LINES && scrollText === "") || this.shouldConvertText(scrollText)) {
                             if (update) {
                                 if (UPDATING_TEXTS) {
-                                    texts[id][SOURCE_LANGUAGE] = command.parameters[0];
+                                    texts[id][SOURCE_LANGUAGE] = scrollText;
                                 } else {
                                     command.parameters[0] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
                                 }
                             } else {
-                                commentId++;
-                                commentLineId = 1;
                                 obj1["id"] = id;
-                                obj1["identifier"] = header + "comment" + commentId + "-line" + commentLineId;
-                                obj1[SOURCE_LANGUAGE] = command.parameters[0];
+                                obj1["identifier"] = header + "scroll" + scrollId + "-line" + scrollLineId;
+                                obj1[SOURCE_LANGUAGE] = scrollText;
                                 command.parameters[0] = escapeText1;
                                 texts.push(obj1);
                             }
                             id++;
+                        }
+                        break;
+                    case 108: //comment(base)
+                        if (CONVERT_NOTES) {
+                            commentId++;
+                            commentLineId = 1;
+                            const baseComment = command.parameters[0];
+                            if ((CONVERT_EMPTY_LINES && baseComment === "") || this.shouldConvertText(baseComment)) {
+                                if (update) {
+                                    if (UPDATING_TEXTS) {
+                                        texts[id][SOURCE_LANGUAGE] = baseComment;
+                                    } else {
+                                        command.parameters[0] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
+                                    }
+                                } else {
+                                    obj1["id"] = id;
+                                    obj1["identifier"] = header + "comment" + commentId + "-line" + commentLineId;
+                                    obj1[SOURCE_LANGUAGE] = baseComment;
+                                    command.parameters[0] = escapeText1;
+                                    texts.push(obj1);
+                                }
+                                id++;
+                            }
                         }
                         break;
                     case 408: //comment(line)
                         if (CONVERT_NOTES) {
-                            if (update) {
-                                if (UPDATING_TEXTS) {
-                                    texts[id][SOURCE_LANGUAGE] = command.parameters[0];
+                            commentLineId++;
+                            const lineComment = command.parameters[0];
+                            if ((CONVERT_EMPTY_LINES && lineComment === "") || this.shouldConvertText(lineComment)) {
+                                if (update) {
+                                    if (UPDATING_TEXTS) {
+                                        texts[id][SOURCE_LANGUAGE] = lineComment;
+                                    } else {
+                                        command.parameters[0] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
+                                    }
                                 } else {
-                                    command.parameters[0] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
+                                    obj1["id"] = id;
+                                    obj1["identifier"] = header + "comment" + commentId + "-line" + commentLineId;
+                                    obj1[SOURCE_LANGUAGE] = lineComment;
+                                    command.parameters[0] = escapeText1;
+                                    texts.push(obj1);
                                 }
-                            } else {
-                                commentLineId++;
-                                obj1["id"] = id;
-                                obj1["identifier"] = header + "comment" + commentId + "-line" + commentLineId;
-                                obj1[SOURCE_LANGUAGE] = command.parameters[0];
-                                command.parameters[0] = escapeText1;
-                                texts.push(obj1);
+                                id++;
                             }
-                            id++;
                         }
                         break;
                     case 320: //changeName
+                        changeNameId++;
                         const name = command.parameters[1];
-                        if (name) {
+                        if (this.shouldConvertText(name)) {
                             if (update) {
                                 if (UPDATING_TEXTS) {
                                     texts[id][SOURCE_LANGUAGE] = name;
@@ -1495,7 +1578,6 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                                     command.parameters[1] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
                                 }
                             } else {
-                                changeNameId++;
                                 obj1["id"] = id;
                                 obj1["identifier"] = header + "changeName" + changeNameId;
                                 obj1[SOURCE_LANGUAGE] = name;
@@ -1506,8 +1588,9 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                         }
                         break;
                     case 324: //changeNickname
+                        changeNicknameId++;
                         const nickname = command.parameters[1];
-                        if (nickname) {
+                        if (this.shouldConvertText(nickname)) {
                             if (update) {
                                 if (UPDATING_TEXTS) {
                                     texts[id][SOURCE_LANGUAGE] = nickname;
@@ -1515,7 +1598,6 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                                     command.parameters[1] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
                                 }
                             } else {
-                                changeNicknameId++;
                                 obj1["id"] = id;
                                 obj1["identifier"] = header + "changeNickname" + changeNicknameId;
                                 obj1[SOURCE_LANGUAGE] = nickname;
@@ -1526,8 +1608,9 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                         }
                         break;
                     case 325: //changeProfile
+                        changeProfileId++;
                         const profile = command.parameters[1];
-                        if (profile) {
+                        if (this.shouldConvertText(profile)) {
                             if (update) {
                                 if (UPDATING_TEXTS) {
                                     texts[id][SOURCE_LANGUAGE] = profile;
@@ -1535,7 +1618,6 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                                     command.parameters[1] = CONVERTING_TO_ESCAPE ? escapeText1 : texts[id][TARGET_LANGUAGE];
                                 }
                             } else {
-                                changeProfileId++;
                                 obj1["id"] = id;
                                 obj1["identifier"] = header + "changeProfile" + changeProfileId;
                                 obj1[SOURCE_LANGUAGE] = profile;
@@ -1567,7 +1649,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                         for (let j=0; j<parameters.length; j++) {
                             const parameterName = parameters[j];
                             const str = plugin.parameters[parameterName];
-                            if (str) {
+                            if (this.shouldConvertText(str)) {
                                 const escapeText = ESCAPE_TEXT.format(id);
                                 if (update) {
                                     if (UPDATING_TEXTS) {
