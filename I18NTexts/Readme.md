@@ -123,6 +123,8 @@ https://opensource.org/licenses/mit-license.php
 スペイン語: **es_ES**  
 ポルトガル語: **pt_BR**  
 ロシア語: **ru_RU**  
+ポーランド語: **pl_PL**  
+トルコ語: **tr_TR**  
 
 ## ライセンス
 このプラグインは**MITライセンス**にてリリースされています。  
