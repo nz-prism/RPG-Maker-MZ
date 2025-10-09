@@ -11,7 +11,7 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.3
+ * ver. 1.0.4
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
@@ -19,6 +19,7 @@
  * 10/02/2023 1.0.2 Fixed an error on a left cursor input at the language
  *                  option.
  * 10/04/2023 1.0.3 Adjusted to OptionEx v1.5.0.
+ * 10/08/2025 1.0.4 Added 2 supported languages; Polish, Turkey
  * 
  * 
  * Displays each text replacing a string referred from a JSON file based on the
@@ -77,6 +78,10 @@
  * @value pt_BR
  * @option Russian
  * @value ru_RU
+ * @option Polish
+ * @value pl_PL
+ * @option Turkey
+ * @value tr_TR
  * 
  */
 
@@ -89,13 +94,14 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.0.3
+ * ver. 1.0.4
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
  * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 2023/10/02 1.0.2 言語オプションで左にカーソルを動かすと発生するエラーを修正
  * 2023/10/04 1.0.3 OptionEx v1.5.0に合わせて修正
+ * 2025/10/08 1.0.4 ポーランド語とトルコ語に対応
  * 
  * オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
  * 「OptionEx」プラグインの導入が前提となります。OptionExよりも後に配置してく
@@ -153,6 +159,10 @@
  * @value pt_BR
  * @option ロシア語
  * @value ru_RU
+ * @option ポーランド語
+ * @value pl_PL
+ * @option トルコ語
+ * @value tr_TR
  * 
  */
 
@@ -178,7 +188,9 @@ $dataI18nTexts = null;
         "de_DE":"Deutsch",
         "es_ES":"Español",
         "pt_BR":"Português",
-        "ru_RU":"Русский"
+        "ru_RU":"Русский",
+        "pl_PL":"Polski",
+        "tr_TR":"Türkçe"
     };
 
     

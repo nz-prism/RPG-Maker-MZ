@@ -2,13 +2,14 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.3](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/DisplayI18NTexts.js)
+[1.0.4](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/DisplayI18NTexts.js)
 
 ### バージョン履歴
 - 2023/06/04 1.0.0 リリース
 - 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
 - 2023/10/02 1.0.2 言語オプションで左にカーソルを動かすと発生するエラーを修正
 - 2023/10/04 1.0.3 OptionEx v1.5.0に合わせて修正
+- 2025/10/08 1.0.4 ポーランド語とトルコ語に対応
 
 ## 概要
 オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
@@ -44,13 +45,14 @@ https://opensource.org/licenses/mit-license.php
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.2.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/ConvertI18NTexts.js)
+[1.3.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/ConvertI18NTexts.js)
 
 ### バージョン履歴
 - 2023/06/04 1.0.0 リリース
 - 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
 - 2023/06/05 1.1.0 二重変換防止機能を追加
 - 2024/10/10 1.2.0 変換対象を制御する２つのパラメータを追加
+- 2025/10/09 1.3.0 言語追加をサポート、ポーランド語とトルコ語に対応
 
 ## 概要
 ゲーム中に使用されるあらゆる文字列を専用制御文字に変換し、元の文字列をJSONファイルとして出力します。本プラグインはデータベースの文字列を直接変更します。**ご使用前に必ずバックアップをお取りください。本プラグインを使用したことで生じたあらゆる不具合や損失について、作者は一切責任を負いません。**
@@ -107,6 +109,7 @@ https://opensource.org/licenses/mit-license.php
 
 なおデータベース等の文字列を制御文字から元の言語の文字列に戻すこともできます。その場合**ソース言語**に**制御文字**を、**ターゲット言語**に**制御文字**以外の言語を指定してテストプレイを実行してください。その後、データベースやイベントの文字列が正常に変換されていることを確認してください。  
 また、**I18NTexts.json**の内容を更新することもできます。例えばデータベース文字列が**日本語**であるとします。データベース上で何らかの文字列に変更を加えたとしても、**I18NTexts.json**のそれに対応する文字列はまだ古いままです。**ソース言語**と**ターゲット言語**の両方に**日本語**を指定してテストプレイを実行すると、**I18NTexts.json**に変更が反映されます。
+2回目以降の起動にて**ターゲット言語**に**翻訳候補言語リスト**にない言語を選択して変換を実行することで、**I18NTexts.json**に途中から言語を追加することもできます。
 
 **I18NTexts.json**の言語別キー一覧  
 日本語: **ja_JP**  

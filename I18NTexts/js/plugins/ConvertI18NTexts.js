@@ -9,13 +9,15 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.2.0
+ * ver. 1.3.0
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
  * 06/04/2023 1.0.1 Fixed locales (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 06/05/2023 1.1.0 Added a functionality to prevent a double conversion.
  * 10/10/2024 1.2.0 Added 2 parameters to control target texts.
+ * 10/08/2025 1.3.0 Supported language addition and added 2 language support;
+ *                  Polish, Turkey
  * 
  * Converts all the texts used in a game to escape characters and generates a
  * JSON file with the original texts. It makes changes to the database files
@@ -129,6 +131,9 @@
  * within I18NTexts.json are yet to be changed. By running this plugin with
  * "English" set for both "Source Language" and "Target Language",
  * I18NTexts.json will be updated.
+ * For the second time or later, a new language will be added to I18NTexts.json
+ * by specifying the language, which is not listed for "Languages to be
+ * Supported", for "Target Language".
  * 
  * The language keys for I18NTexts.json
  * English: en_US
@@ -142,6 +147,8 @@
  * Spanish: es_ES
  * Portuguese: pt_BR
  * Russian: ru_RU
+ * Polish: pl_PL
+ * Turkey: tr_TR
  * 
  * 
  * This plugin is released under MIT license.
@@ -177,6 +184,10 @@
  * @value pt_BR
  * @option Russian
  * @value ru_RU
+ * @option Polish
+ * @value pl_PL
+ * @option Turkey
+ * @value tr_TR
  * 
  * @param targetLanguage
  * @text Target Language
@@ -207,6 +218,10 @@
  * @value pt_BR
  * @option Russian
  * @value ru_RU
+ * @option Polish
+ * @value pl_PL
+ * @option Turkey
+ * @value tr_TR
  * 
  * @param languagesToBeSupported
  * @text Languages to be Supported
@@ -235,6 +250,10 @@
  * @value pt_BR
  * @option Russian
  * @value ru_RU
+ * @option Polish
+ * @value pl_PL
+ * @option Turkey
+ * @value tr_TR
  * 
  * @param targetText
  * @text Target Texts
@@ -305,13 +324,14 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/I18NTexts/js/plugins/ConvertI18NTexts.js
  *
  * @help ConvertI18NTexts.js
- * ver. 1.2.0
+ * ver. 1.3.0
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
  * 2023/06/04 1.0.1 ロケール名を修正 (ja-JP=>ja_JP, en-US=>en_US, ru-RU=>ru_RU)
  * 2023/06/05 1.1.0 二重変換防止機能を追加
  * 2024/10/10 1.2.0 変換対象を制御する２つのパラメータを追加
+ * 2025/10/09 1.3.0 言語追加をサポート、ポーランド語とトルコ語に対応
  * 
  * ゲーム中に使用されるあらゆる文字列を専用制御文字に変換し、元の文字列をJSON
  * ファイルとして出力します。本プラグインはデータベースの文字列を直接変更しま
@@ -424,6 +444,9 @@
  * ても、I18NTexts.jsonのそれに対応する文字列はまだ古いままです。「ソース言語」
  * と「ターゲット言語」の両方に「日本語」を指定してテストプレイを実行すると、
  * I18NTexts.jsonに変更が反映されます。
+ * 2回目以降の起動にて「ターゲット言語」に「翻訳候補言語リスト」にない言語を選
+ * 択して変換を実行することで、I18NTexts.jsonに途中から言語を追加することもでき
+ * ます。
  * 
  * I18NTexts.jsonの言語別キー一覧
  * 日本語: ja_JP
@@ -437,6 +460,8 @@
  * スペイン語: es_ES
  * ポルトガル語: pt_BR
  * ロシア語: ru_RU
+ * ポーランド語: pl_PL
+ * トルコ語: tr_TR
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
@@ -472,6 +497,10 @@
  * @value pt_BR
  * @option ロシア語
  * @value ru_RU
+ * @option ポーランド語
+ * @value pl_PL
+ * @option トルコ語
+ * @value tr_TR
  * 
  * @param targetLanguage
  * @text ターゲット言語
@@ -502,6 +531,10 @@
  * @value pt_BR
  * @option ロシア語
  * @value ru_RU
+ * @option ポーランド語
+ * @value pl_PL
+ * @option トルコ語
+ * @value tr_TR
  * 
  * @param languagesToBeSupported
  * @text 翻訳候補言語リスト
@@ -530,6 +563,10 @@
  * @value pt_BR
  * @option ロシア語
  * @value ru_RU
+ * @option ポーランド語
+ * @value pl_PL
+ * @option トルコ語
+ * @value tr_TR
  * 
  * @param targetText
  * @text 変換対象文字列
@@ -603,7 +640,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
         const SOURCE_LANGUAGE = pluginParams.sourceLanguage;
         const TARGET_LANGUAGE = pluginParams.targetLanguage;
         const CONVERTING_TO_ESCAPE = TARGET_LANGUAGE === "escape";
-        const CONVERTING_FROM_ESCAPE = SOURCE_LANGUAGE === "escape";
+        // const CONVERTING_FROM_ESCAPE = SOURCE_LANGUAGE === "escape";
         const UPDATING_TEXTS = TARGET_LANGUAGE === SOURCE_LANGUAGE;
 
         const LANGUAGES_TO_BE_SUPPORTED = JSON.parse(pluginParams.languagesToBeSupported);
@@ -636,7 +673,9 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
             "de_DE":"Sprache",
             "es_ES":"Idioma",
             "pt_BR":"Linguagem",
-            "ru_RU":"Язык"
+            "ru_RU":"Язык",
+            "pl_PL":"Język",
+            "tr_TR":"Dil"
         };
     
         const ALERT_INVALID_SOURCE_JP = "「ソース言語」が無効な値です。プラグインパラメータを再設定してください。";
@@ -1729,7 +1768,7 @@ if (Utils.isNwjs() && Utils.isOptionValid("test")) {
                 id = this.processPluginTexts(id, $dataI18nTexts, true);
             } else {
                 lang[TARGET_LANGUAGE] = LANGUAGE_OPTION_NAMES[TARGET_LANGUAGE];
-                for (let i=1; i<$dataI18nTexts.length; i++) $dataI18nTexts[i][TARGET_LANGUAGE] = "";
+                for (let i=1; i<$dataI18nTexts.length; i++) $dataI18nTexts[i][TARGET_LANGUAGE] = "temp" + i;
             }
             this.fsWriteFile(FILE_PATH, JsonEx.stringify($dataI18nTexts));
         };
