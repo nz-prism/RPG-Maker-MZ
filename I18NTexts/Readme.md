@@ -2,7 +2,7 @@
 
 ## バージョン
 ### 最新バージョン（ダウンロード）
-[1.0.4](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/DisplayI18NTexts.js)
+[1.1.0](https://raw.githubusercontent.com/nz-prism/RPG-Maker-MZ/master/I18NTexts/js/plugins/DisplayI18NTexts.js)
 
 ### バージョン履歴
 - 2023/06/04 1.0.0 リリース
@@ -10,14 +10,16 @@
 - 2023/10/02 1.0.2 言語オプションで左にカーソルを動かすと発生するエラーを修正
 - 2023/10/04 1.0.3 OptionEx v1.5.0に合わせて修正
 - 2025/10/08 1.0.4 ポーランド語とトルコ語に対応
+- 2025/11/03 1.1.0 言語別フォント設定機能を追加
 
 ## 概要
 オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
 本プラグインは[**オプション拡張**（**OptionEx.js**）](https://github.com/nz-prism/RPG-Maker-MZ/tree/master/OptionEx)プラグインの導入が前提となります。**OptionEx**よりも後に配置してください。
 
-以下の二つの機能が用意されています。
+以下の三つの機能が用意されています。
 1. 言語オプションを追加
 1. 専用制御文字を、現在の言語に応じてJSONファイルから取得した文字列に置き換えて表示
+1. 言語ごとにフォントファイルおよびフォントサイズを変更
 
 **1**はオプション画面に**言語**オプションを追加する機能です。言語オプションでは、プラグインパラメータ**使用言語**に設定した言語から選択できます。このパラメータの一番上に設定した言語がデフォルト言語になります。このパラメータに設定されている言語が一つしかない場合、言語オプションは表示されなくなります。
 
@@ -29,6 +31,8 @@
 ![EscapeCharacter](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/DisplayI18NTexts2.png)
 ![Japanese](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/DisplayI18NTexts3.png)
 ![English](https://github.com/nz-prism/RPG-Maker-MZ/blob/master/ReadmeImages/DisplayI18NTexts4.png)
+
+**3**は現在設定されている言語によって、ゲーム中表示されるテキストのフォントファイルおよびフォントサイズを変更する機能です。プラグインパラメータ**言語別フォント設定**にて言語ごとに設定できます。設定しなかった言語はデフォルトフォントファイルおよびフォントサイズ設定が使用されます。  
 
 ## ライセンス
 このプラグインは**MITライセンス**にてリリースされています。  
