@@ -94,6 +94,7 @@
  * @text Font Settings by Language
  * @desc Specify the font settings for each language. If a language has no font settings, the default one will be applied.
  * @type struct<fontSettingByLanguage>[]
+ * @default []
  * 
  */
 
@@ -233,6 +234,7 @@
  * @text 言語別フォント設定
  * @desc 言語別にフォントを設定できます。設定していない言語はデフォルトフォント設定が使用されます。
  * @type struct<fontSettingByLanguage>[]
+ * @default []
  * 
  */
 
