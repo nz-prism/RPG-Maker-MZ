@@ -11,7 +11,7 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.1.0
+ * ver. 1.2.0
  * 
  * [History]
  * 06/04/2023 1.0.0 Released
@@ -22,16 +22,19 @@
  * 10/08/2025 1.0.4 Added 2 supported languages; Polish, Turkey
  * 11/03/2025 1.1.0 Added a functionality to change the font settings by
  *                  language.
+ * 06/23/2026 1.2.0 Added a functionality to change the title images by
+ *                  language.
  * 
  * Displays each text replacing a string referred from a JSON file based on the
  * language option. It requires "OptionEx" plugin. Place this plugin under
  * OptionEx.
  * 
- * It provides 3 functionalities;
+ * It provides 4 functionalities;
  * 1. Adds a language option.
  * 2. Displays each text replacing a string referred from a JSON file based on
  *    the Language option.
  * 3. Changes the font settings by the current language option.
+ * 4. Changes the title images by the current language option.
  * 
  * Funcionality 1 adds "Language" option on the config screen. For Language
  * option, players can choose a language from ones specified for the plugin
@@ -53,6 +56,35 @@
  * each language by the plugin parameter "Font Settings by Language". If no
  * setting is specified to a language, the default one will be applied.
  * 
+ * Functionality 4 changes the title images by the current language option.
+ * You can specify the title images for each language by the plugin parameter
+ * "Title Images by Language". If no setting is specified to a language, the
+ * default one will be applied.
+ * 
+ * FYI, the current language option can be obtained by a code
+ * ConfigManager.language(). For example, if the current language is English,
+ * ConfigManager.language() will return "en_US". You can use it to implement a
+ * functionality to change the displayed picture by the current language
+ * option. If you choose "Script" for a conditional branch and paste the
+ * following script, it will be executed only when the current language is
+ * English.
+ * ConfigManager.language() === "en_US"
+ * 
+ * The values of ConfigManager.language() are as follows;
+ * English: "en_US"
+ * Japanese: "ja_JP"
+ * Simplified Chinese: "zh_CN"
+ * Traditional Chinese: "zh_TW"
+ * Korean: "ko_KR"
+ * French: "fr_FR"
+ * Italian: "it_IT"
+ * German: "de_DE"
+ * Spanish: "es_ES"
+ * Portuguese: "pt_BR"
+ * Russian: "ru_RU"
+ * Polish: "pl_PL"
+ * Turkey: "tr_TR"
+ *
  * 
  * This plugin is released under MIT license.
  * https://opensource.org/licenses/mit-license.php
@@ -94,6 +126,12 @@
  * @text Font Settings by Language
  * @desc Specify the font settings for each language. If a language has no font settings, the default one will be applied.
  * @type struct<fontSettingByLanguage>[]
+ * @default []
+ * 
+ * @param titleImagesByLanguage
+ * @text Title Images by Language
+ * @desc Specify the title images for each language. If a language has no title image, the default one will be applied.
+ * @type struct<titleImageByLanguage>[]
  * @default []
  * 
  */
@@ -144,6 +182,53 @@
  * 
  */
 
+/*~struct~titleImageByLanguage:
+ *
+ * @param language
+ * @text Language
+ * @desc Select a language to which the font settings will be applied.
+ * @type select
+ * @option English
+ * @value en_US
+ * @option Japanese
+ * @value ja_JP
+ * @option Simplified Chinese
+ * @value zh_CN
+ * @option Traditional Chinese
+ * @value zh_TW
+ * @option Korean
+ * @value ko_KR
+ * @option French
+ * @value fr_FR
+ * @option Italian
+ * @value it_IT
+ * @option German
+ * @value de_DE
+ * @option Spanish
+ * @value es_ES
+ * @option Portuguese
+ * @value pt_BR
+ * @option Russian
+ * @value ru_RU
+ * @option Polish
+ * @value pl_PL
+ * @option Turkey
+ * @value tr_TR
+ * 
+ * @param imageName1
+ * @text Title Image1
+ * @desc Specify the title image1 for this language.
+ * @type file
+ * @dir img/titles1
+ * 
+ * @param imageName2
+ * @text Title Image2
+ * @desc Specify the title image2 for this language.
+ * @type file
+ * @dir img/titles2
+ * 
+ */
+
 /*:ja
  * @target MZ
  * @plugindesc オプションで設定されている言語に応じて、専用制御文字を専用のJSONファイルから参照した文字列に変換して表示します。
@@ -153,7 +238,7 @@
  * @orderAfter OptionEx
  *
  * @help DisplayI18NTexts.js
- * ver. 1.1.0
+ * ver. 1.2.0
  * 
  * [バージョン履歴]
  * 2023/06/04 1.0.0 リリース
@@ -162,16 +247,18 @@
  * 2023/10/04 1.0.3 OptionEx v1.5.0に合わせて修正
  * 2025/10/08 1.0.4 ポーランド語とトルコ語に対応
  * 2025/11/03 1.1.0 言語別フォント設定機能を追加
+ * 2026/06/23 1.2.0 タイトル画像の言語別設定機能を追加
  * 
  * オプションで設定されている言語に応じて、専用制御文字を変換して表示します。
  * 「OptionEx」プラグインの導入が前提となります。OptionExよりも後に配置してく
  * ださい。
  * 
- * 以下の三つの機能が用意されています。
+ * 以下の四つの機能が用意されています。
  * 1. 言語オプションを追加
  * 2. 専用制御文字を、現在の言語に応じてJSONファイルから取得した文字列に置き換
  *    えて表示
  * 3. 言語ごとにフォントファイルおよびフォントサイズを変更
+ * 4. タイトル画面に使用する画像を言語ごとに変更
  * 
  * 1はオプション画面に「言語」オプションを追加する機能です。言語オプションで
  * は、プラグインパラメータ「使用言語」に設定した言語から選択できます。このパ
@@ -192,6 +279,33 @@
  * イルおよびフォントサイズを変更する機能です。プラグインパラメータ「言語別フォ
  * ント設定」にて言語ごとに設定できます。設定しなかった言語はデフォルトフォント
  * ファイルおよびフォントサイズ設定が使用されます。
+ * 
+ * 4はタイトル画面に使用する画像を、言語ごとに変更する機能です。プラグインパラ
+ * メータ「言語別タイトル画像」にて言語ごとに設定できます。設定しなかった言語
+ * は、デフォルトのタイトル画像が使用されます。
+ * 
+ * なお現在設定されている言語は、ConfigManager.language()で取得できます。
+ * 例えば、現在の言語が日本語であればConfigManager.language()は"ja_JP"を返しま
+ * す。これを利用して、表示するピクチャを言語ごとに変更する、などの処理を実装す
+ * ることも可能です。
+ * 条件分岐で「スクリプト」を選択し下記スクリプトを貼り付けると、現在の言語が日
+ * 本語の場合にのみ実行される処理を作成できます。
+ * ConfigManager.language() === "ja_JP"
+ * 
+ * ConfigManager.language()の値一覧
+ * 日本語: "ja_JP"
+ * 英語: "en_US"
+ * 中国語（簡体字）: "zh_CN"
+ * 中国語（繁体字）: "zh_TW"
+ * 韓国語: "ko_KR"
+ * フランス語: "fr_FR"
+ * イタリア語: "it_IT"
+ * ドイツ語: "de_DE"
+ * スペイン語: "es_ES"
+ * ポルトガル語: "pt_BR"
+ * ロシア語: "ru_RU"
+ * ポーランド語: "pl_PL"
+ * トルコ語: "tr_TR"
  * 
  * 
  * このプラグインはMITライセンスにてリリースされています。
@@ -234,6 +348,12 @@
  * @text 言語別フォント設定
  * @desc 言語別にフォントを設定できます。設定していない言語はデフォルトフォント設定が使用されます。
  * @type struct<fontSettingByLanguage>[]
+ * @default []
+ * 
+ * @param titleImagesByLanguage
+ * @text 言語別タイトル画像
+ * @desc タイトル画面に使用する画像を、言語ごとに設定できます。設定していない言語はデフォルト画像が使用されます。
+ * @type struct<titleImageByLanguage>[]
  * @default []
  * 
  */
@@ -284,6 +404,53 @@
  * 
  */
 
+/*~struct~titleImageByLanguage:ja
+ *
+ * @param language
+ * @text 言語
+ * @desc 設定したい言語を選択してください。
+ * @type select
+ * @option 日本語
+ * @value ja_JP
+ * @option 英語
+ * @value en_US
+ * @option 中国語（簡体字）
+ * @value zh_CN
+ * @option 中国語（繁体字）
+ * @value zh_TW
+ * @option 韓国語
+ * @value ko_KR
+ * @option フランス語
+ * @value fr_FR
+ * @option イタリア語
+ * @value it_IT
+ * @option ドイツ語
+ * @value de_DE
+ * @option スペイン語
+ * @value es_ES
+ * @option ポルトガル語
+ * @value pt_BR
+ * @option ロシア語
+ * @value ru_RU
+ * @option ポーランド語
+ * @value pl_PL
+ * @option トルコ語
+ * @value tr_TR
+ * 
+ * @param imageName1
+ * @text 画像ファイル名1
+ * @desc この言語で使用するタイトル画面の画像1を指定してください。
+ * @type file
+ * @dir img/titles1
+ * 
+ * @param imageName2
+ * @text 画像ファイル名2
+ * @desc この言語で使用するタイトル画面の画像2を指定してください。
+ * @type file
+ * @dir img/titles2
+ * 
+ */
+
 $dataI18nTexts = null;
 
 (() => {
@@ -300,6 +467,15 @@ $dataI18nTexts = null;
             fontFace: obj.fontFace,
             fontSize: Number(obj.fontSize)
         }
+    }
+
+    const TITLE_IMAGES_BY_LANGUAGE = {};
+    for (const str of JSON.parse(pluginParams.titleImagesByLanguage)) {
+        const obj = JSON.parse(str);
+        TITLE_IMAGES_BY_LANGUAGE[obj.language] = {
+            imageName1: obj.imageName1,
+            imageName2: obj.imageName2
+        };
     }
 
     const I18N_REGEXP = /\\I18N\[(\d+)\]/gi;
@@ -357,6 +533,19 @@ $dataI18nTexts = null;
         } else {
             return text;
         }
+    };
+
+
+    const _ImageManager_loadTitle1 = ImageManager.loadTitle1;
+    ImageManager.loadTitle1 = function(filename) {
+        const titleImages = TITLE_IMAGES_BY_LANGUAGE[ConfigManager.language()];
+        return _ImageManager_loadTitle1.call(this, titleImages ? titleImages.imageName1 : filename);
+    };
+
+    const _ImageManager_loadTitle2 = ImageManager.loadTitle2;
+    ImageManager.loadTitle2 = function(filename) {
+        const titleImages = TITLE_IMAGES_BY_LANGUAGE[ConfigManager.language()];
+        return _ImageManager_loadTitle2.call(this, titleImages ? titleImages.imageName2 : filename);
     };
 
 
