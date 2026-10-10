@@ -11,11 +11,12 @@
  * @orderAfter OptionEx
  *
  * @help ClickAnimation.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [History]
  * 03/12/2022 1.0.0 Released
  * 04/08/2022 1.0.1 Fixed a no animation issue for battler sprites
+ * 10/10/2026 1.0.2 Fixed a sprite disappearing issue
  * 
  * This plugin provides a functionality to play an animation when players click
  * clickable objects, such as windows or buttons.
@@ -64,11 +65,12 @@
  * @orderAfter OptionEx
  *
  * @help ClickAnimation.js
- * ver. 1.0.1
+ * ver. 1.0.2
  * 
  * [バージョン履歴]
  * 2022/03/12 1.0.0 リリース
  * 2022/04/08 1.0.1 バトラーにアニメが表示されない不具合を修正
+ * 2026/10/10 1.0.2 スプライトが消える不具合を修正
  * 
  * このプラグインはウィンドウやボタンのうち、クリック可能なものをクリックした際
  * にアニメーションを再生する機能を提供します。
@@ -184,7 +186,10 @@
     };
 
     Sprite_Clickable.prototype.getBitmapAlphaPixel = function(bitmap, x, y) {
-        return bitmap ? bitmap.getAlphaPixel(x + this.anchor.x * this.width, y + this.anchor.y * this.height) : 0;
+        if (!bitmap || !bitmap.isReady() || bitmap.width <= 0 || bitmap.height <= 0) {
+            return 0;
+        }
+        return bitmap.getAlphaPixel(x + this.anchor.x * this.width, y + this.anchor.y * this.height);
     };
 
     Sprite_Clickable.prototype.isPointedValidPixel = function(x, y) {
