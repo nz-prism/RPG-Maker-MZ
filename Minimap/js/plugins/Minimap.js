@@ -9,12 +9,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
- * ver. 1.0.2
+ * ver. 1.1.0
  * 
  * [History]
  * 03/26/2022 1.0.0 Released
  * 04/01/2022 1.0.1 Fixed conflicts against other plugins
  * 04/03/2022 1.0.2 Fixed an error at the end of a battle test
+ * 11/08/2026 1.1.0 Added a functionality to hide mini-map
  * 
  * This plugin shows a mini-map on the map scene. When a player moves, the
  * adjacent area will be drawn on the mini-map.
@@ -44,11 +45,19 @@
  * the events, inputting <minimap:n> for events which can move is not
  * recommended.
  * 
+ * If you wish to make a map without a mini-map, input <saveMinimap> in the
+ * Note of the map.
+ * 
+ * Players can control the minimap visibility by inputting a key. Use a plugin
+ * parameter "Show/Hide Minimap Key" to assign the key. If "none" is set,
+ * mini-maps can't be hidden by players.
+ * 
  *
  *  ■ Formats (meta-tag)
  *   ● Map
  *     ・<instantMinimap>
  *     ・<saveMinimap>
+ *     ・<noMinimap>
  * 
  *   ● Event
  *     ・<minimap:n>
@@ -64,6 +73,25 @@
  * @desc The pixels which are drawn for a tile.
  * @type number
  * @default 5
+ * 
+ * @param hideMinimapKey
+ * @text Show/Hide Minimap Key
+ * @desc A key of a keyboard and a button of a gamepad assigned to hide the mini-map.
+ * @type select
+ * @option none
+ * @value 
+ * @option shift key/X button
+ * @value shift
+ * @option X key/Y button
+ * @value menu
+ * @option pageup key/LB button
+ * @value pageup
+ * @option pagedown key/RB button
+ * @value pagedown
+ * @option tab key/LT button
+ * @value tab
+ * @option control key/RT button
+ * @value control
  * 
  * @param minimap
  * @text Minimap
@@ -87,7 +115,7 @@
  * @text Minimap Color Index
  * @desc The color index with which a minimap is drawn.
  * @parent minimap
- * @type number
+ * @type color
  * @default 9
  * 
  * @param minimapOpacity
@@ -105,7 +133,7 @@
  * @text Player Symbol Color Index
  * @desc The color index with which a player symol is drawn.
  * @parent playerSymbol
- * @type number
+ * @type color
  * @default 18
  * 
  * @param playerSymbolOpacity
@@ -135,12 +163,13 @@
  * @url https://github.com/nz-prism/RPG-Maker-MZ/blob/master/Minimap/js/plugins/Minimap.js
  *
  * @help Minimap.js
- * ver. 1.0.2
+ * ver. 1.1.0
  * 
  * [バージョン履歴]
  * 2022/03/26 1.0.0 リリース
  * 2022/04/01 1.0.1 他プラグインとの競合回避対策を強化
  * 2022/04/03 1.0.2 戦闘テスト終了時のエラーを修正
+ * 2026/11/08 1.1.0 ミニマップを非表示に切り替えられる機能を追加
  * 
  * このプラグインを導入すると、マップ画面に小マップが描画されるようになります。
  * 小マップはプレイヤーが付近を通過するごとに追加描画されます。
@@ -171,11 +200,19 @@
  * ニマップには反映されないので、移動する可能性のあるイベントを描画対象にするこ
  * とは非推奨です。
  * 
+ * ミニマップを表示しないマップに設定することもできます。そのマップのメモ欄に
+ * <noMinimap>と記述してください。
+ * 
+ * ミニマップの表示をプレイヤーが操作することもできます。プラグインパラメータ
+ * 「ミニマップ表示切り替えボタン」にて対応する入力を設定可能です。「なし」に
+ * 設定すると、プレイヤー操作で表示状態が切り替わることがなくなります。
+ * 
  *
  *  ■ 書式（メタタグ）
  *   ● マップ
  *     ・<instantMinimap>
  *     ・<saveMinimap>
+ *     ・<noMinimap>
  * 
  *   ● イベント
  *     ・<minimap:n>
@@ -191,6 +228,25 @@
  * @desc ミニマップを描画する、１タイルあたりのピクセル数です。
  * @type number
  * @default 5
+ * 
+ * @param hideMinimapKey
+ * @text ミニマップ表示切り替えボタン
+ * @desc ミニマップの表示切り替えに割り当てるキーボード/ゲームパッドのキー/ボタンです。
+ * @type select
+ * @option なし
+ * @value 
+ * @option shiftキー/Xボタン
+ * @value shift
+ * @option Xキー/Yボタン
+ * @value menu
+ * @option pageupキー/LBボタン
+ * @value pageup
+ * @option pagedownキー/RBボタン
+ * @value pagedown
+ * @option tabキー/LTボタン
+ * @value tab
+ * @option controlキー/RTボタン
+ * @value control
  * 
  * @param minimap
  * @text ミニマップ
@@ -214,7 +270,7 @@
  * @text ミニマップ色番号
  * @desc ミニマップを描画する色番号です（制御文字と同じ）。
  * @parent minimap
- * @type number
+ * @type color
  * @default 9
  * 
  * @param minimapOpacity
@@ -232,7 +288,7 @@
  * @text プレイヤーシンボル色番号
  * @desc プレイヤーシンボルを描画する色番号です（制御文字と同じ）。
  * @parent playerSymbol
- * @type number
+ * @type color
  * @default 18
  * 
  * @param playerSymbolOpacity
@@ -262,6 +318,7 @@
 
 
     const PIXELS_PER_TILE = Number(pluginParams.pixelsPerTile);
+    const HIDE_MINIMAP_KEY = pluginParams.hideMinimapKey;
 
     const MINIMAP_OFFSET_X = Number(pluginParams.minimapOffsetX);
     const MINIMAP_OFFSET_Y = Number(pluginParams.minimapOffsetY);
@@ -343,7 +400,7 @@
                     const event = this.eventsXy(i, j).filter(e => e.minimapColor() >= 0)[0];
                     if (event) {
                         data.push({x: i, y: j, minimapColor: event.minimapColor(), drawn: false});
-                    } else if (!this.checkPassage(i, j, 0x0800)) {
+                    } else if ([2,4,6,8].every(d => !this.isPassable(i, j, d))) {
                         data.push({x: i, y: j, minimapColor: MINIMAP_COLOR_INDEX, drawn: false});
                     }
                 }
@@ -427,7 +484,7 @@
         this.drawMinimap();
         this.updatePlayerSymbol();
         this.updateMinimapPosition();
-        this._minimapSprite.visible = !this._mapNameWindow.isVisible() && !$gameMap.isEventRunning();
+        this.updateMinimapVisiblity();
     };
 
     Scene_Map.prototype.updateMinimapPosition = function() {
@@ -444,6 +501,18 @@
             sprite.x = MINIMAP_OFFSET_X;
             sprite.y = MINIMAP_OFFSET_Y;
         }
+    };
+
+    Scene_Map.prototype.updateMinimapVisiblity = function() {
+        if (Input.isTriggered(HIDE_MINIMAP_KEY)) {
+            this._minimapHidden = !this._minimapHidden;
+        }
+        this._minimapSprite.visible = (
+            !$dataMap?.meta?.noMinimap &&
+            !this._minimapHidden &&
+            !this._mapNameWindow.isVisible() &&
+            !$gameMap.isEventRunning()
+        );
     };
 
     Scene_Map.prototype.drawMinimap = function() {
